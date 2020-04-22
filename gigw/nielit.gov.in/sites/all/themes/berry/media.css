@@ -338,7 +338,7 @@ nav ul ul ul li { position: static;
 
 
 
-@media (width: 768px) 
+@media (max-width: 768px) 
 
  {
 .boxmain{width:100%; float:none;}

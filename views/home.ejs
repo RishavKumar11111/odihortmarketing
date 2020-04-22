@@ -3,15 +3,55 @@
 <style>
     @media only screen and (max-width: 480px)
     {
-      .js-tabs .js-tabs_panel {
-        display: block  !important;
-        padding-left: 0px  !important;
-        padding-right: 0px  !important;
-      }
-      #st3 {
-        height: 250px !important;
-        width: 250px  !important;
-      }
+        .js-tabs .js-tabs_panel {
+            display: block  !important;
+            padding-left: 0px  !important;
+            padding-right: 0px  !important;
+        }
+        #st3 {
+            height: 250px !important;
+            width: 250px  !important;
+        }
+    }
+    .contain {
+        margin: 0 auto;
+        width: 95%;
+        padding: 0;
+        text-align: center;
+    }
+    .contain .colo .po {
+        padding: .25rem .75rem;
+    }
+    .cardBorder {
+        border-radius: 10px 10px 10px 10px;
+        box-shadow: 10px 10px 5px grey;
+        border: 3px solid green;
+        margin: 30px 10px;
+    }
+    .cardImage {
+        border-radius: 50%;
+        height: 125px;
+        width: 125px;
+    }
+    /* 2 columns (600px) */
+    @media only screen and (min-width:600px) {
+        .contain .colo {
+            float: left;
+            width: 50%;
+        }
+    }
+    /* 2 columns (768px) */
+    @media only screen and (min-width:768px) {
+        .contain .colo {
+            float: left;
+            width: 50%;
+        }
+    }
+    /* 4 columns (992px) */
+    @media only screen and (min-width:992px) {
+        .contain .colo {
+            width: 25%;
+        }
     }
 </style>
 <div ng-controller="myHomeCtrl">
@@ -29,9 +69,9 @@
             <div style="width: 30%; position: absolute; z-index: 1; padding-top: 10px; left: 5px; bottom: 12%; left: 30%;">
                 <label style="color: rgb(255, 255, 255); font-size: 22px"><b>All the services should be Citizen Centric</b> </label>
             </div>
-            <div style="width: 15%; position: absolute; z-index: 1; right: 0; text-align: right">
+            <!-- <div style="width: 15%; position: absolute; z-index: 1; right: 0; text-align: right">
                 <img src="../gigw/nielit.gov.in/sites/default/files/minister-secretary.png">
-            </div>
+            </div> -->
             <div data-u="loading" style="position: absolute; top: 0px; left: 0px">
                 <div style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; background-color: #000; top: 0px; left: 0px; width: 100%; height: 100%"></div>
                 <div style="position: absolute; display: block; top: 0px; left: 0px; width: 100%; height: 100%"></div>
@@ -39,28 +79,25 @@
             <!-- Slides Container -->
             <div data-u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 1349px; height: 370px; overflow: hidden">
                 <div>
-                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest4.jpg" /></a>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/site1.jpg" /></a>
                 </div>
                 <div>
-                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest5.jpg" /></a>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/site2.jpg" /></a>
                 </div>
                 <div>
-                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest6.jpg" /></a>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/site3.jpg" /></a>
                 </div>
                 <div>
-                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest7.jpg" /></a>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/site4.jpg" /></a>
                 </div>
                 <div>
-                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest8.jpg" /></a>
-                </div>
-                <div>
-                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest9.jpg" /></a>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/site5.jpg" /></a>
                 </div>
             </div>
             <!-- Bullet Navigator Skin Begin -->
             <!-- jssor slider bullet navigator skin 01 -->
             <!-- bullet navigator container -->
-            <div data-u="navigator" class="jssorb01" style="position: absolute; bottom: 16px; right: 60px; margin-right: 150px">
+            <div data-u="navigator" class="jssorb01" style="position: absolute; bottom: 16px; right: 60px; margin-right: 50px">
                 <!-- bullet navigator item prototype -->
                 <div data-u="prototype" style="position: absolute; width: 12px; height: 12px"></div>
             </div>
@@ -92,6 +129,44 @@
         <div class="clear"></div>
         <div class="content-outer" id="COntentDiv">
             <div class="content">
+                <div class="contain">
+                    <div class="colo">
+                        <div class="card cardBorder">
+                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/AM.jpg" alt="Card image">
+                            <div class="card-body">
+                                <h4 class="card-title">Dr. Arun Kumar Sahoo</h4>
+                                <p class="card-text po" style="font-size: 14px; height: 40px;">Hon'ble Minister, Agriculture &amp; Farmers' Empowerment</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="colo">
+                        <div class="card cardBorder">
+                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/APC.jpg" alt="Card image">
+                            <div class="card-body">
+                                <h4 class="card-title">Sj. Pradipta Kumar Mohapatra, IAS</h4>
+                                <p class="card-text po" style="font-size: 14px; height: 40px;">Agriculture Production Commissioner</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="colo">
+                        <div class="card cardBorder">
+                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/PS.jpg" alt="Card image">
+                            <div class="card-body">
+                                <h4 class="card-title">Dr. Saurabh Garg, IAS</h4>
+                                <p class="card-text po" style="font-size: 14px; height: 40px;">Principal Secretary </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="colo">
+                        <div class="card cardBorder">
+                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/AD.jpg" alt="Card image">
+                            <div class="card-body">
+                                <h4 class="card-title">Dr. M. Muthukumar, IAS</h4>
+                                <p class="card-text po" style="font-size: 14px; height: 40px;">Director, Horticulture </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!--<div style="margin-bottom: 20px" class="message_boxmain">
                     <div class="boxmain">
                         <div class="bottom-panel-box boxmain1">
@@ -145,8 +220,7 @@
                     <div class="breakingNews" id="bn3">
                         <div class="bn-title"><h2>Latest News</h2><span></span></div>
                         <ul>
-                            <li style="color: red">Workshop cum training on Management of FALL ARMY WORM (Spodoptera Furgiperda)</li>
-                            <li style="color: red">Induction training to Agriculture Development Associates (Student Scouts)</li>
+                            <li style="color: red"></li>
                         </ul>
                         <div class="bn-navi">
                             <span></span>
@@ -158,11 +232,10 @@
                 <div class="focus-panel">
                     <div class="tab-panel">
                         <div class="tabs example-a">
-                            <h3>About e-Pest</h3>
+                            <h3>About Horticulture Produce Marketing</h3>
                             <div class="bottom-panel-box" style="height: 310px">
                                 <div style="margin-top: 25px" class="responsive">
-                                    <h4 class="rtejustify" style="color: black">Integrated Pest management plays a pivotal role in agricultural production and increased productivity. Timely and proper pest management not only helps in multiplication of predators and parasites in the eco-system, but also saves the crops from many diseases and insect attack.</h4>
-                                    <h4 class="rtejustify" style="color: black">Pest surveillance is an important tool towards timely and proper execution and harnessing of Integrated Pest Management. Moreover, by the use of pest surveillance technology, insects and diseases are identified and presence of predators and parasites are counted. As a result of which, pest and diseases are effectively managed through application of eco-friendly integrated pest management system. For quick dissemination of the farmer advisory system to the farmers, e-Pest Surveillance Programme is being implemented from the year 2010. Now, it is being felt that this advisory system is time consuming. Therefore, to make it more effective and farmers’ friendly, Mobile App initiative has been taken up.</h4>
+                                    <h4 class="rtejustify" style="color: black"></h4>
                                     <!-- <center>
                                         <div class="container-fluid" id="st1">
                                             <div class="row" id="st2">
@@ -181,7 +254,7 @@
                                     </center> -->
                                 </div>
                             </div>
-                            <!-- <h3>e-Pest in Brief</h3>
+                            <!-- <h3>Horticulture Produce Marketing in Brief</h3>
                             <div style="padding-top: 15px; height: 290px !important">
                                 <div class="bottom-panel-box">
                                     <div class="bottom-panel-box-pic"><img alt="" src="" class="aboutnielitimages"></div>
@@ -252,8 +325,7 @@
                             <div class="container">
                                 <ul class="newsticker" style="margin: 10px">
                                     <marquee behavior="scroll" scrollamount="3, 0" direction="up" onmouseover="this.stop();" onmouseout="this.start();">
-                                        <h3 class="rtejustify" style="color: blue">Workshop cum training on Management of FALL ARMY WORM (Spodoptera Furgiperda) dated on 24-06-2019 at Krushi Bhawan, Bhubaneswar, Odisha</h3>
-                                        <h3 class="rtejustify" style="color: blue">Induction training to Agriculture Development Associates (Student Scouts) on 03-07-2019 at Krushi Bhawan, Bhubaneswar, Odisha</h3>
+                                        <h3 class="rtejustify" style="color: blue"></h3>
                                     </marquee>
                                     <!--<li ng-repeat="a in event">
                                         <div class="homeWMission">
@@ -325,9 +397,9 @@
                     </div>
                     <div class="clear"></div>
                 </div>
-                <script type="text/javascript" src="../public/javascripts/chart.min.js"></script>
+                <!-- <script type="text/javascript" src="../public/javascripts/chart.min.js"></script>
                 <canvas id="myChart" style="margin: 30px 0"></canvas>
-                <script type="text/javascript" src="../public/javascripts/homeGraph.js"></script>
+                <script type="text/javascript" src="../public/javascripts/homeGraph.js"></script> -->
                 <div class="panels">
                     <div class="panel-box">
                         <div class="wrapper">
@@ -347,11 +419,6 @@
                     <div class="panel-box">
                         <div class="wrapper">
                             <a href="http://agricoop.nic.in/" target="_blank" onclick="return confirm('This link will take you to an external web site.')"><img alt="button menu" src="../gigw/www.nielit.gov.in/sites/default/files/AGRICULTURECOOPERATION & FARMERS WELFARE.jpg" /></a>
-                        </div>
-                    </div>
-                    <div class="panel-box">
-                        <div class="wrapper">
-                            <a href="http://ppqs.gov.in/" target="_blank" onclick="return confirm('This link will take you to an external web site.')"><img alt="button menu" src="../gigw/www.nielit.gov.in/sites/default/files/plant.jpg" /></a>
                         </div>
                     </div>
                     <div class="panel-box">

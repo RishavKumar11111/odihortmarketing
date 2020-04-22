@@ -12,8 +12,9 @@ var device = require('express-device');
 var bodyParser = require('body-parser');
 
 var homeRouter = require('./routes/home');
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
+var adminRouter = require('./routes/admin');
+var changePasswordRouter = require('./routes/changePassword');
+var graphRouter = require('./routes/graph');
 
 var app = express();
 
@@ -57,8 +58,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', homeRouter);
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
+app.use('/admin', adminRouter);
+app.use('/changePassword', changePasswordRouter);
+app.use('/graph', graphRouter);
 
 // options request handler
 app.options("/*", function (req, res, next) {

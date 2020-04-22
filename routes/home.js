@@ -333,7 +333,7 @@ function generateOTP() {
 };
 
 function SendOTP(mobileNo, OTP, callback) {
-  var sms = 'e-Pest - OTP for Password Reset is ' + OTP;
+  var sms = 'Horticulture Produce Marketing - OTP for Password Reset is ' + OTP;
   var encodeSMS = encodeURI(sms);
   request('http://www.apicol.nic.in/Registration/EPestSMS?mobileNo=' + mobileNo + '&sms=' + encodeSMS, { json: true }, (err, res, body) => {
     if (err) {
