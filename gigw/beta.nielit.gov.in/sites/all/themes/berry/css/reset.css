@@ -1,0 +1,217 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	
+/*	vertical-align: baseline;*/
+}
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+
+
+
+
+
+
+.content-outer .content .content-panel-right p {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: justify;
+}
+.content-outer .content .content-panel-right h1 {
+    color: #063;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 24px;
+    margin-top: 0;
+}
+.content-outer .content .content-panel-right h2 {
+    color: #333;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 20px;
+}
+.content-outer .content .content-panel-right table {
+    border-collapse: collapse;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+}
+.table-fill {
+    background: white none repeat scroll 0 0;
+    border-collapse: collapse;
+    border-radius: 3px;
+    margin: auto;
+    padding: 5px;
+    width: 100%;
+	border: 1px solid grey;
+}
+.table-fill th {
+    background: #09568c none repeat scroll 0 0;
+    border-bottom: 4px solid #9ea7af;
+    border-right: 1px solid #343a45;
+    color: #fff;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: 100;
+    padding: 7px;
+    text-align: left;
+    /* vertical-align: middle; */
+}
+.table-fill th:first-child {
+    border-top-left-radius: 3px;
+}
+.table-fill th:last-child {
+    border-right: medium none;
+    border-top-right-radius: 3px;
+}
+.table-fill tr {
+    border-top: 1px solid #c1c3d1;
+    color: #000;
+    font-size: 14px;
+    font-weight: normal;
+}
+.table-fill tr:hover td {
+    background: rgba(160, 220, 160, 0.8) none repeat scroll 0 0;
+    border-bottom: 1px solid #22262e;
+    border-top: 1px solid #22262e;
+    color: #000;
+}
+.table-fill tr:hover td a {
+    color: #000;
+}
+.table-fill tr td li {
+    margin-bottom: 10px;
+}
+.table-fill tr:first-child {
+    border-top: medium none;
+}
+.table-fill tr:last-child {
+    border-bottom: medium none;
+}
+.table-fill tr:nth-child(2n+1) td {
+    background: rgba(320, 120, 260, 0.2) none repeat scroll 0 0;
+}
+.table-fill tr:nth-child(2n+1):hover td {
+    background: rgba(320, 120, 260, 0.2) none repeat scroll 0 0;
+}
+.table-fill tr:last-child td:first-child {
+    border-bottom-left-radius: 3px;
+}
+.table-fill tr:last-child td:last-child {
+    border-bottom-right-radius: 3px;
+}
+.table-fill td {
+    background: rgba(120, 320, 160, 0.2) none repeat scroll 0 0;
+    border-right: 1px solid #c1c3d1;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 7px;
+    text-align: left;
+    vertical-align: middle;
+}
+.table-fill td a {
+    color: #000 !important;
+    text-decoration: none;
+}
+.table-fill tr:hover td a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+.table-fill td a:hover {
+    color: #fff;
+}
+.table-fill td:last-child {
+    border-right: 0 none;
+}
+.table-fill th.text-left {
+    text-align: left;
+}
+.table-fill th.text-center {
+    text-align: center;
+}
+.table-fill th.text-right {
+    text-align: right;
+}
+.table-fill td.text-left {
+    text-align: left;
+}
+.table-fill td.text-center {
+    text-align: center;
+}
+.table-fill td.text-right {
+    text-align: right;
+}
+
+
+/*  */
+
+
+.list-view ul {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+.list-view ul li .grid-name {
+	float: left;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:18px;
+	color:#006699;
+	width:150px;
+}
+.list-view ul li .grid-details {
+	float: left;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	line-height:24px;
+}
+.list-view ul li .grid-btn {
+	float: right;
+}
+.list-view ul li {
+	background-color: #e7e7e7;
+	margin-bottom: 10px;
+	padding: 10px;
+	padding-bottom:0px;
+}
+.content-outer .content .content-left h2 {
+    color: #333;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 18px;
+}
+.content .form-type-item{display:none;}
