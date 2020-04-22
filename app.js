@@ -11,8 +11,9 @@ var xFrameOptions = require('x-frame-options');
 var device = require('express-device');
 var bodyParser = require('body-parser');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var homeRouter = require('./routes/home');
+// var indexRouter = require('./routes/index');
+// var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -55,8 +56,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', homeRouter);
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
 
 // options request handler
 app.options("/*", function (req, res, next) {

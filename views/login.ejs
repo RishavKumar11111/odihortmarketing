@@ -1,0 +1,79 @@
+<%- include('header.ejs') -%>
+<script type="text/javascript" src="../public/controllers/myLoginCtrl.js"></script>
+<script type="text/javascript" src="../public/javascripts/sha256.js"></script>
+<link type="text/css" rel=stylesheet href="../public/stylesheets/bootstrap.min.css" />
+<script>
+    $(function() {
+        $('#btnLogin').click( function() {
+            if ($('#un').val() != '' && $('#pwd').val() != '' && $('#captcha').val() != '') {
+                $('#pwd').val(sha256(sha256($('#pwd').val()) + $('#rno').val()));
+                $("#formLogin").submit();
+            }
+            else {
+                alert('Please enter Username, Password and Captcha.');
+            }
+        });
+    });
+</script>
+<div ng-app="myHomeLoginApp" ng-cloak class="container clearfix" ng-controller="myLoginCtrl">
+    <div class="messages error">
+        <h2 class="element-invisible">Error message</h2>
+        <em class="placeholder">Warning</em>: Creating default object from empty value in <em class="placeholder">ctools_access_get_loggedin_context()</em> (line <em class="placeholder">1411</em> of <em class="placeholder">/var/www/html/sites/all/modules/ctools/includes/context.inc</em>).
+    </div>
+    <div class="content-outer" id="COntentDiv">
+        <div class="content">             
+            <div class="row">
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="font-weight: bold; background: #074b72;color: white">Security Guidelines</div>
+                        <div class="panel-body" style="height: 275px">
+                            <ul>
+                                <li style="margin-top: 5px; text-align: justify; font-weight: bold"><span class="glyphicon glyphicon-hand-right"></span>&nbsp; Never write your password on a Post-It and stick it on your monitor, your address rolodex, under your desk pad, or anywhere else where it can be easily found. If you must write it down, keep it where no one can find it except for the authorized user.</li>
+                                <li style="margin-top: 5px; text-align: justify; font-weight: bold"><span class="glyphicon glyphicon-hand-right"></span>&nbsp; Always lock / logout your computer while leaving.</li>
+                                <li style="margin-top: 5px; text-align: justify; font-weight: bold"><span class="glyphicon glyphicon-hand-right"></span>&nbsp; Never install unknown or unsolicited software in your computer.</li>
+                                <li style="margin-top: 5px; text-align: justify; font-weight: bold"><span class="glyphicon glyphicon-hand-right"></span>&nbsp; Never download pirated or cracked software.</li>
+                                <li style="margin-top: 5px; text-align: justify; font-weight: bold"><span class="glyphicon glyphicon-hand-right"></span>&nbsp; Don't click on popup windows that tell you that your computer is infected with a virus.</li>
+                                <li style="margin-top: 5px; text-align: justify; font-weight: bold"><span class="glyphicon glyphicon-hand-right"></span>&nbsp; Use passwords on everything and be sure that they're strong passwords.</li>
+                                <li style="margin-top: 5px; text-align: justify; font-weight: bold"><span class="glyphicon glyphicon-hand-right"></span>&nbsp; Always use a device firewall.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="font-weight: bold; background: #074b72; color: white">Login</div>
+                        <div class="panel-body" style="height: 275px">
+                            <ul class="newsticker">    
+                                <input type="hidden" name="randomNo" id="rno" value="<%= randomNo %>">
+                                <form method="POST" id="formLogin" action="/plogin" autocomplete="off">
+                                    <input type="hidden" name="_csrf" id="_csrf" value="<%=csrfToken %>">
+                                    <div class="form-group" style="margin-bottom: 5px">
+                                        <label for="exampleInputEmail1">Username:</label>
+                                        <input type="text" class="form-control" id="un" name="userName" maxlength="30" autocomplete="off" placeholder="Enter Username" required>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 5px">
+                                        <label for="exampleInputPassword1">Password:</label>
+                                        <input type="password" class="form-control" id="pwd" name="password" maxlength="50" autocomplete="off" placeholder="Enter Password" required>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 5px">
+                                        <label for="exampleInputPassword1">Enter Captcha:</label>
+                                        <div style="display: flex">
+                                            <img ng-src="{{URL}}">
+                                            <div style="padding: 17px 0 0 5px">=</div>
+                                            <input type="text" class="form-control" id="captcha" maxlength="10" name="captcha" style="margin: 9px 0 0 10px">
+                                        </div>
+                                    </div>
+                                    <!-- <span>Forgot</span> <a href="#" onclick="alert('Please contact Administrator (JDA(PP)).')">Username / Password</a> -->
+                                    <span>Forgot</span> <a href="http://localhost:3000/forgotPassword">Password</a>
+                                    <input type="submit" value="Login" id="btnLogin" class="form-submit" style="float: right" />
+                                    <div style="color: red"><b><%= error %></b></div>
+                                </form>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer.ejs') -%>

@@ -1,0 +1,492 @@
+<%- include('header.ejs') -%>
+<script type="text/javascript" src="../public/controllers/myHomeCtrl.js"></script>
+<style>
+    @media only screen and (max-width: 480px)
+    {
+      .js-tabs .js-tabs_panel {
+        display: block  !important;
+        padding-left: 0px  !important;
+        padding-right: 0px  !important;
+      }
+      #st3 {
+        height: 250px !important;
+        width: 250px  !important;
+      }
+    }
+</style>
+<div ng-controller="myHomeCtrl">
+    <div class="slider-outer">
+        <script type="text/javascript" src="../gigw/nielit.gov.in/sites/all/themes/berry/js/jssor.core.js"></script>
+        <script type="text/javascript" src="../gigw/nielit.gov.in/sites/all/themes/berry/js/jssor.utils.js"></script>
+        <script type="text/javascript" src="../gigw/nielit.gov.in/sites/all/themes/berry/js/jssor.slider.js"></script>
+        <!-- Jssor Slider Begin -->
+        <!-- You can move inline styles to css file or css block. -->
+        <div id="sliderb_container" style="position: relative; width: 1349px; height: 370px; overflow: hidden; margin: 0 auto">
+            <!-- Loading Screen -->
+            <div style="width: 30%; position: absolute; z-index: 1; padding-top: 10px; left: 5px">
+                <img src="../gigw/nielit.gov.in/sites/default/files/cm.png">
+            </div>
+            <div style="width: 30%; position: absolute; z-index: 1; padding-top: 10px; left: 5px; bottom: 12%; left: 30%;">
+                <label style="color: rgb(255, 255, 255); font-size: 22px"><b>All the services should be Citizen Centric</b> </label>
+            </div>
+            <div style="width: 15%; position: absolute; z-index: 1; right: 0; text-align: right">
+                <img src="../gigw/nielit.gov.in/sites/default/files/minister-secretary.png">
+            </div>
+            <div data-u="loading" style="position: absolute; top: 0px; left: 0px">
+                <div style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; background-color: #000; top: 0px; left: 0px; width: 100%; height: 100%"></div>
+                <div style="position: absolute; display: block; top: 0px; left: 0px; width: 100%; height: 100%"></div>
+            </div>
+            <!-- Slides Container -->
+            <div data-u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 1349px; height: 370px; overflow: hidden">
+                <div>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest4.jpg" /></a>
+                </div>
+                <div>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest5.jpg" /></a>
+                </div>
+                <div>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest6.jpg" /></a>
+                </div>
+                <div>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest7.jpg" /></a>
+                </div>
+                <div>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest8.jpg" /></a>
+                </div>
+                <div>
+                    <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/epest9.jpg" /></a>
+                </div>
+            </div>
+            <!-- Bullet Navigator Skin Begin -->
+            <!-- jssor slider bullet navigator skin 01 -->
+            <!-- bullet navigator container -->
+            <div data-u="navigator" class="jssorb01" style="position: absolute; bottom: 16px; right: 60px; margin-right: 150px">
+                <!-- bullet navigator item prototype -->
+                <div data-u="prototype" style="position: absolute; width: 12px; height: 12px"></div>
+            </div>
+            <!-- Bullet Navigator Skin End -->
+            <!-- Arrow Navigator Skin Begin -->
+            <!--<div class="StartSlideshowBtn">
+                <img alt="play" src="../gigw/nielit.gov.in/sites/all/themes/berry/images/play.png" class="StartSlideshowBtn_img" />
+            </div>-->
+            <!-- Arrow Left -->
+            <span data-u="arrowleft" class="jssora05l" style="width: 40px; height: 40px; top: 123px; left: 8px"></span>
+            <!-- Arrow Right -->
+            <span data-u="arrowright" class="jssora05r" style="width: 40px; height: 40px; top: 123px; right: 8px"></span>
+            <!-- Arrow Navigator Skin End -->
+            <a style="display: none" href="http:/www.jssor.com/">slider html</a>
+            <!-- Trigger -->
+        </div>
+        <!-- Jssor Slider End -->
+    </div>
+    <!-- START SLIDER -->
+    <!-- end slider -->
+    <div class="clear"></div>
+    <!-- END SLIDER -->
+    <div class="container clearfix">
+        <div class="messages error">
+            <h2 class="element-invisible">Error message</h2>
+            <em class="placeholder">Warning</em>: Creating default object from empty value in <em class="placeholder">ctools_access_get_loggedin_context()</em> (line <em class="placeholder">1411</em> of <em class="placeholder">/var/www/html/sites/all/modules/ctools/includes/context.inc</em>).
+        </div>
+        <div class="full"></div>
+        <div class="clear"></div>
+        <div class="content-outer" id="COntentDiv">
+            <div class="content">
+                <!--<div style="margin-bottom: 20px" class="message_boxmain">
+                    <div class="boxmain">
+                        <div class="bottom-panel-box boxmain1">
+                            <div class="bottom-panel-box-pic boxmain3"><img alt="Union Ministor" src="../gigw/nielit.gov.in/sites/all/themes/berry/images/Ravi_Shankar.jpg"></div>
+                            <div class="bottom-panel-box-content1 boxmain4">
+                                <h2 class="boxmain5">Message from Hon'ble Minister Electronics & IT, L&J (Chairperson, Governing Council)</h2>
+                            </div>
+                            <p>Technology has made giant strides and today India is sitting on ... <a href="node/2867.html">Read More</a></p>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    // second message start
+                    <div class="boxmain">
+                        <div class="bottom-panel-box boxmain1">
+                            <div class="bottom-panel-box-pic boxmain3"><img width="87" height="78" alt="Union Ministor" src="../gigw/nielit.gov.in/sites/all/themes/berry/images/mos.jpg"></div>
+                            <div class="bottom-panel-box-content1 boxmain4">
+                                <h2 class="boxmain5">Message from Hon'ble MoS(Electronics & IT), Tourism (I/C) (Deputy Chairperson, Governing Council)</h2>  
+                            </div>
+                            <p><a href="node/8018.html"></a></p>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    // second message end
+                    // third message start
+                    <div class="boxmain">
+                        <div class="bottom-panel-box boxmain1">
+                            <div class="bottom-panel-box-pic boxmain3"><img alt="Secretary" src="../gigw/nielit.gov.in/sites/all/themes/berry/images/secretary.png"></div>
+                            <div class="bottom-panel-box-content1 boxmain4">
+                                <h2 class="boxmain5">Message from Secretary, Ministry of Electronics & IT (MeitY) (Chairperson, Management Board)</h2>
+                            </div>
+                            <p style="margin-top: 65px">India has taken a number of landmark initiatives. The ‘Digital...<a href="node/2868.html">Read More</a></p>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    // third message end
+                    // fourth message start
+                    <div class="boxmain">
+                        <div class="bottom-panel-box boxmain1">
+                            <div class="bottom-panel-box-pic boxmain3"><img alt="Director General" src="../gigw/nielit.gov.in/sites/all/themes/berry/images/md-nielit.jpg"></div>
+                            <div class="bottom-panel-box-content1 boxmain4">
+                                <h2 class="boxmain5">Message from the Desk of Director General</h2>
+                            </div>
+                            <p style="margin-top: 65px">The education system in this country is undergoing a... <a href="node/19.html">Read More</a></p>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    // fourth message end
+                    <div class="clear"></div>
+                </div>-->
+                <div class="latestnews">
+                    <div class="breakingNews" id="bn3">
+                        <div class="bn-title"><h2>Latest News</h2><span></span></div>
+                        <ul>
+                            <li style="color: red">Workshop cum training on Management of FALL ARMY WORM (Spodoptera Furgiperda)</li>
+                            <li style="color: red">Induction training to Agriculture Development Associates (Student Scouts)</li>
+                        </ul>
+                        <div class="bn-navi">
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span class="latest-news-span"><a href="newsevents">View More</a></span>
+                    </div>
+                </div>
+                <div class="focus-panel">
+                    <div class="tab-panel">
+                        <div class="tabs example-a">
+                            <h3>About e-Pest</h3>
+                            <div class="bottom-panel-box" style="height: 310px">
+                                <div style="margin-top: 25px" class="responsive">
+                                    <h4 class="rtejustify" style="color: black">Integrated Pest management plays a pivotal role in agricultural production and increased productivity. Timely and proper pest management not only helps in multiplication of predators and parasites in the eco-system, but also saves the crops from many diseases and insect attack.</h4>
+                                    <h4 class="rtejustify" style="color: black">Pest surveillance is an important tool towards timely and proper execution and harnessing of Integrated Pest Management. Moreover, by the use of pest surveillance technology, insects and diseases are identified and presence of predators and parasites are counted. As a result of which, pest and diseases are effectively managed through application of eco-friendly integrated pest management system. For quick dissemination of the farmer advisory system to the farmers, e-Pest Surveillance Programme is being implemented from the year 2010. Now, it is being felt that this advisory system is time consuming. Therefore, to make it more effective and farmers’ friendly, Mobile App initiative has been taken up.</h4>
+                                    <!-- <center>
+                                        <div class="container-fluid" id="st1">
+                                            <div class="row" id="st2">
+                                                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12" id="st3">
+                                                    <div id="st4" class="showdiv">
+                                                        <ul class="nav navbar-right" style="margin: -30px -15px 0px 0px; color:white">
+                                                            <li>
+                                                                <a onclick="removediv(this.parentElement.parentElement.parentElement)" style="height: 10px"><i class="fa fa-close"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                        <div id="st5" class="showdiv" data-nic="45" style="height: 300px"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </center> -->
+                                </div>
+                            </div>
+                            <!-- <h3>e-Pest in Brief</h3>
+                            <div style="padding-top: 15px; height: 290px !important">
+                                <div class="bottom-panel-box">
+                                    <div class="bottom-panel-box-pic"><img alt="" src="" class="aboutnielitimages"></div>
+                                    <div class="bottom-panel-box-content">
+                                        <h2>Introduction</h2><br />
+                                        <div class="wrapstagp">
+                                            <p class="rtejustify"></p>
+                                            <a href="aboutus">Read More</a>
+                                        </div>
+                                    </div>
+                                <div class="clear"></div>
+                                </div>
+                                <div class="bottom-panel-box">
+                                    <div class="bottom-panel-box-pic"><img alt="" src="" class="aboutnielitimages"></div>
+                                    <div class="bottom-panel-box-content">
+                                        <h2>Mission & Vision</h2><br />
+                                        <div class="wrapstagp">
+                                            <p></p>
+                                            <a href="aboutus">Read More</a>
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="bottom-panel-box">
+                                    <div class="bottom-panel-box-pic"><img alt="" src="" class="aboutnielitimages"></div>
+                                    <div class="bottom-panel-box-content">
+                                        <h2>Services</h2><br />
+                                        <div class="wrapstagp">
+                                            <p></p>
+                                            <a href="aboutus">Read More</a>
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                    <script>
+                    function display_con(xv) {
+                        if(xv == '1') {
+                        document.getElementById('img2').style.display = 'block';
+                        document.getElementById('img1').style.display = 'none';
+                        }
+                        else {
+                        document.getElementById('img1').style.display='block';
+                        document.getElementById('img2').style.display='none';
+                        }
+                    }
+                    $(document).ready(function() {
+                        $(".bottom-panel-box-content p").contents().unwrap();
+                        $(".bottom-panel-box-content span").wrap( "<p></p>" );
+                    });
+                    </script>
+                    <div class="events-panel" style="height: 363px">
+                        <h1 style="margin: 10px 10px 30px">Latest Events</h1>
+                        <div id="multilines">
+                            <!-- <div style="text-align: right; margin-right: 15px">
+                                <div id="img1">
+                                    <a class="stop-button" onclick="return display_con(1);">
+                                        <img alt="pause" src="../gigw/nielit.gov.in/sites/all/themes/berry/images/pause.gif">
+                                    </a>
+                                </div><div id="img2" style="display: none">
+                                    <a onclick="display_con(2);" class="start-button">
+                                        <img alt="play" src="../gigw/nielit.gov.in/sites/all/themes/berry/images/play.gif">
+                                    </a>
+                                </div>
+                            </div> -->
+                            <div class="container">
+                                <ul class="newsticker" style="margin: 10px">
+                                    <marquee behavior="scroll" scrollamount="3, 0" direction="up" onmouseover="this.stop();" onmouseout="this.start();">
+                                        <h3 class="rtejustify" style="color: blue">Workshop cum training on Management of FALL ARMY WORM (Spodoptera Furgiperda) dated on 24-06-2019 at Krushi Bhawan, Bhubaneswar, Odisha</h3>
+                                        <h3 class="rtejustify" style="color: blue">Induction training to Agriculture Development Associates (Student Scouts) on 03-07-2019 at Krushi Bhawan, Bhubaneswar, Odisha</h3>
+                                    </marquee>
+                                    <!--<li ng-repeat="a in event">
+                                        <div class="homeWMission">
+                                            <a href="{{a.url}}" target="_blank"><img src="{{a.image}}" />
+                                            <p>{{a.title}}</p><br/>
+                                            <p><a href="{{a.url}}" target="_blank" class="readmorelinknews" style="color: #253570;font-weight: bold">View More</a></p>
+                                            <div class="clear"></div>
+                                        </div>
+                                    </li>
+                                    <li ng-repeat="a in event">
+                                        <a href="#">
+                                            <p><a href="{{a.url}}" target="_blank"><img src="{{a.image}}" /></a></p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="homeWMission">
+                                            <img src="" />
+                                            <img src="" />
+                                            <img src="" />
+                                            <img alt="" src="../gigw/nielit.gov.in/sites/default/files/nielitnews/2017/10/171017_Imphal2_0.jpg">
+                                            <p>
+                                                <a href="nielit-news-galleryd2a4.html?gallery=10514" target="_blank">Visit of DG, NIELIT to NIELIT Kohima wherein he launched</a><br />
+                                                <a href="nielit-news-galleryd2a4.html?gallery=10514" class="readmorelinknews" style="color: #253570; font-weight: bold">View More</a>
+                                            </p>
+                                            <div class="clear"></div>
+                                        </div>
+                                    </li>-->
+                                </ul>
+                            </div>
+                        </div>
+                        <script src="../gigw/nielit.gov.in/sites/all/themes/berry/js/newsTicker.js"></script>
+                        <script>
+                            var multilines = $('#multilines .newsticker').newsTicker({
+                                row_height: 115,
+                                speed: 800,
+                                prevButton: $('#multilines .prev-button'),
+                                nextButton: $('#multilines .next-button'),
+                                stopButton: $('#multilines .stop-button'),
+                                startButton: $('#multilines .start-button'),
+                            });
+                            var oneliner = $('#oneliner .newsticker').newsTicker({
+                                row_height: 44,
+                                max_rows: 1,
+                                time: 5000,
+                                nextButton: $('#oneliner .header')
+                            });
+                            // Pause newsTicker on .header hover
+                            $('#oneliner .header').hover(function() {
+                                oneliner.newsTicker('pause');
+                            }, function() {
+                                oneliner.newsTicker('unpause');
+                            });
+                            $(document).ready(function() {
+                                $('.language-link').click(function() {
+                                    $(this).target = "_blank";
+                                    window.open($(this).prop('href'));
+                                    return false;
+                                });
+                            });
+                            $(".menu").flexNav();
+                            $(document).ready(function () {
+                                $("ul.menu li").hover(function () { // When trigger is hovered...
+                                    $(this).children("ul.menu").show();
+                                }, function () {
+                                    $(this).children("ul.menu").slideUp();
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <script type="text/javascript" src="../public/javascripts/chart.min.js"></script>
+                <canvas id="myChart" style="margin: 30px 0"></canvas>
+                <script type="text/javascript" src="../public/javascripts/homeGraph.js"></script>
+                <div class="panels">
+                    <div class="panel-box">
+                        <div class="wrapper">
+                            <a href="http://agrisnetodisha.ori.nic.in/" target="_blank" onclick="return confirm('This link will take you to an external web site.')"><img alt="button menu" src="../gigw/www.nielit.gov.in/sites/default/files/AGRISNETICON.jpg" /></a>
+                        </div>
+                    </div>
+                    <div class="panel-box">
+                        <div class="wrapper">
+                            <a href="http://agriodisha.nic.in/" target="_blank" onclick="return confirm('This link will take you to an external web site.')"><img alt="button menu" src="../gigw/www.nielit.gov.in/sites/default/files/Agriodisha.jpg" /></a>
+                        </div>
+                    </div>
+                    <div class="panel-box">
+                        <div class="wrapper">
+                            <a href="https://www.odisha.gov.in/" target="_blank" onclick="return confirm('This link will take you to an external web site.')"><img alt="button menu" src="../gigw/www.nielit.gov.in/sites/default/files/odisha_gov2.jpg" /></a>
+                        </div>
+                    </div>
+                    <div class="panel-box">
+                        <div class="wrapper">
+                            <a href="http://agricoop.nic.in/" target="_blank" onclick="return confirm('This link will take you to an external web site.')"><img alt="button menu" src="../gigw/www.nielit.gov.in/sites/default/files/AGRICULTURECOOPERATION & FARMERS WELFARE.jpg" /></a>
+                        </div>
+                    </div>
+                    <div class="panel-box">
+                        <div class="wrapper">
+                            <a href="http://ppqs.gov.in/" target="_blank" onclick="return confirm('This link will take you to an external web site.')"><img alt="button menu" src="../gigw/www.nielit.gov.in/sites/default/files/plant.jpg" /></a>
+                        </div>
+                    </div>
+                    <div class="panel-box">
+                        <div class="wrapper">
+                            <a href="https://www.kalia.co.in/" target="_blank" onclick="return confirm('This link will take you to an external web site.')"><img alt="button menu" src="../gigw/www.nielit.gov.in/sites/default/files/KALIA LOGO.jpg" /></a>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Plugins scripts -->
+        <script src="../gigw/nielit.gov.in/sites/all/themes/berry/jquery.accTabs.js"></script>
+        <script>
+            $(function() {
+                $('.example-a').accTabs();
+                $('.example-b').accTabs({
+                    defaultTab: 1
+                });
+                (function() {
+                    var target = $('.example-c'),
+                    buttonContainer = $('<div />'),
+                    buttonRebuild = $('<button class="js-btn">Rebuild</button>'),
+                    buttonDestroy = $('<button class="js-btn">Destroy</button>');
+                    target.accTabs({
+                        defaultTab: 1
+                    });
+                    buttonRebuild.attr('disabled', 'disabled');
+                    buttonRebuild.on('click', function(event) {
+                        event.preventDefault();
+                        target.data('plugin_accTabs').rebuild();
+                        $(this).attr('disabled', 'disabled');
+                        buttonDestroy.removeAttr('disabled');
+                    });
+                    buttonDestroy.on('click', function(event) {
+                        event.preventDefault();
+                        target.data('plugin_accTabs').destroy();
+                        $(this).attr('disabled', 'disabled');
+                        buttonRebuild.removeAttr('disabled');
+                    });
+                    buttonContainer.append(buttonDestroy, buttonRebuild);
+                    target.after(buttonContainer);
+                })();
+            });
+            $(document).ready(function() {
+                $("#block-menu-menu-footer-follow-us .menu li").each(function(n) {
+                    $(this).attr("id", "social" + n);
+                });
+            });
+            $(document).ready(function() {
+                $("#multilines .newsticker").css("height","300px");
+                $("#js-tabs_panel--03").css("height","285px");
+                $("#js-tabs_panel--04").css("height","285px");
+            });
+        </script>
+        <script>
+            jQuery(document).ready(function ($) {
+                var _SlideshowTransitions = [
+                    // Fade in R
+                    { $Duration: 1200, $During: { $Left: [0.3, 0.7] }, $FlyDirection: 2, $Easing: { $Left: $JssorEasing$.$EaseInCubic, $Opacity: $JssorEasing$.$EaseLinear }, $ScaleHorizontal: 0.3, $Opacity: 2 }
+                    // Fade out L
+                    , { $Duration: 1200, $SlideOut: true, $FlyDirection: 1, $Easing: { $Left: $JssorEasing$.$EaseInCubic, $Opacity: $JssorEasing$.$EaseLinear }, $ScaleHorizontal: 0.3, $Opacity: 2 }
+                ];
+                var options = {
+                    $AutoPlay: true,                                    // [Optional] Whether to auto play, to enable slideshow, this option must be set to true, default value is false
+                    $AutoPlaySteps: 1,                                  // [Optional] Steps to go for each navigation request (this options applys only when slideshow disabled), the default value is 1
+                    $AutoPlayInterval: 4000,                            // [Optional] Interval (in milliseconds) to go for next slide since the previous stopped if the slider is auto playing, default value is 3000
+                    $PauseOnHover: 1,                                   // [Optional] Whether to pause when mouse over if a slider is auto playing, 0 no pause, 1 pause for desktop, 2 pause for touch device, 3 pause for desktop and touch device, default value is 1
+                    $ArrowKeyNavigation: true,   			            // [Optional] Allows keyboard (arrow key) navigation or not, default value is false
+                    $SlideDuration: 500,                                // [Optional] Specifies default duration (swipe) for slide in milliseconds, default value is 500
+                    $MinDragOffsetToSlide: 20,                          // [Optional] Minimum drag offset to trigger slide , default value is 20
+                    //$SlideWidth: 1349,                                // [Optional] Width of every slide in pixels, default value is width of 'slides' container
+                    //$SlideHeight: default,                            // [Optional] Height of every slide in pixels, default value is height of 'slides' container
+                    $SlideSpacing: 0, 					                // [Optional] Space between each slide in pixels, default value is 0
+                    $DisplayPieces: 1,                                  // [Optional] Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1), the default value is 1
+                    $ParkingPosition: 0,                                // [Optional] The offset position to park slide (this options applys only when slideshow disabled), default value is 0.
+                    $UISearchMode: 1,                                   // [Optional] The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, arrow navigator container, thumbnail navigator container etc).
+                    $PlayOrientation: 1,                                // [Optional] Orientation to play slide (for auto play, navigation), 1 horizental, 2 vertical, 5 horizental reverse, 6 vertical reverse, default value is 1
+                    $DragOrientation: 3,                                // [Optional] Orientation to drag slide, 0 no drag, 1 horizental, 2 vertical, 3 either, default value is 1 (Note that the $DragOrientation should be the same as $PlayOrientation when $DisplayPieces is greater than 1, or parking position is not 0)
+                    $SlideshowOptions: {                                // [Optional] Options to specify and enable slideshow or not
+                        $Class: $JssorSlideshowRunner$,                 // [Required] Class to create instance of slideshow
+                        $Transitions: _SlideshowTransitions,            // [Required] An array of slideshow transitions to play slideshow
+                        $TransitionsOrder: 1,                           // [Optional] The way to choose transition to play slide, 1 Sequence, 0 Random
+                        $ShowLink: true                                 // [Optional] Whether to bring slide link on top of the slider when slideshow is running, default value is false
+                    },
+                    $BulletNavigatorOptions: {                          // [Optional] Options to specify and enable navigator or not
+                        $Class: $JssorBulletNavigator$,                 // [Required] Class to create navigator instance
+                        $ChanceToShow: 2,                               // [Required] 0 Never, 1 Mouse Over, 2 Always
+                        $Lanes: 1,                                      // [Optional] Specify lanes to arrange items, default value is 1
+                        $SpacingX: 10,                                  // [Optional] Horizontal space between each item in pixel, default value is 0
+                        $SpacingY: 10                                   // [Optional] Vertical space between each item in pixel, default value is 0
+                    },
+                    $ArrowNavigatorOptions: {
+                        $Class: $JssorArrowNavigator$,                  // [Requried] Class to create arrow navigator instance
+                        $ChanceToShow: 2                                // [Required] 0 Never, 1 Mouse Over, 2 Always
+                    },
+                    $ThumbnailNavigatorOptions: {
+                        $Class: $JssorThumbnailNavigator$,              // [Required] Class to create thumbnail navigator instance
+                        $ChanceToShow: 2,                               // [Required] 0 Never, 1 Mouse Over, 2 Always
+                        $ActionMode: 0,                                 // [Optional] 0 None, 1 act by click, 2 act by mouse hover, 3 both, default value is 1
+                        $DisableDrag: true                              // [Optional] Disable drag or not, default value is false
+                    }
+                };
+                var jssor_sliderb = new $JssorSlider$("sliderb_container", options);
+                // responsive code begin
+                // you can remove responsive code if you don't want the slider scales while window resizes
+                function ScaleSlider() {
+                    var parentWidth = jssor_sliderb.$Elmt.parentNode.clientWidth;
+                    if (parentWidth)
+                        jssor_sliderb.$SetScaleWidth(Math.min(parentWidth, 1920));
+                    else
+                        window.setTimeout(ScaleSlider, 30);
+                }
+                ScaleSlider();
+                if (!navigator.userAgent.match(/(iPhone|iPod|iPad|BlackBerry|IEMobile)/)) {
+                    $(window).bind('resize', ScaleSlider);
+                }
+                // if (navigator.userAgent.match(/(iPhone|iPod|iPad)/)) {
+                //     $(window).bind("orientationchange", ScaleSlider);
+                // }
+                // responsive code end
+                $('.StartSlideshowBtn').click(function () {
+                    if (jssor_sliderb.$IsAutoPlaying()) {
+                        jssor_sliderb.$Pause();
+                        $('.StartSlideshowBtn_img').attr('src', 'sites/all/themes/berry/images/pause.png');
+                    }
+                    else {
+                        jssor_sliderb.$Play();
+                        $('.StartSlideshowBtn_img').attr('src', '../gigw/nielit.gov.in/sites/all/themes/berry/images/play.png');
+                    }
+                });
+            });
+        </script>
+        <div class="clear"></div>
+    </div>
+    <div id="totopscroller" title="scroller"></div>
+</div>
+<%- include('footer.ejs') -%>
