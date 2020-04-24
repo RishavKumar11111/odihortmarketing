@@ -157,6 +157,16 @@ router.get('/aboutUs', csrfProtection, cache.overrideCacheHeaders(overrideConfig
   res.render('aboutus', { title: 'About Us', csrfToken: req.csrfToken() });
 });
 
+router.get('/photoGallery', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('photogallery', { title: 'Photo Gallery', csrfToken: req.csrfToken() });
+});
+
+router.get('/videoGallery', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('videogallery', { title: 'Video Gallery', csrfToken: req.csrfToken() });
+});
+
 router.get('/login', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');

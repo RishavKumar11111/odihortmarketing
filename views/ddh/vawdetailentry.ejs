@@ -1,0 +1,275 @@
+<div class="right_col" role="main" ng-controller="myVAWDECtrl" ng-init="getGPs(); getRegisteredVAWs(); getAllRegisteredVAWs()" style="min-height: 100vh">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>VAW Details Entry</h3>
+            </div>
+            <div class="title_right">
+                <!-- <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Select GP(s) under your Block <small></small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <!-- <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li> -->
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+                        <div class="form-group">
+                            <div class="col-md-3 col-sm-3 col-xs-12" ng-repeat="i in gps">
+                                <input style="margin: 5px" type="checkbox" ng-model="i.selected" ng-change="getValue()" ng-true-value="true" ng-false-value="false" />
+                                <label style="padding: 0 25px 0 0; font-weight: normal" class="control-label">{{i.GPName | capitalize}}</label>
+                            </div>
+                            <div ng-show="gps.length == 0">
+                                <label style="color: darkred; text-align: justify" class="control-label">All GPs are occupied.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-xs-4 col-xs-12">
+                <div class="row">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>VAW Registration</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <form class="form-horizontal" role="form" name="vawForm" ng-submit="registerVAW(vawForm.$valid)" autocomplete="off" novalidate>
+                                <div ng-show="populateGPs.length > 0">
+                                    <div class="row">
+                                        <div class="form-group" style="text-align: center">
+                                            <div class="table table-responsive">
+                                                <table class="table table-hover table-striped jambo_table bulk_action">
+                                                    <thead>
+                                                        <tr class="headings">
+                                                            <td><b>Serial No.</b></td>
+                                                            <td><b>GP Name</b></td>
+                                                            <td><b>Action</b></td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tr ng-repeat="i in populateGPs">
+                                                        <td>{{$index + 1}}</td>
+                                                        <td>{{i.GPName | capitalize}}</td>
+                                                        <td>
+                                                            <button type="button" style="margin-bottom: 0px" class="btn btn-xs btn-danger" ng-click="removeData($index, i.GPCode)">Delete <i class="fa fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" style="padding-right: 6px"><i class="glyphicon glyphicon-user"></i><span style="color: red">*</span></span>
+                                            <input type="text" class="form-control" name-only name="vawName" ng-model="txtVAWName" minlength="1" maxlength="50" placeholder="Enter VAW's Name" required />
+                                        </div>
+                                        <div class="has-error" ng-show="vawForm.$submitted || vawForm.vawName.$touched" style="color:red">
+                                            <span ng-show="vawForm.vawName.$error.required">This is a required field</span>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" style="padding-right: 6px"><i class="glyphicon glyphicon-phone"></i><span style="color: red">*</span></span>
+                                            <input type="text" class="form-control" numbers-only mobile-no-only name="vawMobileNo" ng-model="txtVAWMobileNo" placeholder="Enter VAW's Mobile No." minlength="10" maxlength="10" required />
+                                        </div>
+                                        <div class="has-error" ng-show="vawForm.$submitted || vawForm.vawMobileNo.$touched" style="color:red">
+                                            <span ng-show="vawForm.vawMobileNo.$error.required">This is a required field</span>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                            <input type="text" class="form-control" numbers-only name="vawAadhaarNo" ng-model="txtVAWAadhaarNo" placeholder="Enter VAW's Aadhaar No." minlength="12" maxlength="12">
+                                        </div>
+                                    </div>
+                                    <div class="ln_solid"></div>
+                                    <input type="submit" class="btn btn-success" value="Register" ng-disabled="vawForm.$invalid" />
+                                </div>
+                                <div class="row" ng-show="populateGPs.length == 0">
+                                    <label style="color: darkred; text-align: justify" class="control-label">Select GP(s) to assign VAW(s) to their respective GPs.</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2 style="width: 90%">Assign registered VAW(s) to</h2>
+                            <h2 style="width: 90%">unallocated and new GP(s)</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <form class="form-horizontal" role="form" name="vawAForm" ng-submit="assignVAW(vawAForm.$valid)" autocomplete="off" novalidate>
+                                <div ng-show="allRegisteredVAWs.length > 0">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                                <select class="form-control" name="vawCode" ng-model="ddlVAWCode" ng-options="i.VAWCode for i in allRegisteredVAWs" ng-change="getRegisteredVAWDetails(ddlVAWCode.VAWCode)" required>
+                                                    <option value="" disabled>Select VAW Code</option>
+                                                </select>
+                                            </div>
+                                            <div class="has-error" ng-show="vawAForm.$submitted || vawAForm.vawCode.$touched" style="color:red">
+                                                <span ng-show="vawAForm.vawCode.$error.required">This is a required field</span>
+                                            </div>
+                                        </div>
+                                        <div ng-show="registeredVAWDetails.length > 0">
+                                            <div class="row">
+                                                <div class="table table-responsive text-center">
+                                                    <table class="table table-hover table-striped jambo_table bulk_action">
+                                                        <thead>
+                                                            <tr class="headings">
+                                                                <td><b>Name <span style="color: red">*</span></b></td>
+                                                                <td style="white-space: nowrap"><b>Mobile No. <span style="color: red">*</span></b></td>
+                                                                <td ng-show="txtVAWDetails" style="white-space: nowrap; padding-top: 13px"><b>Aadhaar No.</b></td>
+                                                                <td style="padding-top: 13px"><b>Action</b></td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tr ng-repeat="i in registeredVAWDetails">
+                                                            <td ng-show="lblVAWDetails">{{i.VAWName}}</td>
+                                                            <td ng-show="txtVAWDetails">
+                                                                <input type="text" class="form-control" name-only ng-model="$parent.txtMVAWName" minlength="1" maxlength="50" placeholder="Enter VAW's Name" />
+                                                            </td>
+                                                            <td ng-show="lblVAWDetails">{{i.VAWMobileNo}}</td>
+                                                            <td ng-show="txtVAWDetails">
+                                                                <input type="text" class="form-control" numbers-only mobile-no-only ng-model="$parent.txtMVAWMobileNo" placeholder="Enter VAW's Mobile No." minlength="10" maxlength="10" />
+                                                            </td>
+                                                            <td ng-show="txtVAWDetails">
+                                                                <input type="text" class="form-control" numbers-only ng-model="$parent.txtMVAWAadhaarNo" placeholder="Enter VAW's Aadhaar No." minlength="12" maxlength="12">
+                                                            </td>
+                                                            <td ng-show="lblVAWDetails">
+                                                                <input type="button" class="btn btn-xs btn-warning" value="Modify" ng-click="modifyVAWDetails()" style="margin-top: -3px" />
+                                                            </td>
+                                                            <td ng-show="txtVAWDetails" style="white-space: nowrap; padding-top: 13px">
+                                                                <button type="button" class="btn btn-xs btn-primary" ng-click="updateVAWDetails()"><span class="glyphicon glyphicon-refresh"></span></button>
+                                                                <button type="button" class="btn btn-xs btn-danger" ng-click="cancelVAWDetails()"><span class="glyphicon glyphicon-remove"></span></button>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div ng-repeat="i in unallocatedGPs">
+                                            <input style="margin: 5px" type="checkbox" ng-model="i.gpSelected" ng-change="getGPValue()" ng-true-value="true" ng-false-value="false" />
+                                            <label style="padding: 0 25px 0 0; font-weight: normal" class="control-label">{{i.GPName | capitalize}}</label>
+                                        </div>
+                                        <div ng-show="unallocatedGPs.length == 0">
+                                            <label style="color: darkred; text-align: justify" class="control-label">No VAW(s) are unassigned from their respective GPs.</label>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-md-7 col-sm-7 col-xs-12">
+                                            <div ng-dropdown-multiselect="" extra-settings="dropdownSetting" options="RestGPs" selected-model="RestGPsSelected" checkboxes="true" translation-texts="customTexts"></div>
+                                        </div>
+                                        <div class="col-md-5 col-sm-5 col-xs-12">
+                                            <input type="button" class="btn btn-primary" value="Add New GPs" ng-click="submitRestGPsData()" />
+                                        </div>
+                                    </div>
+                                    <div class="row form-group" ng-show="selectedRestGPs.length > 0">
+                                        <label class="control-label" style="font-size: 16px">Selected New GPs</label>
+                                        <table class="table table-responsive table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Serial No.</th>
+                                                    <th>GP Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="i in selectedRestGPs">
+                                                    <td>{{$index + 1}}</td>
+                                                    <td>{{i.GPName}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="ln_solid"></div>
+                                    <input type="submit" class="btn btn-success" value="Assign" ng-disabled="vawAForm.$invalid" />
+                                </div>
+                                <div class="row" ng-show="allRegisteredVAWs.length == 0">
+                                    <label style="color: darkred; text-align: justify" class="control-label">None of the VAWs are allotted to their GPs.</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-xs-8 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Registered VAW(s)</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="form-group">
+                            <div class="row" ng-show="registeredVAWs.length > 0">
+                                <div class="form-group" style="text-align: center">
+                                    <div class="table table-responsive">
+                                        <table class="table table-hover table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr class="headings">
+                                                    <td><b>Serial No.</b></td>
+                                                    <td><b>VAW Code</b></td>
+                                                    <td><b>VAW Name</b></td>
+                                                    <td><b>VAW Mobile No.</b></td>
+                                                    <td><b>VAW Details</b></td>
+                                                </tr>
+                                            </thead>
+                                            <tr ng-repeat="(key, value) in registeredVAWs | groupBy: 'VAWCode'">
+                                                <td style="vertical-align: middle">{{$index + 1}}</td>
+                                                <td style="vertical-align: middle">{{key}}</td>
+                                                <td style="vertical-align: middle">{{value[0].VAWName}}</td>
+                                                <td style="vertical-align: middle">{{value[0].VAWMobileNo}}</td>
+                                                <td>
+                                                    <table class="table table-hover table-striped jambo_table bulk_action">
+                                                        <thead>
+                                                            <tr class="headings">
+                                                                <td><b>Serial No.</b></td>
+                                                                <td><b>GP Name</b></td>
+                                                                <td><b>Action</b></td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tr ng-repeat="i in value">
+                                                            <td>{{$index + 1}}</td>
+                                                            <td>{{i.GPName | capitalize}}</td>
+                                                            <td>
+                                                                <button type="button" style="margin-bottom: 0px" class="btn btn-xs btn-danger" ng-click="removeVAW(i.VAWCode, i.GPCode, i.GPName)">Remove <span class="glyphicon glyphicon-trash"></span></button>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="registeredVAWs.length == 0">
+                                <label style="color: darkred; text-align: justify" class="control-label">None of the VAWs are allotted to their GPs.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

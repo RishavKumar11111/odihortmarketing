@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var balModule = require('../models/adminBALModule');
+var atob = require('atob');
 var crypto = require('crypto');
 var sha256 = require('js-sha256');
 var csrf = require('csurf');
@@ -10,6 +11,8 @@ var parseForm = bodyParser.urlencoded({ extended: false });
 var os = require('os');
 var cache = require('cache-headers');
 var permit = require('../models/permission');
+var request = require('request');
+var soap = require('soap');
 
 var overrideConfig = {
   'maxAge': 2000,

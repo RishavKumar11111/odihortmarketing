@@ -12,6 +12,7 @@ var device = require('express-device');
 var bodyParser = require('body-parser');
 
 var homeRouter = require('./routes/home');
+var ddhRouter = require('./routes/ddh');
 var adminRouter = require('./routes/admin');
 var changePasswordRouter = require('./routes/changePassword');
 var graphRouter = require('./routes/graph');
@@ -44,7 +45,7 @@ app.disable('x-powered-by');
 // static paths
 app.use('/public', express.static('public'));
 app.use('/gigw', express.static('gigw'));
-app.use('/gentelella', express.static('gentelella'));
+app.use('/AdminLTE', express.static('AdminLTE'));
 app.use('/app_login', express.static('app_login'));
 
 // view engine setup
@@ -58,6 +59,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', homeRouter);
+app.use('/ddh', ddhRouter);
 app.use('/admin', adminRouter);
 app.use('/changePassword', changePasswordRouter);
 app.use('/graph', graphRouter);
