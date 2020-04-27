@@ -1,4 +1,4 @@
-var app = angular.module('myHomeLoginApp', []);
+var app = angular.module('myApp', []);
 
 app.controller('myLoginCtrl', function ($scope, $http) {
 

@@ -13,6 +13,16 @@ exports.addActivityLog = function (ipAddress, userID, url, deviceType, os, brows
     });
 };
 
+exports.getAuditLog = function () {
+    return sequelize.query("select ActivityCode, IPAddress, UserID, URL, DeviceType, OS, Browser, convert(varchar(10), DateTime, 105) + ' ' +  convert(varchar(8), DateTime, 108) as DateTime, Action, Attack, Mode from ActivityLog", {
+        type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
 exports.getUserDetails = function (userName) {
     return sequelize.query('select ul.UserID, ul.PasswordHash, ul.RoleID, ul.ContactNo, ul.AccessFailedCount, ul.Status, ur.RoleName from UserLogin ul inner join UserRole ur on ul.RoleID = ur.RoleID where UserID = :user_name', {
         replacements: { user_name: userName }, type: sequelize.QueryTypes.SELECT

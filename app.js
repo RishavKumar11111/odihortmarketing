@@ -14,6 +14,7 @@ var bodyParser = require('body-parser');
 var homeRouter = require('./routes/home');
 var ddhRouter = require('./routes/ddh');
 var adminRouter = require('./routes/admin');
+var superAdminRouter = require('./routes/superAdmin');
 var changePasswordRouter = require('./routes/changePassword');
 var graphRouter = require('./routes/graph');
 
@@ -61,6 +62,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', homeRouter);
 app.use('/ddh', ddhRouter);
 app.use('/admin', adminRouter);
+app.use('/superAdmin', superAdminRouter);
 app.use('/changePassword', changePasswordRouter);
 app.use('/graph', graphRouter);
 

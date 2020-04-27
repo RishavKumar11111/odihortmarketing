@@ -81,26 +81,46 @@ var getURL = function (req) {
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('ddh/layout', { title: 'DDH Layout' });
+  res.render('ddh/layout', { title: 'Layout' });
 });
 
 router.get('/dashboard', function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('ddh/dashboard', { title: 'DDH Dashboard' });
+  res.render('ddh/dashboard', { title: 'Dashboard' });
 });
 
-router.get('/home', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+router.get('/stockIn', function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('admin/home', { title: 'ADMIN Home', csrfToken: req.csrfToken() });
+  res.render('ddh/stockin', { title: 'Stock In' });
 });
 
-router.get('/changePassword', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+router.get('/stockOut', function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('ddh/stockout', { title: 'Stock Out' });
+});
+
+router.get('/stockInList', function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('ddh/stockinlist', { title: 'Stock In List' });
+});
+
+router.get('/stockOutList', function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('ddh/stockoutlist', { title: 'Stock Out List' });
+});
+
+router.get('/traderDetailsList', function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('ddh/traderdetailslist', { title: 'Trader Details List' });
+});
+
+router.get('/changePassword', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
-  res.render('admin/changepassword', { title: 'ADMIN Change Password', csrfToken: req.csrfToken(), randomNo: req.session.RandomNo });
+  res.render('ddh/changepassword', { title: 'Change Password', csrfToken: req.csrfToken(), randomNo: req.session.RandomNo });
 });
 
-router.post('/changePassword', parseForm, csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+router.post('/changePassword', parseForm, csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   balModule.getUserDetails(req.session.username).then(function success(response) {
     if (response.length === 0) {
@@ -163,15 +183,18 @@ router.post('/changePassword', parseForm, csrfProtection, permit.permission('ADM
   });
 });
 
-router.get('/auditLog', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
-  req.session.RandomNo = randomNumber();
+router.get('/logout', function (req, res, next) {
+  if (req.session.username != undefined) {
+    balModule.updateIsLoggedIn(0, req.session.username, function success(response) { }, function error(response) { console.log(response.status); });
+  }
+  req.session.destroy();
   res.get('X-Frame-Options');
-  res.render('admin/auditlog', { title: 'ADMIN Audit Log', csrfToken: req.csrfToken(), randomNo: req.session.RandomNo });
+  res.redirect('../login');
 });
 
-router.get('/getAuditLog', function (req, res, next) {
+router.get('/getCategories', function (req, res, next) {
   res.get('X-Frame-Options');
-  balModule.getAuditLog().then(function success(response) {
+  balModule.getCategories().then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);
@@ -180,13 +203,94 @@ router.get('/getAuditLog', function (req, res, next) {
   });
 });
 
-router.get('/logout', function (req, res, next) {
-  if (req.session.username != undefined) {
-    balModule.updateIsLoggedIn(0, req.session.username, function success(response) { }, function error(response) { console.log(response.status); });
-  }
-  req.session.destroy();
+router.get('/getItemsByCategory', function (req, res, next) {
   res.get('X-Frame-Options');
-  res.redirect('../login');
+  var categoryID = req.query.categoryID;
+  balModule.getItemsByCategory(categoryID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getBlocks', function (req, res, next) {
+  res.get('X-Frame-Options');
+  // var districtCode = req.session.username.substr(4, 3);
+  var districtCode = 344;
+  balModule.getBlocks(districtCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getGPsByBlock', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var blockCode = req.query.blockCode;
+  balModule.getGPsByBlock(blockCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getVillagesByGP', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var gpCode = req.query.gpCode;
+  balModule.getVillagesByGP(gpCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getULBs', function (req, res, next) {
+  res.get('X-Frame-Options');
+  // var districtCode = req.session.username.substr(4, 3);
+  var districtCode = 344;
+  balModule.getULBs(districtCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.post('/submitStockIn', function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, 'DDH_344', getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var obj = req.body.data;
+  console.log(obj);
+  if (obj.Photo != null) {
+    obj.Photo = Buffer.from(obj.Photo, 'base64');
+  }
+  obj.UserID = 'DDH_344';
+  obj.IPAddress = req.connection.remoteAddress;
+  obj.FinancialYear = getFinancialYear();
+  obj.Status = null;
+  balModule.submitStockIn(obj).then(function success(response1) {
+    for (var propName in response1[0][0]) {
+      if (response1[0][0].hasOwnProperty(propName)) {
+        res.send(response1[0][0][propName] == 1 ? true : false);
+      }
+    }
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
 });
 
 module.exports = router;

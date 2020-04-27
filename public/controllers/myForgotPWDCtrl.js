@@ -1,4 +1,4 @@
-var app = angular.module('myHomeFPApp', []);
+var app = angular.module('myApp', []);
 
 app.controller('myForgotPWDCtrl', function ($scope, $http) {
 

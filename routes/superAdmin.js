@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
-var balModule = require('../models/ddhBALModule');
+var balModule = require('../models/superAdminBALModule');
 var atob = require('atob');
 var crypto = require('crypto');
 var sha256 = require('js-sha256');
@@ -81,31 +81,21 @@ var getURL = function (req) {
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('admin/layout', { title: 'Layout' });
+  res.render('superAdmin/layout', { title: 'Layout' });
 });
 
-router.get('/dashboard', function (req, res, next) {
+router.get('/auditLog', function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('admin/dashboard', { title: 'Dashboard' });
+  res.render('superAdmin/auditlog', { title: 'Audit Log' });
 });
 
-router.get('/availableItemsList', function (req, res, next) {
-  res.get('X-Frame-Options');
-  res.render('admin/availableitemslist', { title: 'Available Items List' });
-});
-
-router.get('/traderDetailsList', function (req, res, next) {
-  res.get('X-Frame-Options');
-  res.render('admin/traderdetailslist', { title: 'Trader Details List' });
-});
-
-router.get('/changePassword', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+router.get('/changePassword', csrfProtection, permit.permission('SUPERADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
-  res.render('ddh/changepassword', { title: 'Change Password', csrfToken: req.csrfToken(), randomNo: req.session.RandomNo });
+  res.render('superAdmin/changepassword', { title: 'Change Password', csrfToken: req.csrfToken(), randomNo: req.session.RandomNo });
 });
 
-router.post('/changePassword', parseForm, csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+router.post('/changePassword', parseForm, csrfProtection, permit.permission('SUPERADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   balModule.getUserDetails(req.session.username).then(function success(response) {
     if (response.length === 0) {
@@ -161,6 +151,17 @@ router.post('/changePassword', parseForm, csrfProtection, permit.permission('ADM
         console.log('An error occurred...', error);
       });
     }
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getAuditLog', function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getAuditLog().then(function success(response) {
+    res.send(response);
   }, function error(response) {
     console.log(response.status);
   }).catch(function err(error) {

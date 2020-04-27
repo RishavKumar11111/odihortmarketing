@@ -1,4 +1,4 @@
-app.controller('myCPCtrl', function ($scope, $http, $filter) {
+app.controller('myAdminChangePasswordCtrl', function ($scope, $http, $filter) {
 
     var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -58,12 +58,11 @@ app.controller('myCPCtrl', function ($scope, $http, $filter) {
             obj.ConfirmPassword = sha256($scope.txtConfirmPassword);
             if (sha256($scope.txtOldPassword) !== obj.NewPassword) {
                 if (obj.NewPassword === obj.ConfirmPassword) {
-                    $http.post('http://localhost:3000/changePassword', { data: obj }, { credentials: 'same-origin', headers: { 'CSRF-Token': token } }).then(function success(response) {
+                    $http.post('http://localhost:3000/admin/changePassword', { data: obj }, { credentials: 'same-origin', headers: { 'CSRF-Token': token } }).then(function success(response) {
                         var result = response.data;
                         if (result == 'OK') {
-                            alert('Password changed successfully. You will be redirected to Login Page. Please Login again to continue.');
+                            alert('Password changed successfully.');
                             clearFields();
-                            document.getElementById('logoutLink').click();
                         }
                         else {
                             alert(result);

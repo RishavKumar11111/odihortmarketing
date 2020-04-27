@@ -54,7 +54,7 @@
     <script src="../../public/javascripts/angularjs-dropdown-multiselect.min.js"></script>
 </head>
 
-<body class="hold-transition sidebar-mini" ng-app="myDDHApp" ng-cloak>
+<body class="hold-transition sidebar-mini" ng-app="mySuperAdminApp" ng-cloak>
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -154,7 +154,7 @@
                         <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div> -->
                     <div class="info">
-                        <a href="#" class="d-block">Welcome, DDH</a>
+                        <a href="#" class="d-block">Welcome, Super Admin</a>
                     </div>
                 </div>
 
@@ -166,56 +166,11 @@
                with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a href="#!" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Dashboard
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#!stockIn" class="nav-link">
-                                <i class="nav-icon fas fa-edit"></i>
-                                <p>
-                                    Stock In
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#!stockOut" class="nav-link">
-                                <i class="nav-icon fas fa-edit"></i>
-                                <p>
-                                    Stock Out
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
-                                    Reports
-                                    <i class="fas fa-angle-left right"></i>
+                                    Audit Log
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#!stockInList" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Stock In List</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#!stockOutList" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Stock Out List</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#!traderDetailsList" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Trader Details List</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#!changePassword" class="nav-link">
@@ -250,8 +205,8 @@
     </div>
     <!-- ./wrapper -->
     <script>
-        var app = angular.module('myDDHApp', ['ngRoute', 'angular.filter', 'angularjs-dropdown-multiselect']);
-        app.controller('myDDHCtrl', function ($scope, $http) { });
+        var app = angular.module('mySuperAdminApp', ['ngRoute', 'angular.filter', 'angularjs-dropdown-multiselect']);
+        app.controller('mySuperAdminCtrl', function ($scope, $http) { });
         app.filter('capitalize', function () {
             return function (input) {
                 if (input != null) {
@@ -272,26 +227,11 @@
         app.config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when("/", {
-                    templateUrl: "ddh/dashboard",
-                    controller: 'myDDHDashboardCtrl'
-                }).when("/stockIn", {
-                    templateUrl: "ddh/stockIn",
-                    controller: 'myDDHStockInCtrl'
-                }).when("/stockOut", {
-                    templateUrl: "ddh/stockOut",
-                    controller: 'myDDHStockOutCtrl'
-                }).when("/stockInList", {
-                    templateUrl: "ddh/stockInList",
-                    controller: 'myDDHStockInListCtrl'
-                }).when("/stockOutList", {
-                    templateUrl: "ddh/stockOutList",
-                    controller: 'myDDHStockOutListCtrl'
-                }).when("/traderDetailsList", {
-                    templateUrl: "ddh/traderDetailsList",
-                    controller: 'myDDHTraderDetailsListCtrl'
+                    templateUrl: "superAdmin/auditLog",
+                    controller: 'mySuperAdminAuditLogCtrl'
                 }).when("/changePassword", {
-                    templateUrl: "ddh/changePassword",
-                    controller: 'myDDHChangePasswordCtrl'
+                    templateUrl: "superAdmin/changePassword",
+                    controller: 'mySuperAdminChangePasswordCtrl'
                 }).otherwise({
                     redirectTo: "/"
                 });
@@ -322,13 +262,8 @@
             history.pushState(null, document.title, location.href);
         });
     </script>
-    <script src="../../public/controllers/ddh/myDDHDashboardCtrl.js"></script>
-    <script src="../../public/controllers/ddh/myDDHStockInCtrl.js"></script>
-    <script src="../../public/controllers/ddh/myDDHStockOutCtrl.js"></script>
-    <script src="../../public/controllers/ddh/myDDHStockInListCtrl.js"></script>
-    <script src="../../public/controllers/ddh/myDDHStockOutListCtrl.js"></script>
-    <script src="../../public/controllers/ddh/myDDHTraderDetailsListCtrl.js"></script>
-    <script src="../../public/controllers/ddh/myDDHChangePasswordCtrl.js"></script>
+    <script src="../../public/controllers/superAdmin/mySuperAdminAuditLogCtrl.js"></script>
+    <script src="../../public/controllers/superAdmin/mySuperAdminChangePasswordCtrl.js"></script>
     <!-- jQuery -->
     <script src="../../AdminLTE/plugins/jquery/jquery.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -385,7 +320,7 @@
     <!-- AdminLTE for demo purposes -->
     <script src="../../AdminLTE/dist/js/demo.js"></script>
     <!-- Page script -->
-    <script src="../../public/javascripts/sha256.min.js"></script>
+    <script type="text/javascript" src="../../public/javascripts/sha256.min.js"></script>
     <script src="../../public/javascripts/jquery.table2excel.min.js"></script>
     <script type="text/javascript">
         var idleTime = 0;
@@ -409,7 +344,7 @@
         function timerIncrement() {
             idleTime = idleTime + 1;
             if (idleTime > 9) { // 10 minutes
-                httpGetAsync('http://localhost:3000/ddh/logout', function (res) {
+                httpGetAsync('http://localhost:3000/superAdmin/logout', function (res) {
                     alert('Your session is expired. Please login again to continue.');
                     window.location.href = 'http://localhost:3000/login';
                 });
