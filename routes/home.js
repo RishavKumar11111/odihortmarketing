@@ -417,4 +417,27 @@ router.post('/updatePassword', parseForm, csrfProtection, cache.overrideCacheHea
   });
 });
 
+router.get('/getItemDetails', function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getItemDetails().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getItemDetailsDistrictWise', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var itemID = req.query.itemID;
+  balModule.getItemDetailsDistrictWise(itemID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
 module.exports = router;

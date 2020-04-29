@@ -30,6 +30,10 @@ app.controller('myDDHStockInCtrl', function ($scope, $http, $filter) {
         if ($scope.rbAreaType == 'Rural') {
             $http.get('http://localhost:3000/ddh/getBlocks').then(function success(response) {
                 $scope.blocks = response.data;
+                $scope.gps = [];
+                $scope.villages = [];
+                $scope.ddlGPs = null;
+                $scope.ddlVillages = null;
             }, function error(response) {
                 console.log(response.status);
             }).catch(function err(error) {
@@ -39,6 +43,10 @@ app.controller('myDDHStockInCtrl', function ($scope, $http, $filter) {
         else {
             $http.get('http://localhost:3000/ddh/getULBs').then(function success(response) {
                 $scope.blocks = response.data;
+                $scope.gps = [];
+                $scope.villages = [];
+                $scope.ddlGPs = null;
+                $scope.ddlVillages = null;
             }, function error(response) {
                 console.log(response.status);
             }).catch(function err(error) {
@@ -48,23 +56,27 @@ app.controller('myDDHStockInCtrl', function ($scope, $http, $filter) {
     };
 
     $scope.getGPsByBlock = function () {
-        $http.get('http://localhost:3000/ddh/getGPsByBlock?blockCode=' + $scope.ddlBlocks).then(function success(response) {
-            $scope.gps = response.data;
-        }, function error(response) {
-            console.log(response.status);
-        }).catch(function err(error) {
-            console.log('An error occurred...', error);
-        });
+        if ($scope.ddlBlocks !== null && $scope.ddlBlocks !== undefined && $scope.ddlBlocks !== '') {
+            $http.get('http://localhost:3000/ddh/getGPsByBlock?blockCode=' + $scope.ddlBlocks).then(function success(response) {
+                $scope.gps = response.data;
+            }, function error(response) {
+                console.log(response.status);
+            }).catch(function err(error) {
+                console.log('An error occurred...', error);
+            });
+        }
     };
 
     $scope.getVillagesByGP = function () {
-        $http.get('http://localhost:3000/ddh/getVillagesByGP?gpCode=' + $scope.ddlGPs).then(function success(response) {
-            $scope.villages = response.data;
-        }, function error(response) {
-            console.log(response.status);
-        }).catch(function err(error) {
-            console.log('An error occurred...', error);
-        });
+        if ($scope.ddlGPs !== null && $scope.ddlGPs !== undefined && $scope.ddlGPs !== '') {
+            $http.get('http://localhost:3000/ddh/getVillagesByGP?gpCode=' + $scope.ddlGPs).then(function success(response) {
+                $scope.villages = response.data;
+            }, function error(response) {
+                console.log(response.status);
+            }).catch(function err(error) {
+                console.log('An error occurred...', error);
+            });
+        }
     };
 
     $scope.readFile = function (e) {
@@ -155,7 +167,7 @@ app.controller('myDDHStockInCtrl', function ($scope, $http, $filter) {
                                     cbs[i].checked = false;
                             }
                             else {
-                                console.log(response.status);
+                                alert('An error occurred... Please contact the administrator.');
                             }
                         }).catch(function error(err) {
                             console.log('An error occurred...', err);
@@ -202,128 +214,4 @@ app.controller('myDDHStockInCtrl', function ($scope, $http, $filter) {
     //     };
     // };
 
-});
-
-app.directive('nameOnly', function () {
-    return {
-        require: '?ngModel',
-        link: function (scope, element, attrs, ngModelCtrl) {
-            if (!ngModelCtrl) {
-                return;
-            }
-            ngModelCtrl.$parsers.push(function (val) {
-                if (angular.isUndefined(val)) {
-                    var val = '';
-                }
-                var clean = val.replace(/[^a-zA-Z\s]/g, '');
-                if (val !== clean) {
-                    ngModelCtrl.$setViewValue(clean);
-                    ngModelCtrl.$render();
-                }
-                return clean;
-            });
-        }
-    };
-});
-
-app.directive('mobileNoOnly', function () {
-    return {
-        require: '?ngModel',
-        link: function (scope, element, attrs, ngModelCtrl) {
-            if (!ngModelCtrl) {
-                return;
-            }
-            element.on('input change', function () {
-                if (this.value === '0' || this.value === '1' || this.value === '2' || this.value === '3' || this.value === '4' || this.value === '5') {
-                    this.value = null;
-                }
-            });
-        }
-    };
-});
-
-app.directive('numbersOnly', function () {
-    return {
-        require: '?ngModel',
-        link: function (scope, element, attrs, ngModelCtrl) {
-            if (!ngModelCtrl) {
-                return;
-            }
-            ngModelCtrl.$parsers.push(function (val) {
-                if (angular.isUndefined(val)) {
-                    var val = '';
-                }
-                var clean = val.replace(/[^0-9]/g, '');
-                var negativeCheck = clean.split('-');
-                if (!angular.isUndefined(negativeCheck[1])) {
-                    negativeCheck[1] = negativeCheck[1].slice(0, negativeCheck[1].length);
-                    clean = negativeCheck[0] + '-' + negativeCheck[1];
-                    if (negativeCheck[0].length > 0) {
-                        clean = negativeCheck[0];
-                    }
-                }
-                if (val !== clean) {
-                    ngModelCtrl.$setViewValue(clean);
-                    ngModelCtrl.$render();
-                }
-                return clean;
-            });
-            element.bind('keypress', function (event) {
-                if (event.keyCode === 32) {
-                    event.preventDefault();
-                }
-            });
-        }
-    };
-});
-
-app.directive('validNumberUptoOneDecimal', function () {
-    return {
-        require: '?ngModel',
-        link: function (scope, element, attrs, ngModelCtrl) {
-            if (!ngModelCtrl) {
-                return;
-            }
-            ngModelCtrl.$parsers.push(function (val) {
-                if (angular.isUndefined(val)) {
-                    var val = '';
-                }
-                var clean = val.replace(/[^0-9\.]/g, '');
-                var negativeCheck = clean.split('-');
-                var decimalCheck = clean.split('.');
-                if (!angular.isUndefined(negativeCheck[1])) {
-                    negativeCheck[1] = negativeCheck[1].slice(0, negativeCheck[1].length);
-                    clean = negativeCheck[0] + '-' + negativeCheck[1];
-                    if (negativeCheck[0].length > 0) {
-                        clean = negativeCheck[0];
-                    }
-                }
-                if (!angular.isUndefined(decimalCheck[1])) {
-                    decimalCheck[1] = decimalCheck[1].slice(0, 2);
-                    clean = decimalCheck[0] + '.' + decimalCheck[1];
-                }
-                if (val !== clean) {
-                    ngModelCtrl.$setViewValue(clean);
-                    ngModelCtrl.$render();
-                }
-                return clean;
-            });
-            element.on('blur', function () {
-                if (element.val().slice(-1) == '.') {
-                    ngModelCtrl.$setViewValue(element.val() + '0');
-                }
-                if (element.val().charAt(0) == 0) {
-                    var decimalNo = parseFloat(element.val(), 10)
-                    ngModelCtrl.$setViewValue(decimalNo.toString());
-                }
-                ngModelCtrl.$render();
-                scope.$apply();
-            });
-            element.bind('keypress', function (event) {
-                if (event.keyCode === 32) {
-                    event.preventDefault();
-                }
-            });
-        }
-    };
 });

@@ -148,20 +148,6 @@
                             </div>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group">
-                                    <label>Quantity <small>(in Quintal)</small></label>
-                                    <input type="text" name="quantity" class="form-control"
-                                        valid-number-upto-one-decimal ng-model="txtQuantity"
-                                        placeholder="Enter Quantity" minlength="1" maxlength="10" required>
-                                    <div class="has-error"
-                                        ng-show="stockInForm.$submitted || stockInForm.quantity.$touched"
-                                        style="color:red">
-                                        <span ng-show="stockInForm.quantity.$error.required">This is a required
-                                            field</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="form-group">
                                     <label>Farmer's Mobile No.</label>
                                     <input type="text" name="farmerMobileNo" class="form-control" mobile-no-only
                                         numbers-only ng-model="txtFarmerMobileNo" placeholder="Enter Farmer's Mobile No."
@@ -170,6 +156,20 @@
                                         ng-show="stockInForm.$submitted || stockInForm.farmerMobileNo.$touched"
                                         style="color:red">
                                         <span ng-show="stockInForm.farmerMobileNo.$error.required">This is a required
+                                            field</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>Quantity <small>(in Quintal)</small></label>
+                                    <input type="text" name="quantity" class="form-control"
+                                        valid-number-upto-two-decimal ng-model="txtQuantity"
+                                        placeholder="Enter Quantity" minlength="1" maxlength="10" required>
+                                    <div class="has-error"
+                                        ng-show="stockInForm.$submitted || stockInForm.quantity.$touched"
+                                        style="color:red">
+                                        <span ng-show="stockInForm.quantity.$error.required">This is a required
                                             field</span>
                                     </div>
                                 </div>

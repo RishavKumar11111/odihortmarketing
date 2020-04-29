@@ -135,3 +135,55 @@ exports.submitStockIn = function (obj) {
         console.log('An error occurred...', err);
     });
 };
+
+exports.getStockDetails = function (obj) {
+    if (obj.hasOwnProperty('gpCode') && obj.hasOwnProperty('villageCode')) {
+        return sequelize.query('select a.StockID, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, c.ItemName, Quantity - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemId and a.ItemID = :item_id left join StockOut b on a.StockID = b.StockID inner join LGDBlock d on a.BlockCode = d.BlockCode inner join LGDGP e on a.GPCode = e.GPCode inner join LGDVillage f on a.VillageCode = f.VillageCode where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:gp_code = 0 or a.GPCode = :gp_code) and (:village_code = 0 or a.VillageCode = :village_code) group by a.StockID, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, c.ItemName, Quantity, Unit having Quantity - isnull((sum(SaleQuantity)), 0) > 0 order by BlockName, GPName, VillageName', {
+            replacements: { item_id: obj.itemID, district_code: obj.districtCode, block_code: obj.blockCode, gp_code: obj.gpCode, village_code: obj.villageCode }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+    else {
+        return sequelize.query('select a.StockID, ULBName as BlockName, FarmerName, FarmerMobileNo, c.ItemName, Quantity - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemId and a.ItemID = :item_id left join StockOut b on a.StockID = b.StockID inner join LGDULB d on a.BlockCode = d.ULBCode where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) group by a.StockID, ULBName, FarmerName, FarmerMobileNo, c.ItemName, Quantity, Unit having Quantity - isnull((sum(SaleQuantity)), 0) > 0 order by ULBName', {
+            replacements: { item_id: obj.itemID, district_code: obj.districtCode, block_code: obj.blockCode }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+};
+
+exports.submitStockOut = function (stockArray, obj, callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const tableStock = new sql.Table();
+        tableStock.create = true;
+        tableStock.columns.add('StockID', sql.Int, { nullable: false, primary: true });
+        tableStock.columns.add('SaleQuantity', sql.Decimal(18, 2), { nullable: false });
+        for (var i = 0; i < stockArray.length; i++) {
+            tableStock.rows.add(stockArray[i].StockID, stockArray[i].SaleQuantity);
+        }
+        const request = new sql.Request(con);
+        request.input('Remarks', obj.Remarks);
+        request.input('UserID', obj.UserID);
+        request.input('IPAddress', obj.IPAddress);
+        request.input('FinancialYear', obj.FinancialYear);
+        request.input('Status', obj.Status);
+        request.input('tableStock', tableStock);
+        request.execute('spSubmitStockOut', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.returnValue);
+            }
+            con.close();
+        });
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};

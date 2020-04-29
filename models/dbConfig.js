@@ -15,7 +15,10 @@ const locConfig = {
     user: 'sa',
     password: 'sa@123#',
     server: 'localhost',
-    database: 'odihortmarketing'
+    database: 'odihortmarketing',
+    options: {
+        encrypt: false
+    }
 };
 
 // const Sequelize = require('sequelize');

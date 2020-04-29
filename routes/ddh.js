@@ -272,7 +272,6 @@ router.post('/submitStockIn', function (req, res, next) {
     console.log(response.status);
   });
   var obj = req.body.data;
-  console.log(obj);
   if (obj.Photo != null) {
     obj.Photo = Buffer.from(obj.Photo, 'base64');
   }
@@ -290,6 +289,44 @@ router.post('/submitStockIn', function (req, res, next) {
     console.log(response.status);
   }).catch(function err(error) {
     console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getStockDetails', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var obj = {};
+  obj.itemID = req.query.itemID;
+  obj.districtCode = 344;
+  obj.blockCode = req.query.blockCode;
+  if (req.query.hasOwnProperty('gpCode') && req.query.hasOwnProperty('villageCode')) {
+    obj.gpCode = req.query.gpCode;
+    obj.villageCode = req.query.villageCode;
+  }
+  balModule.getStockDetails(obj).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.post('/submitStockOut', function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, 'DDH_344', getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var stockArray = req.body.data.array;
+  var obj = req.body.data.obj;
+  obj.UserID = 'DDH_344';
+  obj.IPAddress = req.connection.remoteAddress;
+  obj.FinancialYear = getFinancialYear();
+  obj.Status = null;
+  balModule.submitStockOut(stockArray, obj, function success(response1) {
+    res.send((response1 == stockArray.length) ? true : false);
+  }, function error(response) {
+    console.log(response.status);
   });
 });
 

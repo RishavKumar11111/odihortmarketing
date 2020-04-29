@@ -1,38 +1,43 @@
 <%- include('header.ejs') -%>
 <script type="text/javascript" src="../public/controllers/myHomeCtrl.js"></script>
 <style>
-    @media only screen and (max-width: 480px)
-    {
+    @media only screen and (max-width: 480px) {
         .js-tabs .js-tabs_panel {
-            display: block  !important;
-            padding-left: 0px  !important;
-            padding-right: 0px  !important;
+            display: block !important;
+            padding-left: 0px !important;
+            padding-right: 0px !important;
         }
+
         #st3 {
             height: 250px !important;
-            width: 250px  !important;
+            width: 250px !important;
         }
     }
+
     .contain {
         margin: 0 auto;
         width: 95%;
         padding: 0;
         text-align: center;
     }
+
     .contain .colo .po {
         padding: .25rem .75rem;
     }
+
     .cardBorder {
         border-radius: 10px 10px 10px 10px;
         box-shadow: 10px 10px 5px grey;
         border: 3px solid green;
         margin: 30px 10px;
     }
+
     .cardImage {
         border-radius: 50%;
         height: 125px;
         width: 125px;
     }
+
     /* 2 columns (600px) */
     @media only screen and (min-width:600px) {
         .contain .colo {
@@ -40,6 +45,7 @@
             width: 50%;
         }
     }
+
     /* 2 columns (768px) */
     @media only screen and (min-width:768px) {
         .contain .colo {
@@ -47,37 +53,161 @@
             width: 50%;
         }
     }
+
     /* 4 columns (992px) */
     @media only screen and (min-width:992px) {
         .contain .colo {
             width: 25%;
         }
     }
+
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 5px;
+        background-color: #73a2d1;
+        font-size: 15px;
+    }
+
+    td {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 5px;
+        background-color: white;
+        font-size: 13px;
+    }
+
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 3000;
+        /* Sit on top */
+        padding-top: 100px;
+        /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        position: relative;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 80%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s
+    }
+
+    /* Add Animation */
+    @-webkit-keyframes animatetop {
+        from {
+            top: -300px;
+            opacity: 0
+        }
+
+        to {
+            top: 0;
+            opacity: 1
+        }
+    }
+
+    @keyframes animatetop {
+        from {
+            top: -300px;
+            opacity: 0
+        }
+
+        to {
+            top: 0;
+            opacity: 1
+        }
+    }
+
+    /* The Close Button */
+    .close {
+        color: white;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-header {
+        padding: 10px;
+        background-color: #73a2d1;
+        color: white;
+    }
+
+    .modal-body {
+        padding: 10px;
+        background-color: #d5e3f1;
+    }
+
+    .modal-footer {
+        padding: 10px;
+        background-color: #73a2d1;
+        color: white;
+    }
 </style>
-<div ng-controller="myHomeCtrl">
+<div ng-controller="myHomeCtrl" ng-init="getItemDetails();">
     <div class="slider-outer">
         <script type="text/javascript" src="../gigw/nielit.gov.in/sites/all/themes/berry/js/jssor.core.js"></script>
         <script type="text/javascript" src="../gigw/nielit.gov.in/sites/all/themes/berry/js/jssor.utils.js"></script>
         <script type="text/javascript" src="../gigw/nielit.gov.in/sites/all/themes/berry/js/jssor.slider.js"></script>
         <!-- Jssor Slider Begin -->
         <!-- You can move inline styles to css file or css block. -->
-        <div id="sliderb_container" style="position: relative; width: 1349px; height: 370px; overflow: hidden; margin: 0 auto">
+        <div id="sliderb_container"
+            style="position: relative; width: 1349px; height: 370px; overflow: hidden; margin: 0 auto">
             <!-- Loading Screen -->
             <div style="width: 30%; position: absolute; z-index: 1; padding-top: 10px; left: 5px">
                 <img src="../gigw/nielit.gov.in/sites/default/files/cm.png">
             </div>
-            <div style="width: 30%; position: absolute; z-index: 1; padding-top: 10px; left: 5px; bottom: 12%; left: 30%;">
-                <label style="color: rgb(255, 255, 255); font-size: 22px"><b>All the services should be Citizen Centric</b> </label>
+            <div
+                style="width: 30%; position: absolute; z-index: 1; padding-top: 10px; left: 5px; bottom: 12%; left: 30%;">
+                <label style="color: rgb(255, 255, 255); font-size: 22px"><b>All the services should be Citizen
+                        Centric</b> </label>
             </div>
             <!-- <div style="width: 15%; position: absolute; z-index: 1; right: 0; text-align: right">
                 <img src="../gigw/nielit.gov.in/sites/default/files/minister-secretary.png">
             </div> -->
             <div data-u="loading" style="position: absolute; top: 0px; left: 0px">
-                <div style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; background-color: #000; top: 0px; left: 0px; width: 100%; height: 100%"></div>
+                <div
+                    style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; background-color: #000; top: 0px; left: 0px; width: 100%; height: 100%">
+                </div>
                 <div style="position: absolute; display: block; top: 0px; left: 0px; width: 100%; height: 100%"></div>
             </div>
             <!-- Slides Container -->
-            <div data-u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 1349px; height: 370px; overflow: hidden">
+            <div data-u="slides"
+                style="cursor: move; position: absolute; left: 0px; top: 0px; width: 1349px; height: 370px; overflow: hidden">
                 <div>
                     <a href="#"><img alt="home slider" src="../gigw/nielit.gov.in/sites/default/files/site1.jpg" /></a>
                 </div>
@@ -97,7 +227,8 @@
             <!-- Bullet Navigator Skin Begin -->
             <!-- jssor slider bullet navigator skin 01 -->
             <!-- bullet navigator container -->
-            <div data-u="navigator" class="jssorb01" style="position: absolute; bottom: 16px; right: 60px; margin-right: 50px">
+            <div data-u="navigator" class="jssorb01"
+                style="position: absolute; bottom: 16px; right: 60px; margin-right: 50px">
                 <!-- bullet navigator item prototype -->
                 <div data-u="prototype" style="position: absolute; width: 12px; height: 12px"></div>
             </div>
@@ -109,7 +240,8 @@
             <!-- Arrow Left -->
             <span data-u="arrowleft" class="jssora05l" style="width: 40px; height: 40px; top: 123px; left: 8px"></span>
             <!-- Arrow Right -->
-            <span data-u="arrowright" class="jssora05r" style="width: 40px; height: 40px; top: 123px; right: 8px"></span>
+            <span data-u="arrowright" class="jssora05r"
+                style="width: 40px; height: 40px; top: 123px; right: 8px"></span>
             <!-- Arrow Navigator Skin End -->
             <a style="display: none" href="http:/www.jssor.com/">slider html</a>
             <!-- Trigger -->
@@ -123,7 +255,9 @@
     <div class="container clearfix">
         <div class="messages error">
             <h2 class="element-invisible">Error message</h2>
-            <em class="placeholder">Warning</em>: Creating default object from empty value in <em class="placeholder">ctools_access_get_loggedin_context()</em> (line <em class="placeholder">1411</em> of <em class="placeholder">/var/www/html/sites/all/modules/ctools/includes/context.inc</em>).
+            <em class="placeholder">Warning</em>: Creating default object from empty value in <em
+                class="placeholder">ctools_access_get_loggedin_context()</em> (line <em class="placeholder">1411</em> of
+            <em class="placeholder">/var/www/html/sites/all/modules/ctools/includes/context.inc</em>).
         </div>
         <div class="full"></div>
         <div class="clear"></div>
@@ -132,25 +266,30 @@
                 <div class="contain">
                     <div class="colo">
                         <div class="card cardBorder">
-                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/AM.jpg" alt="Card image">
+                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/AM.jpg"
+                                alt="Card image">
                             <div class="card-body">
                                 <h4 class="card-title">Dr. Arun Kumar Sahoo</h4>
-                                <p class="card-text po" style="font-size: 14px; height: 40px;">Hon'ble Minister, Agriculture &amp; Farmers' Empowerment</p>
+                                <p class="card-text po" style="font-size: 14px; height: 40px;">Hon'ble Minister,
+                                    Agriculture &amp; Farmers' Empowerment</p>
                             </div>
                         </div>
                     </div>
                     <div class="colo">
                         <div class="card cardBorder">
-                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/APC.jpg" alt="Card image">
+                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/APC.jpg"
+                                alt="Card image">
                             <div class="card-body">
                                 <h4 class="card-title">Sj. Pradipta Kumar Mohapatra, IAS</h4>
-                                <p class="card-text po" style="font-size: 14px; height: 40px;">Agriculture Production Commissioner</p>
+                                <p class="card-text po" style="font-size: 14px; height: 40px;">Agriculture Production
+                                    Commissioner</p>
                             </div>
                         </div>
                     </div>
                     <div class="colo">
                         <div class="card cardBorder">
-                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/PS.jpg" alt="Card image">
+                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/PS.jpg"
+                                alt="Card image">
                             <div class="card-body">
                                 <h4 class="card-title">Dr. Saurabh Garg, IAS</h4>
                                 <p class="card-text po" style="font-size: 14px; height: 40px;">Principal Secretary </p>
@@ -159,10 +298,12 @@
                     </div>
                     <div class="colo">
                         <div class="card cardBorder">
-                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/AD.jpg" alt="Card image">
+                            <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/AD.jpg"
+                                alt="Card image">
                             <div class="card-body">
                                 <h4 class="card-title">Dr. M. Muthukumar, IAS</h4>
-                                <p class="card-text po" style="font-size: 14px; height: 40px;">Director, Horticulture </p>
+                                <p class="card-text po" style="font-size: 14px; height: 40px;">Director, Horticulture
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -218,7 +359,9 @@
                 </div>-->
                 <div class="latestnews">
                     <div class="breakingNews" id="bn3">
-                        <div class="bn-title"><h2>Latest News</h2><span></span></div>
+                        <div class="bn-title">
+                            <h2>Latest News</h2><span></span>
+                        </div>
                         <ul>
                             <li style="color: red"></li>
                         </ul>
@@ -232,10 +375,40 @@
                 <div class="focus-panel">
                     <div class="tab-panel" style="width: 30%;">
                         <div class="tabs example-a" style="margin-left: 50px;">
-                            <h3>Fruits (Available Quantity)</h3>
-                            <div class="bottom-panel-box" style="height: 310px;">
+                            <h3>Fruits (Available)</h3>
+                            <div class="bottom-panel-box" style="height: 250px; background-color: #d5e3f1;">
                                 <div style="margin-top: 25px" class="responsive">
-                                    <h4 class="rtejustify" style="color: black"></h4>
+                                    <table>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Quantity (in Qtl.)</th>
+                                        </tr>
+                                        <tr ng-click="getItemDetailsDistrictWise(i.ItemID)"
+                                            ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Fruits' }">
+                                            <td>{{i.ItemName}}</td>
+                                            <td>{{i.Quantity}}</td>
+                                        </tr>
+                                    </table>
+                                    <!-- Trigger/Open The Modal -->
+                                    <button id="myBtn">Open Modal</button>
+                                    <!-- The Modal -->
+                                    <div id="myModal" class="modal">
+                                        <!-- Modal content -->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <span class="close">&times;</span>
+                                                <h2>Modal Header</h2>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Some text in the Modal Body</p>
+                                                <p>Some other text...</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <h3>Modal Footer</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <h4 class="rtejustify" style="color: black"></h4> -->
                                     <!-- <center>
                                         <div class="container-fluid" id="st1">
                                             <div class="row" id="st2">
@@ -294,10 +467,20 @@
                     </div>
                     <div class="tab-panel" style="width: 30%;">
                         <div class="tabs example-a" style="margin-left: 50px;">
-                            <h3>Vegetables (Available Quantity)</h3>
-                            <div class="bottom-panel-box" style="height: 310px;">
+                            <h3>Vegetables (Available)</h3>
+                            <div class="bottom-panel-box" style="height: 250px;; background-color: #d5e3f1;">
                                 <div style="margin-top: 25px" class="responsive">
-                                    <h4 class="rtejustify" style="color: black"></h4>
+                                    <table>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Quantity (in Qtl.)</th>
+                                        </tr>
+                                        <tr ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Vegetables' }">
+                                            <td>{{i.ItemName}}</td>
+                                            <td>{{i.Quantity}}</td>
+                                        </tr>
+                                    </table>
+                                    <!-- <h4 class="rtejustify" style="color: black"></h4> -->
                                     <!-- <center>
                                         <div class="container-fluid" id="st1">
                                             <div class="row" id="st2">
@@ -356,10 +539,20 @@
                     </div>
                     <div class="tab-panel" style="width: 30%;">
                         <div class="tabs example-a" style="margin-left: 50px;">
-                            <h3>Flowers (Available Quantity)</h3>
-                            <div class="bottom-panel-box" style="height: 310px;">
+                            <h3>Flowers (Available)</h3>
+                            <div class="bottom-panel-box" style="height: 250px;; background-color: #d5e3f1;">
                                 <div style="margin-top: 25px" class="responsive">
-                                    <h4 class="rtejustify" style="color: black"></h4>
+                                    <table>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Quantity (in Qtl.)</th>
+                                        </tr>
+                                        <tr ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Flowers' }">
+                                            <td>{{i.ItemName}}</td>
+                                            <td>{{i.Quantity}}</td>
+                                        </tr>
+                                    </table>
+                                    <!-- <h4 class="rtejustify" style="color: black"></h4> -->
                                     <!-- <center>
                                         <div class="container-fluid" id="st1">
                                             <div class="row" id="st2">
@@ -417,20 +610,20 @@
                         </div>
                     </div>
                     <script>
-                    function display_con(xv) {
-                        if(xv == '1') {
-                        document.getElementById('img2').style.display = 'block';
-                        document.getElementById('img1').style.display = 'none';
+                        function display_con(xv) {
+                            if (xv == '1') {
+                                document.getElementById('img2').style.display = 'block';
+                                document.getElementById('img1').style.display = 'none';
+                            }
+                            else {
+                                document.getElementById('img1').style.display = 'block';
+                                document.getElementById('img2').style.display = 'none';
+                            }
                         }
-                        else {
-                        document.getElementById('img1').style.display='block';
-                        document.getElementById('img2').style.display='none';
-                        }
-                    }
-                    $(document).ready(function() {
-                        $(".bottom-panel-box-content p").contents().unwrap();
-                        $(".bottom-panel-box-content span").wrap( "<p></p>" );
-                    });
+                        $(document).ready(function () {
+                            $(".bottom-panel-box-content p").contents().unwrap();
+                            $(".bottom-panel-box-content span").wrap("<p></p>");
+                        });
                     </script>
                     <!-- <div class="events-panel" style="height: 363px">
                         <h1 style="margin: 10px 10px 30px">Latest Events</h1>
@@ -525,10 +718,21 @@
                 <div class="focus-panel">
                     <div class="tab-panel" style="width: 30%;">
                         <div class="tabs example-a" style="margin-left: 50px;">
-                            <h3>Plantation Crops (Available Quantity)</h3>
-                            <div class="bottom-panel-box" style="height: 310px;">
+                            <h3>Plantation Crops (Available)</h3>
+                            <div class="bottom-panel-box" style="height: 250px;; background-color: #d5e3f1;">
                                 <div style="margin-top: 25px" class="responsive">
-                                    <h4 class="rtejustify" style="color: black"></h4>
+                                    <table>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                        <tr
+                                            ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Plantation Crops' }">
+                                            <td>{{i.ItemName}}</td>
+                                            <td>{{i.Quantity}} {{(i.Unit == 'Q') ? 'Qtl' : 'Lakh nos.'}}</td>
+                                        </tr>
+                                    </table>
+                                    <!-- <h4 class="rtejustify" style="color: black"></h4> -->
                                     <!-- <center>
                                         <div class="container-fluid" id="st1">
                                             <div class="row" id="st2">
@@ -587,10 +791,20 @@
                     </div>
                     <div class="tab-panel" style="width: 30%;">
                         <div class="tabs example-a" style="margin-left: 50px;">
-                            <h3>Spices (Available Quantity)</h3>
-                            <div class="bottom-panel-box" style="height: 310px;">
+                            <h3>Spices (Available)</h3>
+                            <div class="bottom-panel-box" style="height: 250px;; background-color: #d5e3f1;">
                                 <div style="margin-top: 25px" class="responsive">
-                                    <h4 class="rtejustify" style="color: black"></h4>
+                                    <table>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                        <tr ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Spices' }">
+                                            <td>{{i.ItemName}}</td>
+                                            <td>{{i.Quantity}} {{(i.Unit == 'Q') ? 'Qtl' : 'Lakh nos.'}}</td>
+                                        </tr>
+                                    </table>
+                                    <!-- <h4 class="rtejustify" style="color: black"></h4> -->
                                     <!-- <center>
                                         <div class="container-fluid" id="st1">
                                             <div class="row" id="st2">
@@ -648,20 +862,20 @@
                         </div>
                     </div>
                     <script>
-                    function display_con(xv) {
-                        if(xv == '1') {
-                        document.getElementById('img2').style.display = 'block';
-                        document.getElementById('img1').style.display = 'none';
+                        function display_con(xv) {
+                            if (xv == '1') {
+                                document.getElementById('img2').style.display = 'block';
+                                document.getElementById('img1').style.display = 'none';
+                            }
+                            else {
+                                document.getElementById('img1').style.display = 'block';
+                                document.getElementById('img2').style.display = 'none';
+                            }
                         }
-                        else {
-                        document.getElementById('img1').style.display='block';
-                        document.getElementById('img2').style.display='none';
-                        }
-                    }
-                    $(document).ready(function() {
-                        $(".bottom-panel-box-content p").contents().unwrap();
-                        $(".bottom-panel-box-content span").wrap( "<p></p>" );
-                    });
+                        $(document).ready(function () {
+                            $(".bottom-panel-box-content p").contents().unwrap();
+                            $(".bottom-panel-box-content span").wrap("<p></p>");
+                        });
                     </script>
                     <!-- <div class="events-panel" style="height: 363px">
                         <h1 style="margin: 10px 10px 30px">Latest Events</h1>
@@ -788,27 +1002,27 @@
         <!-- Plugins scripts -->
         <script src="../gigw/nielit.gov.in/sites/all/themes/berry/jquery.accTabs.js"></script>
         <script>
-            $(function() {
+            $(function () {
                 $('.example-a').accTabs();
                 $('.example-b').accTabs({
                     defaultTab: 1
                 });
-                (function() {
+                (function () {
                     var target = $('.example-c'),
-                    buttonContainer = $('<div />'),
-                    buttonRebuild = $('<button class="js-btn">Rebuild</button>'),
-                    buttonDestroy = $('<button class="js-btn">Destroy</button>');
+                        buttonContainer = $('<div />'),
+                        buttonRebuild = $('<button class="js-btn">Rebuild</button>'),
+                        buttonDestroy = $('<button class="js-btn">Destroy</button>');
                     target.accTabs({
                         defaultTab: 1
                     });
                     buttonRebuild.attr('disabled', 'disabled');
-                    buttonRebuild.on('click', function(event) {
+                    buttonRebuild.on('click', function (event) {
                         event.preventDefault();
                         target.data('plugin_accTabs').rebuild();
                         $(this).attr('disabled', 'disabled');
                         buttonDestroy.removeAttr('disabled');
                     });
-                    buttonDestroy.on('click', function(event) {
+                    buttonDestroy.on('click', function (event) {
                         event.preventDefault();
                         target.data('plugin_accTabs').destroy();
                         $(this).attr('disabled', 'disabled');
@@ -818,15 +1032,15 @@
                     target.after(buttonContainer);
                 })();
             });
-            $(document).ready(function() {
-                $("#block-menu-menu-footer-follow-us .menu li").each(function(n) {
+            $(document).ready(function () {
+                $("#block-menu-menu-footer-follow-us .menu li").each(function (n) {
                     $(this).attr("id", "social" + n);
                 });
             });
-            $(document).ready(function() {
-                $("#multilines .newsticker").css("height","300px");
-                $("#js-tabs_panel--03").css("height","285px");
-                $("#js-tabs_panel--04").css("height","285px");
+            $(document).ready(function () {
+                $("#multilines .newsticker").css("height", "300px");
+                $("#js-tabs_panel--03").css("height", "285px");
+                $("#js-tabs_panel--04").css("height", "285px");
             });
         </script>
         <script>
@@ -906,6 +1120,28 @@
                     }
                 });
             });
+        </script>
+        <script>
+            // Get the modal
+            var modal = document.getElementById("myModal");
+            // Get the button that opens the modal
+            var btn = document.getElementById("myBtn");
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+            // When the user clicks the button, open the modal 
+            btn.onclick = function () {
+                modal.style.display = "block";
+            }
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
         </script>
         <div class="clear"></div>
     </div>
