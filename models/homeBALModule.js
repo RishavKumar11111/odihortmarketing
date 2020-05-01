@@ -107,10 +107,30 @@ exports.getItemDetails = function () {
 };
 
 exports.getItemDetailsDistrictWise = function (itemID) {
-    return sequelize.query('select DistrictName, DDHName, DDHMobileNo, ItemName, sum(Quantity) - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemID and a.ItemId = :item_id inner join LGDDistrict d on d.DistrictCode = substring(a.UserID, 5, 3) inner join DDHDistrictMapping e on substring(e.DDHUserID, 5, 3) = d.DistrictCode left join StockOut b on a.StockID = b.StockID group by DistrictName, DDHName, DDHMobileNo, ItemName, Unit having sum(Quantity) - isnull((sum(SaleQuantity)), 0) > 0', {
+    return sequelize.query('select d.DistrictCode, DistrictName, DDHName, DDHMobileNo, a.ItemID, ItemName, sum(Quantity) - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemID and a.ItemId = :item_id inner join LGDDistrict d on d.DistrictCode = substring(a.UserID, 5, 3) inner join DDHDistrictMapping e on substring(e.DDHUserID, 5, 3) = d.DistrictCode left join StockOut b on a.StockID = b.StockID group by d.DistrictCode, DistrictName, DDHName, DDHMobileNo, a.ItemID, ItemName, Unit having sum(Quantity) - isnull((sum(SaleQuantity)), 0) > 0 order by DistrictName, DDHName, ItemName', {
         replacements: { item_id: itemID }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getItemDetailsBGVWise = function (districtCode, itemID, callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const request = new sql.Request(con);
+        request.input('DistrictCode', districtCode);
+        request.input('ItemID', itemID);
+        request.execute('spGetItemDetailsBGVWise', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.recordset);
+            }
+            con.close();
+        });
     }).catch(function error(err) {
         console.log('An error occurred...', err);
     });

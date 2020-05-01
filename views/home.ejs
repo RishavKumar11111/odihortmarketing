@@ -1,4 +1,5 @@
 <%- include('header.ejs') -%>
+<link rel="stylesheet" href="../public/stylesheets/fontawesome.min.css" />
 <script type="text/javascript" src="../public/controllers/myHomeCtrl.js"></script>
 <style>
     @media only screen and (max-width: 480px) {
@@ -91,12 +92,13 @@
         z-index: 3000;
         /* Sit on top */
         padding-top: 100px;
+        padding-bottom: 100px;
         /* Location of the box */
         left: 0;
         top: 0;
         width: 100%;
         /* Full width */
-        height: 100%;
+        height: 75vh;
         /* Full height */
         overflow: auto;
         /* Enable scroll if needed */
@@ -118,7 +120,7 @@
         -webkit-animation-name: animatetop;
         -webkit-animation-duration: 0.4s;
         animation-name: animatetop;
-        animation-duration: 0.4s
+        animation-duration: 0.4s;
     }
 
     /* Add Animation */
@@ -211,6 +213,45 @@
 
     .tooltip:hover .tooltiptext {
         visibility: visible;
+    }
+
+    .buttonh {
+        border-radius: 5px;
+        background-color: #e7e7e7; 
+        color: black;
+        border: none;
+        text-align: center;
+        font-size: 15px;
+        font-weight: bolder;
+        padding: 10px;
+        width: 100px;
+        transition: all 0.5s;
+        cursor: pointer;
+    }
+
+    .buttonh span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+    .buttonh span:after {
+        content: '\00ab';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+    }
+
+    .buttonh:hover span {
+        padding-right: 25px;
+    }
+
+    .buttonh:hover span:after {
+        opacity: 1;
+        right: 0;
     }
 </style>
 <div ng-controller="myHomeCtrl" ng-init="getItemDetails();">
@@ -315,7 +356,7 @@
                             <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/APC.jpg"
                                 alt="Card image">
                             <div class="card-body">
-                                <h4 class="card-title">Sj. Pradipta Kumar Mohapatra, IAS</h4>
+                                <h4 class="card-title">Shri Suresh Chandra Mahapatra, IAS</h4>
                                 <p class="card-text po" style="font-size: 14px; height: 40px;">Agriculture Production
                                     Commissioner</p>
                             </div>
@@ -415,14 +456,76 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <span class="close">&times;</span>
-                            <h2>Modal Header</h2>
+                            <h2 ng-show="itemDetailsBGVWise.length == 0 && itemDetailsDistrictWise.length > 0"
+                                style="color: black; margin-bottom: 0;">District-wise "{{itemDetailsDistrictWise[0].ItemName}}"
+                                availability
+                            </h2>
+                            <h2 ng-show="itemDetailsBGVWise.length > 0" style="color: black; margin-bottom: 10px;">Block, GP and VIllage-wise
+                                "{{itemDetailsBGVWise[0].ItemName}}"
+                                availability</h2>
+                                <div style="display: inline-flex;">
+                                    <p ng-show="itemDetailsBGVWise.length > 0" style="color: black; font-size: 15px; font-weight: bold;">District: {{itemDetailsDistrictWise[0].DistrictName}}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <p ng-show="itemDetailsBGVWise.length > 0" style="color: black; font-size: 15px; font-weight: bold;">DDH Name: {{itemDetailsDistrictWise[0].DDHName}}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <p ng-show="itemDetailsBGVWise.length > 0" style="color: black; font-size: 15px; font-weight: bold;">DDH Contact No.: {{itemDetailsDistrictWise[0].DDHMobileNo}}</p>
+                                </div>
                         </div>
-                        <div class="modal-body">
-                            <p>Some text in the Modal Body</p>
-                            <p>Some other text...</p>
+                        <div class="modal-body" style="overflow-x:auto;">
+                            <table ng-show="itemDetailsBGVWise.length == 0 && itemDetailsDistrictWise.length > 0">
+                                <tr>
+                                    <th>District</th>
+                                    <th>DDH Name</th>
+                                    <th>DDH Contact No.</th>
+                                    <th>Available Quantity
+                                        <span ng-show="itemDetailsDistrictWise[0].Unit == 'Q'">(Qtls.)</span>
+                                        <span ng-show="itemDetailsDistrictWise[0].Unit == 'No'">(Lakh Nos.)</span>
+                                    </th>
+                                </tr>
+                                <tr ng-repeat="i in itemDetailsDistrictWise">
+                                    <td>{{i.DistrictName}}</td>
+                                    <td>{{i.DDHName}}</td>
+                                    <td>{{i.DDHMobileNo}}</td>
+                                    <td ng-click="getItemDetailsBGVWise(i.DistrictCode, i.ItemID)"><a href=""
+                                            class="tooltip openModal" style="color: black">{{i.Quantity}} <i
+                                                class="fa fa-eye"></i><span class="tooltiptext">Click to view
+                                                details</span></a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table ng-show="itemDetailsBGVWise.length > 0">
+                                <tr>
+                                    <th>Block</th>
+                                    <th>GP</th>
+                                    <th>Village</th>
+                                    <th>Farmer Name</th>
+                                    <th>Available Quantity
+                                        <span ng-show="itemDetailsBGVWise[0].Unit == 'Q'">(Qtls.)</span>
+                                        <span ng-show="itemDetailsBGVWise[0].Unit == 'No'">(Lakh Nos.)</span>
+                                    </th>
+                                </tr>
+                                <tr ng-repeat="i in itemDetailsBGVWise">
+                                    <td>{{i.BlockName}}</td>
+                                    <td>{{i.GPName}}</td>
+                                    <td>{{i.VillageName}}</td>
+                                    <td>{{i.FarmerName}}</td>
+                                    <td>{{i.Quantity}}</td>
+                                </tr>
+                            </table>
                         </div>
-                        <div class="modal-footer">
-                            <h3>Modal Footer</h3>
+                        <div class="modal-footer" style="text-align: right;">
+                            <div style="display: inline-flex;">
+                                <h2 ng-show="itemDetailsBGVWise.length == 0 && itemDetailsDistrictWise.length > 0"
+                                    style="color: black; text-align: right;">
+                                    Total: {{totalQuantityDistrictWise}}
+                                    <span ng-show="itemDetailsDistrictWise[0].Unit == 'Q'">Qtls.</span>
+                                    <span ng-show="itemDetailsDistrictWise[0].Unit == 'No'">Lakh Nos.</span>
+                                </h2>
+                                <h2 ng-show="itemDetailsBGVWise.length > 0" style="color: black; text-align: right; margin: 10px 30px 5px 0;">
+                                    Total: {{totalQuantityBGVWise}}
+                                    <span ng-show="itemDetailsDistrictWise[0].Unit == 'Q'">Qtls.</span>
+                                    <span ng-show="itemDetailsDistrictWise[0].Unit == 'No'">Lakh Nos.</span>
+                                </h2>
+                                <button ng-show="itemDetailsBGVWise.length > 0" class="buttonh" ng-click="itemDetailsBGVWise = []; totalQuantityBGVWise = 0"><span>Back</span></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -435,7 +538,7 @@
                                     <table ng-show="foundFruits == true">
                                         <tr>
                                             <th>Item</th>
-                                            <th>Quantity (in Qtl.)</th>
+                                            <th>Quantity (in Qtls.)</th>
                                         </tr>
                                         <tr ng-click="getItemDetailsDistrictWise(i.ItemID)"
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Fruits' }">
@@ -511,7 +614,7 @@
                                     <table ng-show="foundVegetables == true">
                                         <tr>
                                             <th>Item</th>
-                                            <th>Quantity (in Qtl.)</th>
+                                            <th>Quantity (in Qtls.)</th>
                                         </tr>
                                         <tr ng-click="getItemDetailsDistrictWise(i.ItemID)"
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Vegetables' }">
@@ -590,7 +693,7 @@
                                     <table ng-show="foundFlowers == true">
                                         <tr>
                                             <th>Item</th>
-                                            <th>Quantity (in Qtl.)</th>
+                                            <th>Quantity (in Qtls.)</th>
                                         </tr>
                                         <tr ng-click="getItemDetailsDistrictWise(i.ItemID)"
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Flowers' }">
@@ -783,7 +886,7 @@
                                                         class="tooltiptext">Click
                                                         to view details</span></a></td>
                                             <td><a href="" class="tooltip openModal">{{i.Quantity}}
-                                                    {{(i.Unit == 'Q') ? 'Qtl' : 'Lakh nos.'}}<span
+                                                    {{(i.Unit == 'Q') ? 'Qtls' : 'Lakh nos.'}}<span
                                                         class="tooltiptext">Click to view details</span></a>
                                             </td>
                                         </tr>
@@ -859,10 +962,10 @@
                                         </tr>
                                         <tr ng-click="getItemDetailsDistrictWise(i.ItemID)"
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Spices' }">
-                                            <td><a href="#" class="tooltip openModal">{{i.ItemName}}<span
+                                            <td><a href="" class="tooltip openModal">{{i.ItemName}}<span
                                                         class="tooltiptext">Click to view details</span></a></td>
                                             <td><a href="" class="tooltip openModal">{{i.Quantity}}
-                                                    {{(i.Unit == 'Q') ? 'Qtl' : 'Lakh nos.'}}<span
+                                                    {{(i.Unit == 'Q') ? 'Qtls' : 'Lakh nos.'}}<span
                                                         class="tooltiptext">Click to view details</span></a>
                                             </td>
                                         </tr>
@@ -1188,12 +1291,12 @@
         <script>
             window.onload = function () {
                 var modal = document.getElementById('myModal');
-                console.log(modal);
                 var btns = document.getElementsByClassName("openModal");
                 var span = document.getElementsByClassName("close")[0];
                 for (let i = 0; i < btns.length; i++) {
                     btns[i].onclick = function () {
                         modal.style.display = "block";
+                        document.body.style.overflowY = "hidden";
                     }
                 }
                 // for (let i = 0; i < spans.length; i++) {
@@ -1203,10 +1306,12 @@
                 // }
                 span.onclick = function () {
                     modal.style.display = "none";
+                    document.body.style.overflowY = "scroll";
                 }
                 window.onclick = function (event) {
                     if (event.target == modal) {
                         modal.style.display = "none";
+                        document.body.style.overflowY = "scroll";
                     }
                 }
                 // Get the modal

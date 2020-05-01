@@ -35,9 +35,29 @@ app.controller('myHomeCtrl', function ($scope, $http) {
     };
 
     $scope.getItemDetailsDistrictWise = function (itemID) {
+        $scope.itemDetailsBGVWise = [];
+        $scope.totalQuantityBGVWise = 0;
         $http.get('http://localhost:3000/getItemDetailsDistrictWise?itemID=' + itemID).then(function success(response) {
             $scope.itemDetailsDistrictWise = response.data;
-            console.log($scope.itemDetailsDistrictWise);
+            $scope.totalQuantityDistrictWise = 0;
+            angular.forEach($scope.itemDetailsDistrictWise, function (i) {
+                $scope.totalQuantityDistrictWise += i.Quantity;
+            });
+        }, function error(response) {
+            console.log(response.status);
+        }).catch(function err(error) {
+            console.log('An error occurred...', error);
+        });
+    };
+
+    $scope.itemDetailsBGVWise = [];
+    $scope.getItemDetailsBGVWise = function (districtCode, itemID) {
+        $http.get('http://localhost:3000/getItemDetailsBGVWise?districtCode=' + districtCode + '&itemID=' + itemID).then(function success(response) {
+            $scope.itemDetailsBGVWise = response.data;
+            $scope.totalQuantityBGVWise = 0;
+            angular.forEach($scope.itemDetailsBGVWise, function (i) {
+                $scope.totalQuantityBGVWise += i.Quantity;
+            });
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {

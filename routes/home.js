@@ -440,4 +440,15 @@ router.get('/getItemDetailsDistrictWise', function (req, res, next) {
   });
 });
 
+router.get('/getItemDetailsBGVWise', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.query.districtCode;
+  var itemID = req.query.itemID;
+  balModule.getItemDetailsBGVWise(districtCode, itemID, function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  });
+});
+
 module.exports = router;

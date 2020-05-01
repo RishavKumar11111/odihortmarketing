@@ -77,7 +77,7 @@ exports.getCategories = function () {
 };
 
 exports.getItemsByCategory = function (categoryID) {
-    return sequelize.query('select * from Items where CategoryID = :category_id', {
+    return sequelize.query('select ItemID, ItemName from Items where CategoryID = :category_id', {
         replacements: { category_id: categoryID }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;

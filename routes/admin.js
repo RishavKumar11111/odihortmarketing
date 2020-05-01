@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
-var balModule = require('../models/ddhBALModule');
+var balModule = require('../models/adminBALModule');
 var atob = require('atob');
 var crypto = require('crypto');
 var sha256 = require('js-sha256');
@@ -175,6 +175,40 @@ router.get('/logout', function (req, res, next) {
   req.session.destroy();
   res.get('X-Frame-Options');
   res.redirect('../login');
+});
+
+router.get('/getItemDetails', function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getItemDetails().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getItemDetailsDistrictWise', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var itemID = req.query.itemID;
+  balModule.getItemDetailsDistrictWise(itemID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getItemDetailsBGVWise', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.query.districtCode;
+  var itemID = req.query.itemID;
+  balModule.getItemDetailsBGVWise(districtCode, itemID, function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  });
 });
 
 module.exports = router;
