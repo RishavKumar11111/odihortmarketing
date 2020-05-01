@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var crypto = require('crypto');
-var uuid = require('uuid/v4');
+var { v4: uuidv4 } = require('uuid');
 var xFrameOptions = require('x-frame-options');
 var device = require('express-device');
 var bodyParser = require('body-parser');
@@ -31,7 +31,7 @@ app.use(session({
     // expires: 10000
   },
   genid: function () {
-    return uuid();
+    return uuidv4();
   }
 }));
 
