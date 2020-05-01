@@ -33,7 +33,10 @@ const locConfig = {
 //     password: 'sa@123#',
 //     server: '164.100.140.101',
 //     database: 'odihortmarketing',
-//     requestTimeout: 3600000
+//     requestTimeout: 3600000,
+//     options: {
+//         encrypt: false
+//     }
 // };
 
 sequelize
