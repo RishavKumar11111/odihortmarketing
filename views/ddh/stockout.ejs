@@ -55,7 +55,7 @@
                                     <select class="form-control select2" name="items" ng-model="ddlItems"
                                         ng-options="i.ItemID as i.ItemName for i in items"
                                         ng-change="stockDetails = [];" required>
-                                        <option value="" disabled>Select Items</option>
+                                        <option value="" disabled>Select Item</option>
                                     </select>
                                     <div class="has-error"
                                         ng-show="stockOutForm.$submitted || stockOutForm.items.$touched"
@@ -97,7 +97,7 @@
                                     <label class="control-label">GPs</label>
                                     <select class="form-control select2" name="gps" ng-model="ddlGPs"
                                         ng-options="i.GPCode as i.GPName for i in gps" ng-change="getVillagesByGP()">
-                                        <option value="" disabled>Select GPs</option>
+                                        <option value="" disabled>Select GP</option>
                                     </select>
                                 </div>
                             </div>
@@ -107,12 +107,12 @@
                                     <select ng-show="rbAreaType == 'Rural'" class="form-control select2" name="blocks"
                                         ng-model="ddlBlocks" ng-options="i.BlockCode as i.BlockName for i in blocks"
                                         ng-change="getGPsByBlock()" required>
-                                        <option value="" disabled>Select Blocks</option>
+                                        <option value="" disabled>Select Block</option>
                                     </select>
                                     <select ng-show="rbAreaType == 'Urban'" class="form-control select2" name="blocks"
                                         ng-model="ddlBlocks" ng-options="i.ULBCode as i.ULBName for i in blocks"
                                         ng-change="getGPsByBlock()" required>
-                                        <option value="" disabled>Select Blocks</option>
+                                        <option value="" disabled>Select Block</option>
                                     </select>
                                     <div class="has-error"
                                         ng-show="stockOutForm.$submitted || stockOutForm.blocks.$touched"
@@ -126,7 +126,7 @@
                                     <select class="form-control select2" name="villages" ng-model="ddlVillages"
                                         ng-options="i.VillageCode as i.VillageName for i in villages"
                                         ng-change="stockDetails = [];">
-                                        <option value="" disabled>Select Villages</option>
+                                        <option value="" disabled>Select Village</option>
                                     </select>
                                 </div>
                             </div>
@@ -170,21 +170,24 @@
                                             <td style="vertical-align: middle;">
                                                 <div class="icheck-success d-inline">
                                                     <input type="checkbox" ng-model="i.selected"
-                                                        ng-change="optionToggled(i.selected, i.StockID, i)" id="checkboxSelect{{$index}}">
+                                                        ng-change="optionToggled(i.selected, i.StockID, i)"
+                                                        id="checkboxSelect{{$index}}">
                                                     <label for="checkboxSelect{{$index}}"></label>
                                                 </div>
                                             </td>
-                                            <td style="vertical-align: middle;" ng-show="ddlBlocks == 0">{{i.BlockName}}
+                                            <td style="vertical-align: middle;" ng-show="ddlBlocks == 0">
+                                                {{i.BlockName | capitalize}}
                                             </td>
                                             <td style="vertical-align: middle;"
                                                 ng-show="ddlGPs == 0 && rbAreaType == 'Rural'">
-                                                {{i.GPName}}</td>
+                                                {{i.GPName | capitalize}}</td>
                                             <td style="vertical-align: middle;"
-                                                ng-show="ddlVillages == 0 && rbAreaType == 'Rural'">{{i.VillageName}}
+                                                ng-show="ddlVillages == 0 && rbAreaType == 'Rural'">
+                                                {{i.VillageName | capitalize}}
                                             </td>
-                                            <td style="vertical-align: middle;">{{i.FarmerName}}</td>
+                                            <td style="vertical-align: middle;">{{i.FarmerName | capitalize}}</td>
                                             <td style="vertical-align: middle;">{{i.FarmerMobileNo}}</td>
-                                            <td style="vertical-align: middle;">{{i.ItemName}}</td>
+                                            <td style="vertical-align: middle;">{{i.ItemName | capitalize}}</td>
                                             <td style="vertical-align: middle;">{{i.Quantity}}
                                                 {{(i.Unit == 'Q') ? '(in Quintal)' : '(in Numbers)'}}</td>
                                             <td ng-show="i.Unit == 'Q'">

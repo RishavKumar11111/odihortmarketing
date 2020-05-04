@@ -217,7 +217,7 @@
 
     .buttonh {
         border-radius: 5px;
-        background-color: #e7e7e7; 
+        background-color: #e7e7e7;
         color: black;
         border: none;
         text-align: center;
@@ -457,17 +457,26 @@
                         <div class="modal-header">
                             <span class="close">&times;</span>
                             <h2 ng-show="itemDetailsBGVWise.length == 0 && itemDetailsDistrictWise.length > 0"
-                                style="color: black; margin-bottom: 0;">District-wise "{{itemDetailsDistrictWise[0].ItemName}}"
+                                style="color: black; margin-bottom: 0;">District-wise
+                                "{{itemDetailsDistrictWise[0].ItemName | capitalize}}"
                                 availability
                             </h2>
-                            <h2 ng-show="itemDetailsBGVWise.length > 0" style="color: black; margin-bottom: 10px;">Block, GP and VIllage-wise
-                                "{{itemDetailsBGVWise[0].ItemName}}"
+                            <h2 ng-show="itemDetailsBGVWise.length > 0" style="color: black; margin-bottom: 10px;">
+                                Block, GP and VIllage-wise
+                                "{{itemDetailsBGVWise[0].ItemName | capitalize}}"
                                 availability</h2>
-                                <div style="display: inline-flex;">
-                                    <p ng-show="itemDetailsBGVWise.length > 0" style="color: black; font-size: 15px; font-weight: bold;">District: {{itemDetailsDistrictWise[0].DistrictName}}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <p ng-show="itemDetailsBGVWise.length > 0" style="color: black; font-size: 15px; font-weight: bold;">DDH Name: {{itemDetailsDistrictWise[0].DDHName}}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <p ng-show="itemDetailsBGVWise.length > 0" style="color: black; font-size: 15px; font-weight: bold;">DDH Contact No.: {{itemDetailsDistrictWise[0].DDHMobileNo}}</p>
-                                </div>
+                            <div style="display: inline-flex;">
+                                <p ng-show="itemDetailsBGVWise.length > 0"
+                                    style="color: black; font-size: 15px; font-weight: bold;">District:
+                                    {{itemDetailsBGVWise[0].DistrictName | capitalize}}</p>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <p ng-show="itemDetailsBGVWise.length > 0"
+                                    style="color: black; font-size: 15px; font-weight: bold;">DDH Name:
+                                    {{itemDetailsBGVWise[0].DDHName | capitalize}}</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <p ng-show="itemDetailsBGVWise.length > 0"
+                                    style="color: black; font-size: 15px; font-weight: bold;">DDH Contact No.:
+                                    {{itemDetailsBGVWise[0].DDHMobileNo}}</p>
+                            </div>
                         </div>
                         <div class="modal-body" style="overflow-x:auto;">
                             <table ng-show="itemDetailsBGVWise.length == 0 && itemDetailsDistrictWise.length > 0">
@@ -481,11 +490,11 @@
                                     </th>
                                 </tr>
                                 <tr ng-repeat="i in itemDetailsDistrictWise">
-                                    <td>{{i.DistrictName}}</td>
-                                    <td>{{i.DDHName}}</td>
+                                    <td>{{i.DistrictName | capitalize}}</td>
+                                    <td>{{i.DDHName | capitalize}}</td>
                                     <td>{{i.DDHMobileNo}}</td>
                                     <td ng-click="getItemDetailsBGVWise(i.DistrictCode, i.ItemID)"><a href=""
-                                            class="tooltip openModal" style="color: black">{{i.Quantity}} <i
+                                            class="tooltip" style="color: black">{{i.Quantity}} <i
                                                 class="fa fa-eye"></i><span class="tooltiptext">Click to view
                                                 details</span></a>
                                     </td>
@@ -501,13 +510,15 @@
                                         <span ng-show="itemDetailsBGVWise[0].Unit == 'Q'">(Qtls.)</span>
                                         <span ng-show="itemDetailsBGVWise[0].Unit == 'No'">(Lakh Nos.)</span>
                                     </th>
+                                    <th>Available Date</th>
                                 </tr>
                                 <tr ng-repeat="i in itemDetailsBGVWise">
-                                    <td>{{i.BlockName}}</td>
-                                    <td>{{i.GPName}}</td>
-                                    <td>{{i.VillageName}}</td>
-                                    <td>{{i.FarmerName}}</td>
+                                    <td>{{i.BlockName | capitalize}}</td>
+                                    <td>{{i.GPName | capitalize}}</td>
+                                    <td>{{i.VillageName | capitalize}}</td>
+                                    <td>{{i.FarmerName | capitalize}}</td>
                                     <td>{{i.Quantity}}</td>
+                                    <td>{{(i.AvailableDate == '01-01-2200 - 01-01-2200') ? 'NA' : i.AvailableDate}}</td>
                                 </tr>
                             </table>
                         </div>
@@ -515,16 +526,18 @@
                             <div style="display: inline-flex;">
                                 <h2 ng-show="itemDetailsBGVWise.length == 0 && itemDetailsDistrictWise.length > 0"
                                     style="color: black; text-align: right;">
-                                    Total: {{totalQuantityDistrictWise}}
+                                    Total: {{totalQuantityDistrictWise.toFixed(2)}}
                                     <span ng-show="itemDetailsDistrictWise[0].Unit == 'Q'">Qtls.</span>
                                     <span ng-show="itemDetailsDistrictWise[0].Unit == 'No'">Lakh Nos.</span>
                                 </h2>
-                                <h2 ng-show="itemDetailsBGVWise.length > 0" style="color: black; text-align: right; margin: 10px 30px 5px 0;">
-                                    Total: {{totalQuantityBGVWise}}
-                                    <span ng-show="itemDetailsDistrictWise[0].Unit == 'Q'">Qtls.</span>
-                                    <span ng-show="itemDetailsDistrictWise[0].Unit == 'No'">Lakh Nos.</span>
+                                <h2 ng-show="itemDetailsBGVWise.length > 0"
+                                    style="color: black; text-align: right; margin: 10px 30px 5px 0;">
+                                    Total: {{totalQuantityBGVWise.toFixed(2)}}
+                                    <span ng-show="itemDetailsBGVWise[0].Unit == 'Q'">Qtls.</span>
+                                    <span ng-show="itemDetailsBGVWise[0].Unit == 'No'">Lakh Nos.</span>
                                 </h2>
-                                <button ng-show="itemDetailsBGVWise.length > 0" class="buttonh" ng-click="itemDetailsBGVWise = []; totalQuantityBGVWise = 0"><span>Back</span></button>
+                                <button ng-show="itemDetailsBGVWise.length > 0" class="buttonh"
+                                    ng-click="itemDetailsBGVWise = []; totalQuantityBGVWise = 0"><span>Back</span></button>
                             </div>
                         </div>
                     </div>
@@ -542,7 +555,7 @@
                                         </tr>
                                         <tr ng-click="getItemDetailsDistrictWise(i.ItemID)"
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Fruits' }">
-                                            <td><a href="" class="tooltip openModal">{{i.ItemName}}<span
+                                            <td><a href="" class="tooltip openModal">{{i.ItemName | capitalize}}<span
                                                         class="tooltiptext">Click to view details</span></a></td>
                                             <td><a href="" class="tooltip openModal">{{i.Quantity}}<span
                                                         class="tooltiptext">Click to view details</span></a></td>
@@ -618,7 +631,7 @@
                                         </tr>
                                         <tr ng-click="getItemDetailsDistrictWise(i.ItemID)"
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Vegetables' }">
-                                            <td><a href="" class="tooltip openModal">{{i.ItemName}}<span
+                                            <td><a href="" class="tooltip openModal">{{i.ItemName | capitalize}}<span
                                                         class="tooltiptext">Click
                                                         to view details</span></a></td>
                                             <td><a href="" class="tooltip openModal">{{i.Quantity}}<span
@@ -697,7 +710,7 @@
                                         </tr>
                                         <tr ng-click="getItemDetailsDistrictWise(i.ItemID)"
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Flowers' }">
-                                            <td><a href="" class="tooltip openModal">{{i.ItemName}}<span
+                                            <td><a href="" class="tooltip openModal">{{i.ItemName | capitalize}}<span
                                                         class="tooltiptext">Click
                                                         to view details</span></a></td>
                                             <td><a href="" class="tooltip openModal">{{i.Quantity}}<span
@@ -882,7 +895,7 @@
                                         </tr>
                                         <tr ng-click="getItemDetailsDistrictWise(i.ItemID)"
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Plantation Crops' }">
-                                            <td><a href="" class="tooltip openModal">{{i.ItemName}}<span
+                                            <td><a href="" class="tooltip openModal">{{i.ItemName | capitalize}}<span
                                                         class="tooltiptext">Click
                                                         to view details</span></a></td>
                                             <td><a href="" class="tooltip openModal">{{i.Quantity}}
@@ -962,7 +975,7 @@
                                         </tr>
                                         <tr ng-click="getItemDetailsDistrictWise(i.ItemID)"
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Spices' }">
-                                            <td><a href="" class="tooltip openModal">{{i.ItemName}}<span
+                                            <td><a href="" class="tooltip openModal">{{i.ItemName | capitalize}}<span
                                                         class="tooltiptext">Click to view details</span></a></td>
                                             <td><a href="" class="tooltip openModal">{{i.Quantity}}
                                                     {{(i.Unit == 'Q') ? 'Qtls' : 'Lakh nos.'}}<span

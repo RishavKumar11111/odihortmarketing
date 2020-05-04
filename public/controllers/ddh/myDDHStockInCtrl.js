@@ -1,6 +1,6 @@
 app.controller('myDDHStockInCtrl', function ($scope, $http, $filter) {
 
-    // var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     $scope.rbAreaType = 'Rural';
 
@@ -24,6 +24,10 @@ app.controller('myDDHStockInCtrl', function ($scope, $http, $filter) {
                 console.log('An error occurred...', error);
             });
         }
+    };
+
+    $scope.getUnitByItem = function () {
+        $scope.unit = $filter('filter')($scope.items, { ItemID: $scope.ddlItems }, true)[0].Unit;
     };
 
     $scope.getBlocks = function () {
@@ -154,10 +158,10 @@ app.controller('myDDHStockInCtrl', function ($scope, $http, $filter) {
                     var message = confirm('Do you really want to submit the form?');
                     if (message) {
                         var imageData = (document.getElementById("uploadedImage")) ? document.getElementById("uploadedImage").src.replace('data:image/jpeg;base64,', '') : null;;
-                        var availableFrom = availableDate.split(' - ')[0];
-                        var availableTill = availableDate.split(' - ')[1];
+                        var availableFrom = availableDate.split(' - ')[0].split("-").reverse().join("-");
+                        var availableTill = availableDate.split(' - ')[1].split("-").reverse().join("-");
                         var myData = { BlockCode: $scope.ddlBlocks, GPCode: $scope.ddlGPs, VillageCode: $scope.ddlVillages, AreaType: $scope.rbAreaType, ItemID: $scope.ddlItems, FarmerName: $scope.txtFarmerName, FarmerMobileNo: $scope.txtFarmerMobileNo, Quantity: $scope.txtQuantity, Photo: imageData, AvailableFrom: availableFrom, AvailableTill: availableTill, };
-                        $http.post('http://localhost:3000/ddh/submitStockIn', { data: myData }, { credentials: 'same-origin' }).then(function success(response) {
+                        $http.post('http://localhost:3000/ddh/submitStockIn', { data: myData }, { credentials: 'same-origin', headers: { 'CSRF-Token': token } }).then(function success(response) {
                             var result = response.data;
                             if (result == true) {
                                 alert('The Stock In details are submitted successfully.');

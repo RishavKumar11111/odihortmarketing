@@ -1,4 +1,22 @@
-var app = angular.module('myApp', []);
+var app = angular.module('myApp', ['angular.filter']);
+
+app.filter('capitalize', function () {
+    return function (input) {
+        if (input != null) {
+            input = input.toLowerCase().split(' ');
+            for (var i = 0; i < input.length; i++) {
+                input[i] = input[i].charAt(0).toUpperCase() + input[i].substring(1);
+            }
+            return input.join(' ');
+        }
+        else {
+            return false;
+        }
+    }
+    // return function (input) {
+    //     return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+    // }
+});
 
 app.controller('myHomeCtrl', function ($scope, $http) {
 

@@ -79,24 +79,34 @@ var getURL = function (req) {
 };
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('admin/layout', { title: 'Layout' });
+  res.render('admin/layout', { title: 'Layout', csrfToken: req.csrfToken() });
 });
 
-router.get('/dashboard', function (req, res, next) {
+router.get('/dashboard', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('admin/dashboard', { title: 'Dashboard' });
+  res.render('admin/dashboard', { title: 'Dashboard', csrfToken: req.csrfToken() });
 });
 
-router.get('/availableItemsList', function (req, res, next) {
+router.get('/availableItemsList', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('admin/availableitemslist', { title: 'Available Items List' });
+  res.render('admin/availableitemslist', { title: 'Available Items List', csrfToken: req.csrfToken() });
 });
 
-router.get('/traderDetailsList', function (req, res, next) {
+router.get('/stockInList', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('admin/traderdetailslist', { title: 'Trader Details List' });
+  res.render('admin/stockinlist', { title: 'Stock In List', csrfToken: req.csrfToken() });
+});
+
+router.get('/stockOutList', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('admin/stockoutlist', { title: 'Stock Out List', csrfToken: req.csrfToken() });
+});
+
+router.get('/traderDetailsList', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('admin/traderdetailslist', { title: 'Trader Details List', csrfToken: req.csrfToken() });
 });
 
 router.get('/changePassword', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
@@ -177,7 +187,7 @@ router.get('/logout', function (req, res, next) {
   res.redirect('../login');
 });
 
-router.get('/getItemDetails', function (req, res, next) {
+router.get('/getItemDetails', permit.permission('ADMIN'), function (req, res, next) {
   res.get('X-Frame-Options');
   balModule.getItemDetails().then(function success(response) {
     res.send(response);
@@ -188,7 +198,7 @@ router.get('/getItemDetails', function (req, res, next) {
   });
 });
 
-router.get('/getItemDetailsDistrictWise', function (req, res, next) {
+router.get('/getItemDetailsDistrictWise', permit.permission('ADMIN'), function (req, res, next) {
   res.get('X-Frame-Options');
   var itemID = req.query.itemID;
   balModule.getItemDetailsDistrictWise(itemID).then(function success(response) {
@@ -200,14 +210,74 @@ router.get('/getItemDetailsDistrictWise', function (req, res, next) {
   });
 });
 
-router.get('/getItemDetailsBGVWise', function (req, res, next) {
+router.get('/getItemDetailsBGVWise', permit.permission('ADMIN'), function (req, res, next) {
   res.get('X-Frame-Options');
   var districtCode = req.query.districtCode;
   var itemID = req.query.itemID;
-  balModule.getItemDetailsBGVWise(districtCode, itemID, function success(response) {
+  var roleName = req.session.role;
+  balModule.getItemDetailsBGVWise(districtCode, itemID, roleName, function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);
+  });
+});
+
+router.get('/getTraderDetails', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getTraderDetails().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getCategories', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getCategories().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getDistricts', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getDistricts().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getStockInDetails', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.query.districtCode
+  var categoryID = req.query.categoryID;
+  balModule.getStockInDetails(districtCode, categoryID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getStockOutDetails', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.query.districtCode
+  var categoryID = req.query.categoryID;
+  balModule.getStockOutDetails(districtCode, categoryID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
   });
 });
 

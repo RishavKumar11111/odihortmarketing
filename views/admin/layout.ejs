@@ -7,7 +7,7 @@
     <title>Horticulture Produce Marketing</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <link rel="icon" href="../../gigw/nielit.gov.in/sites/all/themes/berry/images/favicon.ico" type="image/x-icon" />
 
     <!-- Font Awesome -->
@@ -81,16 +81,16 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Messages Dropdown Menu -->
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="">
                         <i class="far fa-comments"></i>
                         <span class="badge badge-danger navbar-badge">3</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <div class="dropdown-divider"></div>
-                        <a href="" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
+                        <a href="" class="dropdown-item"> -->
+                <!-- Message Start -->
+                <!-- <div class="media">
                                 <img src="../../AdminLTE/dist/img/user8-128x128.jpg" alt="User Avatar"
                                     class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
@@ -101,15 +101,15 @@
                                     <p class="text-sm">I got your message bro</p>
                                     <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                                 </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
+                            </div> -->
+                <!-- Message End -->
+                <!-- </a>
                         <div class="dropdown-divider"></div>
                         <a href="" class="dropdown-item dropdown-footer">See All Messages</a>
                     </div>
-                </li>
+                </li> -->
                 <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="">
                         <i class="far fa-bell"></i>
                         <span class="badge badge-warning navbar-badge">5</span>
@@ -123,6 +123,17 @@
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="" class="dropdown-item dropdown-footer">See All Notifications</a>
+                    </div>
+                </li> -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="" data-toggle="tooltip" data-placement="top"
+                        title="Logout">
+                        <i class="fa fa-sign-out-alt"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="http://localhost:3000/admin/logout" class="dropdown-item">
+                            <i class="fa fa-sign-out-alt"></i> Logout
+                        </a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -164,14 +175,14 @@
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#!" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item has-treeview">
                             <a href="" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
@@ -188,6 +199,18 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="#!stockInList" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock In List</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#!stockOutList" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Stock Out List</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="#!traderDetailsList" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Trader Details List</p>
@@ -195,14 +218,14 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#!changePassword" class="nav-link">
                                 <i class="nav-icon fas fa-key"></i>
                                 <p>
                                     Change Password
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -228,7 +251,7 @@
     </div>
     <!-- ./wrapper -->
     <script>
-        var app = angular.module('myAdminApp', ['ngRoute', 'angular.filter', 'angularjs-dropdown-multiselect']);
+        var app = angular.module('myAdminApp', ['ngRoute', 'angular.filter', 'angularUtils.directives.dirPagination', 'angularjs-dropdown-multiselect']);
         app.controller('myAdminCtrl', function ($scope, $http) { });
         app.filter('capitalize', function () {
             return function (input) {
@@ -249,12 +272,23 @@
         });
         app.config(['$routeProvider', function ($routeProvider) {
             $routeProvider
+                // .when("/", {
+                //     templateUrl: "admin/dashboard",
+                //     controller: 'myAdminDashboardCtrl'
+                // })
+                // .when("/availableItemsList", {
+                //     templateUrl: "admin/availableItemsList",
+                //     controller: 'myAdminAvailableItemsListCtrl'
+                // })
                 .when("/", {
-                    templateUrl: "admin/dashboard",
-                    controller: 'myAdminDashboardCtrl'
-                }).when("/availableItemsList", {
                     templateUrl: "admin/availableItemsList",
                     controller: 'myAdminAvailableItemsListCtrl'
+                }).when("/stockInList", {
+                    templateUrl: "admin/stockInList",
+                    controller: 'myAdminStockInListCtrl'
+                }).when("/stockOutList", {
+                    templateUrl: "admin/stockOutList",
+                    controller: 'myAdminStockOutListCtrl'
                 }).when("/traderDetailsList", {
                     templateUrl: "admin/traderDetailsList",
                     controller: 'myAdminTraderDetailsListCtrl'
@@ -293,6 +327,8 @@
     </script>
     <script src="../../public/controllers/admin/myAdminDashboardCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminAvailableItemsListCtrl.js"></script>
+    <script src="../../public/controllers/admin/myAdminStockInListCtrl.js"></script>
+    <script src="../../public/controllers/admin/myAdminStockOutListCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminTraderDetailsListCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminChangePasswordCtrl.js"></script>
     <!-- jQuery -->
@@ -353,6 +389,7 @@
     <!-- Page script -->
     <script src="../../public/javascripts/sha256.min.js"></script>
     <script src="../../public/javascripts/jquery.table2excel.min.js"></script>
+    <script src="../../public/javascripts/dirPagination.js"></script>
     <script type="text/javascript">
         var idleTime = 0;
         $(document).ready(function () {

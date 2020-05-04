@@ -7,7 +7,7 @@
     <title>Horticulture Produce Marketing</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <link rel="icon" href="../../gigw/nielit.gov.in/sites/all/themes/berry/images/favicon.ico" type="image/x-icon" />
 
     <!-- Font Awesome -->
@@ -81,16 +81,16 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Messages Dropdown Menu -->
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="">
                         <i class="far fa-comments"></i>
                         <span class="badge badge-danger navbar-badge">3</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <div class="dropdown-divider"></div>
-                        <a href="" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
+                        <a href="" class="dropdown-item"> -->
+                <!-- Message Start -->
+                <!-- <div class="media">
                                 <img src="../../AdminLTE/dist/img/user8-128x128.jpg" alt="User Avatar"
                                     class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
@@ -101,15 +101,15 @@
                                     <p class="text-sm">I got your message bro</p>
                                     <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                                 </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
+                            </div> -->
+                <!-- Message End -->
+                <!-- </a>
                         <div class="dropdown-divider"></div>
                         <a href="" class="dropdown-item dropdown-footer">See All Messages</a>
                     </div>
-                </li>
+                </li> -->
                 <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="">
                         <i class="far fa-bell"></i>
                         <span class="badge badge-warning navbar-badge">5</span>
@@ -124,6 +124,17 @@
                         <div class="dropdown-divider"></div>
                         <a href="" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
+                </li> -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="" data-toggle="tooltip" data-placement="top"
+                        title="Logout">
+                        <i class="fa fa-sign-out-alt"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="http://localhost:3000/ddh/logout" class="dropdown-item">
+                            <i class="fa fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="" role="button">
@@ -135,7 +146,8 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar sidebar-dark-primary elevation-4" ng-controller="myDDHCtrl"
+            ng-init="getDDHDetails()">
             <!-- Brand Logo -->
             <!-- <a href="../../index3.html" class="brand-link"> -->
             <br>
@@ -154,7 +166,8 @@
                         <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div> -->
                     <div class="info">
-                        <a href="" class="d-block">Welcome, DDH</a>
+                        <a href="" class="d-block">Welcome,<br>{{ddhDetails.DDHName}},<br>DDH
+                            {{ddhDetails.DistrictName}}</a>
                     </div>
                 </div>
 
@@ -164,14 +177,14 @@
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#!" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a href="#!stockIn" class="nav-link">
                                 <i class="nav-icon fas fa-edit"></i>
@@ -198,6 +211,12 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
+                                    <a href="#!availableItemsList" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Available Items List</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="#!stockInList" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Stock In List</p>
@@ -217,14 +236,14 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#!changePassword" class="nav-link">
                                 <i class="nav-icon fas fa-key"></i>
                                 <p>
                                     Change Password
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -250,8 +269,20 @@
     </div>
     <!-- ./wrapper -->
     <script>
-        var app = angular.module('myDDHApp', ['ngRoute', 'angular.filter', 'angularjs-dropdown-multiselect']);
-        app.controller('myDDHCtrl', function ($scope, $http) { });
+        var app = angular.module('myDDHApp', ['ngRoute', 'angular.filter', 'angularUtils.directives.dirPagination', 'angularjs-dropdown-multiselect']);
+        app.controller('myDDHCtrl', function ($scope, $http) {
+
+            $scope.getDDHDetails = function () {
+                $http.get('http://localhost:3000/ddh/getDDHDetails').then(function success(response) {
+                    $scope.ddhDetails = response.data[0];
+                }, function error(response) {
+                    console.log(response.status);
+                }).catch(function err(error) {
+                    console.log('An error occurred...', error);
+                });
+            };
+
+        });
         app.filter('capitalize', function () {
             return function (input) {
                 if (input != null) {
@@ -271,15 +302,23 @@
         });
         app.config(['$routeProvider', function ($routeProvider) {
             $routeProvider
+                // .when("/", {
+                //     templateUrl: "ddh/dashboard",
+                //     controller: 'myDDHDashboardCtrl'
+                // })
+                // .when("/stockIn", {
+                //     templateUrl: "ddh/stockIn",
+                //     controller: 'myDDHStockInCtrl'
+                // })
                 .when("/", {
-                    templateUrl: "ddh/dashboard",
-                    controller: 'myDDHDashboardCtrl'
-                }).when("/stockIn", {
                     templateUrl: "ddh/stockIn",
                     controller: 'myDDHStockInCtrl'
                 }).when("/stockOut", {
                     templateUrl: "ddh/stockOut",
                     controller: 'myDDHStockOutCtrl'
+                }).when("/availableItemsList", {
+                    templateUrl: "ddh/availableItemsList",
+                    controller: 'myDDHAvailableItemsListCtrl'
                 }).when("/stockInList", {
                     templateUrl: "ddh/stockInList",
                     controller: 'myDDHStockInListCtrl'
@@ -445,6 +484,7 @@
     <script src="../../public/controllers/ddh/myDDHDashboardCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHStockInCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHStockOutCtrl.js"></script>
+    <script src="../../public/controllers/ddh/myDDHAvailableItemsListCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHStockInListCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHStockOutListCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHTraderDetailsListCtrl.js"></script>
@@ -507,6 +547,7 @@
     <!-- Page script -->
     <script src="../../public/javascripts/sha256.min.js"></script>
     <script src="../../public/javascripts/jquery.table2excel.min.js"></script>
+    <script src="../../public/javascripts/dirPagination.js"></script>
     <script type="text/javascript">
         var idleTime = 0;
         $(document).ready(function () {

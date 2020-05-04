@@ -53,8 +53,9 @@
                                 <div class="form-group">
                                     <label class="control-label">Items</label>
                                     <select class="form-control select2" name="items" ng-model="ddlItems"
-                                        ng-options="i.ItemID as i.ItemName for i in items" required>
-                                        <option value="" disabled>Select Items</option>
+                                        ng-options="i.ItemID as i.ItemName for i in items" ng-change="getUnitByItem()"
+                                        required>
+                                        <option value="" disabled>Select Item</option>
                                     </select>
                                     <div class="has-error"
                                         ng-show="stockInForm.$submitted || stockInForm.items.$touched"
@@ -96,7 +97,7 @@
                                     <label class="control-label">GPs</label>
                                     <select class="form-control select2" name="gps" ng-model="ddlGPs"
                                         ng-options="i.GPCode as i.GPName for i in gps" ng-change="getVillagesByGP()">
-                                        <option value="" disabled>Select GPs</option>
+                                        <option value="" disabled>Select GP</option>
                                     </select>
                                 </div>
                             </div>
@@ -106,12 +107,12 @@
                                     <select ng-show="rbAreaType == 'Rural'" class="form-control select2" name="blocks"
                                         ng-model="ddlBlocks" ng-options="i.BlockCode as i.BlockName for i in blocks"
                                         ng-change="getGPsByBlock()" required>
-                                        <option value="" disabled>Select Blocks</option>
+                                        <option value="" disabled>Select Block</option>
                                     </select>
                                     <select ng-show="rbAreaType == 'Urban'" class="form-control select2" name="blocks"
                                         ng-model="ddlBlocks" ng-options="i.ULBCode as i.ULBName for i in blocks"
                                         ng-change="getGPsByBlock()" required>
-                                        <option value="" disabled>Select Blocks</option>
+                                        <option value="" disabled>Select Block</option>
                                     </select>
                                     <div class="has-error"
                                         ng-show="stockInForm.$submitted || stockInForm.blocks.$touched"
@@ -124,7 +125,7 @@
                                     <label class="control-label">Villages</label>
                                     <select class="form-control select2" name="villages" ng-model="ddlVillages"
                                         ng-options="i.VillageCode as i.VillageName for i in villages">
-                                        <option value="" disabled>Select Villages</option>
+                                        <option value="" disabled>Select Village</option>
                                     </select>
                                 </div>
                             </div>
@@ -150,8 +151,8 @@
                                 <div class="form-group">
                                     <label>Farmer's Mobile No.</label>
                                     <input type="text" name="farmerMobileNo" class="form-control" mobile-no-only
-                                        numbers-only ng-model="txtFarmerMobileNo" placeholder="Enter Farmer's Mobile No."
-                                        minlength="10" maxlength="10" required>
+                                        numbers-only ng-model="txtFarmerMobileNo"
+                                        placeholder="Enter Farmer's Mobile No." minlength="10" maxlength="10" required>
                                     <div class="has-error"
                                         ng-show="stockInForm.$submitted || stockInForm.farmerMobileNo.$touched"
                                         style="color:red">
@@ -162,7 +163,8 @@
                             </div>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group">
-                                    <label>Quantity <small>(in Quintal)</small></label>
+                                    <label>Quantity
+                                        <small>{{(unit == 'Q') ? '(in Qtls.)' : (unit == 'No') ? '(in Lakh Nos.)' : ''}}</small></label>
                                     <input type="text" name="quantity" class="form-control"
                                         valid-number-upto-two-decimal ng-model="txtQuantity"
                                         placeholder="Enter Quantity" minlength="1" maxlength="10" required>

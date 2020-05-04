@@ -79,39 +79,44 @@ var getURL = function (req) {
 };
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('ddh/layout', { title: 'Layout' });
+  res.render('ddh/layout', { title: 'Layout', csrfToken: req.csrfToken() });
 });
 
-router.get('/dashboard', function (req, res, next) {
+router.get('/dashboard', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('ddh/dashboard', { title: 'Dashboard' });
+  res.render('ddh/dashboard', { title: 'Dashboard', csrfToken: req.csrfToken() });
 });
 
-router.get('/stockIn', function (req, res, next) {
+router.get('/stockIn', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('ddh/stockin', { title: 'Stock In' });
+  res.render('ddh/stockin', { title: 'Stock In', csrfToken: req.csrfToken() });
 });
 
-router.get('/stockOut', function (req, res, next) {
+router.get('/stockOut', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('ddh/stockout', { title: 'Stock Out' });
+  res.render('ddh/stockout', { title: 'Stock Out', csrfToken: req.csrfToken() });
 });
 
-router.get('/stockInList', function (req, res, next) {
+router.get('/availableItemsList', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('ddh/stockinlist', { title: 'Stock In List' });
+  res.render('ddh/availableitemslist', { title: 'Available Items List', csrfToken: req.csrfToken() });
 });
 
-router.get('/stockOutList', function (req, res, next) {
+router.get('/stockInList', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('ddh/stockoutlist', { title: 'Stock Out List' });
+  res.render('ddh/stockinlist', { title: 'Stock In List', csrfToken: req.csrfToken() });
 });
 
-router.get('/traderDetailsList', function (req, res, next) {
+router.get('/stockOutList', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('ddh/traderdetailslist', { title: 'Trader Details List' });
+  res.render('ddh/stockoutlist', { title: 'Stock Out List', csrfToken: req.csrfToken() });
+});
+
+router.get('/traderDetailsList', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('ddh/traderdetailslist', { title: 'Trader Details List', csrfToken: req.csrfToken() });
 });
 
 router.get('/changePassword', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
@@ -192,7 +197,7 @@ router.get('/logout', function (req, res, next) {
   res.redirect('../login');
 });
 
-router.get('/getCategories', function (req, res, next) {
+router.get('/getCategories', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
   balModule.getCategories().then(function success(response) {
     res.send(response);
@@ -203,7 +208,7 @@ router.get('/getCategories', function (req, res, next) {
   });
 });
 
-router.get('/getItemsByCategory', function (req, res, next) {
+router.get('/getItemsByCategory', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
   var categoryID = req.query.categoryID;
   balModule.getItemsByCategory(categoryID).then(function success(response) {
@@ -215,10 +220,9 @@ router.get('/getItemsByCategory', function (req, res, next) {
   });
 });
 
-router.get('/getBlocks', function (req, res, next) {
+router.get('/getBlocks', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
-  // var districtCode = req.session.username.substr(4, 3);
-  var districtCode = 344;
+  var districtCode = req.session.username.substr(4, 3);
   balModule.getBlocks(districtCode).then(function success(response) {
     res.send(response);
   }, function error(response) {
@@ -228,7 +232,7 @@ router.get('/getBlocks', function (req, res, next) {
   });
 });
 
-router.get('/getGPsByBlock', function (req, res, next) {
+router.get('/getGPsByBlock', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
   var blockCode = req.query.blockCode;
   balModule.getGPsByBlock(blockCode).then(function success(response) {
@@ -240,7 +244,7 @@ router.get('/getGPsByBlock', function (req, res, next) {
   });
 });
 
-router.get('/getVillagesByGP', function (req, res, next) {
+router.get('/getVillagesByGP', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
   var gpCode = req.query.gpCode;
   balModule.getVillagesByGP(gpCode).then(function success(response) {
@@ -252,10 +256,9 @@ router.get('/getVillagesByGP', function (req, res, next) {
   });
 });
 
-router.get('/getULBs', function (req, res, next) {
+router.get('/getULBs', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
-  // var districtCode = req.session.username.substr(4, 3);
-  var districtCode = 344;
+  var districtCode = req.session.username.substr(4, 3);
   balModule.getULBs(districtCode).then(function success(response) {
     res.send(response);
   }, function error(response) {
@@ -265,9 +268,9 @@ router.get('/getULBs', function (req, res, next) {
   });
 });
 
-router.post('/submitStockIn', function (req, res, next) {
+router.post('/submitStockIn', parseForm, csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  balModule.addActivityLog(req.connection.remoteAddress, 'DDH_344', getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
   }, function error(response) {
     console.log(response.status);
   });
@@ -275,7 +278,7 @@ router.post('/submitStockIn', function (req, res, next) {
   if (obj.Photo != null) {
     obj.Photo = Buffer.from(obj.Photo, 'base64');
   }
-  obj.UserID = 'DDH_344';
+  obj.UserID = req.session.username;
   obj.IPAddress = req.connection.remoteAddress;
   obj.FinancialYear = getFinancialYear();
   obj.Status = null;
@@ -292,11 +295,11 @@ router.post('/submitStockIn', function (req, res, next) {
   });
 });
 
-router.get('/getStockDetails', function (req, res, next) {
+router.get('/getStockDetails', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
   var obj = {};
   obj.itemID = req.query.itemID;
-  obj.districtCode = 344;
+  obj.districtCode = req.session.username.substr(4, 3);
   obj.blockCode = req.query.blockCode;
   if (req.query.hasOwnProperty('gpCode') && req.query.hasOwnProperty('villageCode')) {
     obj.gpCode = req.query.gpCode;
@@ -311,15 +314,15 @@ router.get('/getStockDetails', function (req, res, next) {
   });
 });
 
-router.post('/submitStockOut', function (req, res, next) {
+router.post('/submitStockOut', parseForm, csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  balModule.addActivityLog(req.connection.remoteAddress, 'DDH_344', getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
   }, function error(response) {
     console.log(response.status);
   });
   var stockArray = req.body.data.array;
   var obj = req.body.data.obj;
-  obj.UserID = 'DDH_344';
+  obj.UserID = req.session.username;
   obj.IPAddress = req.connection.remoteAddress;
   obj.FinancialYear = getFinancialYear();
   obj.Status = null;
@@ -327,6 +330,84 @@ router.post('/submitStockOut', function (req, res, next) {
     res.send((response1 == stockArray.length) ? true : false);
   }, function error(response) {
     console.log(response.status);
+  });
+});
+
+router.get('/getItemDetails', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var userID = req.session.username
+  balModule.getItemDetails(userID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getItemDetailsBGVWise', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.session.username.substr(4, 3);
+  var itemID = req.query.itemID;
+  var roleName = req.session.role;
+  balModule.getItemDetailsBGVWise(districtCode, itemID, roleName, function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  });
+});
+
+router.get('/getTraderDetails', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.session.username.substr(4, 3);
+  balModule.getTraderDetails(districtCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getStockInDetails', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.session.username.substr(4, 3);
+  var blockCode = req.query.blockCode;
+  var categoryID = req.query.categoryID;
+  var areaType = req.query.areaType;
+  balModule.getStockInDetails(districtCode, blockCode, categoryID, areaType).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getStockOutDetails', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.session.username.substr(4, 3);
+  var blockCode = req.query.blockCode;
+  var categoryID = req.query.categoryID;
+  var areaType = req.query.areaType;
+  balModule.getStockOutDetails(districtCode, blockCode, categoryID, areaType).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getDDHDetails', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var userID = req.session.username;
+  balModule.getDDHDetails(userID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
   });
 });
 

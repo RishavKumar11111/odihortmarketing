@@ -1,6 +1,6 @@
 app.controller('myDDHStockOutCtrl', function ($scope, $http, $filter) {
 
-    // var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     $scope.rbAreaType = 'Rural';
 
@@ -201,31 +201,34 @@ app.controller('myDDHStockOutCtrl', function ($scope, $http, $filter) {
                         alert('The Sale quantity must be less than or equal to the total Quantity available.');
                     }
                     else {
-                        angular.forEach($scope.stockDetails, function (i) {
-                            angular.forEach($scope.stockArray, function (j) {
-                                if (j.StockID == i.StockID) {
-                                    j.SaleQuantity = i.SaleQuantity;
-                                }
+                        var message = confirm('Do you really want to submit the form?');
+                        if (message) {
+                            angular.forEach($scope.stockDetails, function (i) {
+                                angular.forEach($scope.stockArray, function (j) {
+                                    if (j.StockID == i.StockID) {
+                                        j.SaleQuantity = i.SaleQuantity;
+                                    }
+                                });
                             });
-                        });
-                        var myData = {};
-                        myData.Remarks = ($scope.txtRemarks !== null && $scope.txtRemarks !== undefined && $scope.txtRemarks !== '') ? $scope.txtRemarks : null;
-                        $http.post('http://localhost:3000/ddh/submitStockOut', { data: { array: $scope.stockArray, obj: myData } }, { credentials: 'same-origin' }).then(function success(response) {
-                            var result = response.data;
-                            if (result == true) {
-                                alert('The Stock Out details are submitted successfully.');
-                                $scope.getStockDetails('successfully');
-                                $scope.txtRemarks = null;
-                                $scope.isAllSelected = false;
-                                $scope.stockDetails = [];
-                                $scope.stockArray = [];
-                            }
-                            else {
-                                alert('An error occurred... Please contact the administrator.');
-                            }
-                        }).catch(function error(err) {
-                            console.log('An error occurred...', err);
-                        });
+                            var myData = {};
+                            myData.Remarks = ($scope.txtRemarks !== null && $scope.txtRemarks !== undefined && $scope.txtRemarks !== '') ? $scope.txtRemarks : null;
+                            $http.post('http://localhost:3000/ddh/submitStockOut', { data: { array: $scope.stockArray, obj: myData } }, { credentials: 'same-origin', headers: { 'CSRF-Token': token } }).then(function success(response) {
+                                var result = response.data;
+                                if (result == true) {
+                                    alert('The Stock Out details are submitted successfully.');
+                                    $scope.getStockDetails('successfully');
+                                    $scope.txtRemarks = null;
+                                    $scope.isAllSelected = false;
+                                    $scope.stockDetails = [];
+                                    $scope.stockArray = [];
+                                }
+                                else {
+                                    alert('An error occurred... Please contact the administrator.');
+                                }
+                            }).catch(function error(err) {
+                                console.log('An error occurred...', err);
+                            });
+                        }
                     }
                 }
             }

@@ -67,7 +67,7 @@ exports.updateIsLoggedIn = function (isLoggedIn, userID) {
 };
 
 exports.getCategories = function () {
-    return sequelize.query('select CategoryID, CategoryName from Category', {
+    return sequelize.query('select CategoryID, CategoryName from Category order by CategoryName', {
         type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
@@ -77,7 +77,7 @@ exports.getCategories = function () {
 };
 
 exports.getItemsByCategory = function (categoryID) {
-    return sequelize.query('select ItemID, ItemName from Items where CategoryID = :category_id', {
+    return sequelize.query('select ItemID, ItemName, Unit from Items where CategoryID = :category_id order by ItemName', {
         replacements: { category_id: categoryID }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
@@ -87,7 +87,7 @@ exports.getItemsByCategory = function (categoryID) {
 };
 
 exports.getBlocks = function (districtCode) {
-    return sequelize.query('select BlockCode, BlockName from LGDBlock where DistrictCode = :district_code', {
+    return sequelize.query('select BlockCode, BlockName from LGDBlock where DistrictCode = :district_code order by BlockName', {
         replacements: { district_code: districtCode }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
@@ -97,7 +97,7 @@ exports.getBlocks = function (districtCode) {
 };
 
 exports.getGPsByBlock = function (blockCode) {
-    return sequelize.query('select GPCode, GPName from LGDGP where BlockCode = :block_code', {
+    return sequelize.query('select GPCode, GPName from LGDGP where BlockCode = :block_code order by GPName', {
         replacements: { block_code: blockCode }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
@@ -107,7 +107,7 @@ exports.getGPsByBlock = function (blockCode) {
 };
 
 exports.getVillagesByGP = function (gpCode) {
-    return sequelize.query('select VillageCode, VillageName from LGDVillage where GPCode = :gp_code', {
+    return sequelize.query('select VillageCode, VillageName from LGDVillage where GPCode = :gp_code order by VillageName', {
         replacements: { gp_code: gpCode }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
@@ -117,7 +117,7 @@ exports.getVillagesByGP = function (gpCode) {
 };
 
 exports.getULBs = function (districtCode) {
-    return sequelize.query('select ULBCode, ULBName from LGDULB where DistrictCode = :district_code', {
+    return sequelize.query('select ULBCode, ULBName from LGDULB where DistrictCode = :district_code order by ULBName', {
         replacements: { district_code: districtCode }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
@@ -138,7 +138,7 @@ exports.submitStockIn = function (obj) {
 
 exports.getStockDetails = function (obj) {
     if (obj.hasOwnProperty('gpCode') && obj.hasOwnProperty('villageCode')) {
-        return sequelize.query('select a.StockID, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, c.ItemName, Quantity - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemId and a.ItemID = :item_id left join StockOut b on a.StockID = b.StockID inner join LGDBlock d on a.BlockCode = d.BlockCode inner join LGDGP e on a.GPCode = e.GPCode inner join LGDVillage f on a.VillageCode = f.VillageCode where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:gp_code = 0 or a.GPCode = :gp_code) and (:village_code = 0 or a.VillageCode = :village_code) group by a.StockID, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, c.ItemName, Quantity, Unit having Quantity - isnull((sum(SaleQuantity)), 0) > 0 order by BlockName, GPName, VillageName', {
+        return sequelize.query('select a.StockID, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, ItemName, Quantity - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemId and a.ItemID = :item_id left join StockOut b on a.StockID = b.StockID inner join LGDBlock d on a.BlockCode = d.BlockCode inner join LGDGP e on a.GPCode = e.GPCode inner join LGDVillage f on a.VillageCode = f.VillageCode where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:gp_code = 0 or a.GPCode = :gp_code) and (:village_code = 0 or a.VillageCode = :village_code) group by a.StockID, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, ItemName, Quantity, Unit having Quantity - isnull((sum(SaleQuantity)), 0) > 0 order by BlockName, GPName, VillageName, FarmerName, ItemName', {
             replacements: { item_id: obj.itemID, district_code: obj.districtCode, block_code: obj.blockCode, gp_code: obj.gpCode, village_code: obj.villageCode }, type: sequelize.QueryTypes.SELECT
         }).then(function success(data) {
             return data;
@@ -147,7 +147,7 @@ exports.getStockDetails = function (obj) {
         });
     }
     else {
-        return sequelize.query('select a.StockID, ULBName as BlockName, FarmerName, FarmerMobileNo, c.ItemName, Quantity - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemId and a.ItemID = :item_id left join StockOut b on a.StockID = b.StockID inner join LGDULB d on a.BlockCode = d.ULBCode where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) group by a.StockID, ULBName, FarmerName, FarmerMobileNo, c.ItemName, Quantity, Unit having Quantity - isnull((sum(SaleQuantity)), 0) > 0 order by ULBName', {
+        return sequelize.query('select a.StockID, ULBName as BlockName, FarmerName, FarmerMobileNo, ItemName, Quantity - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemId and a.ItemID = :item_id left join StockOut b on a.StockID = b.StockID inner join LGDULB d on a.BlockCode = d.ULBCode where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) group by a.StockID, ULBName, FarmerName, FarmerMobileNo, ItemName, Quantity, Unit having Quantity - isnull((sum(SaleQuantity)), 0) > 0 order by ULBName, FarmerName, ItemName', {
             replacements: { item_id: obj.itemID, district_code: obj.districtCode, block_code: obj.blockCode }, type: sequelize.QueryTypes.SELECT
         }).then(function success(data) {
             return data;
@@ -183,6 +183,77 @@ exports.submitStockOut = function (stockArray, obj, callback) {
             }
             con.close();
         });
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getItemDetails = function (userID) {
+    return sequelize.query('select a.ItemID, ItemName, CategoryName, sum(Quantity) - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemId = c.ItemId left join StockOut b on a.StockId = b.StockId inner join Category d on c.CategoryID = d.CategoryID where a.UserID = :user_id group by a.ItemID, ItemName, CategoryName, Unit having sum(Quantity) - isnull((sum(SaleQuantity)) ,0) > 0 order by ItemName, CategoryName', {
+        replacements: { user_id: userID }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getItemDetailsBGVWise = function (districtCode, itemID, roleName, callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const request = new sql.Request(con);
+        request.input('DistrictCode', districtCode);
+        request.input('ItemID', itemID);
+        request.input('RoleName', roleName);
+        request.execute('spGetItemDetailsBGVWise', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.recordset);
+            }
+            con.close();
+        });
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getTraderDetails = function (districtCode) {
+    return sequelize.query('select ID, DistrictName, TraderName, TraderContactNo, Commodity from TraderDetails a inner join LGDDistrict b on a.DistrictCode = b.DistrictCode where a.DistrictCode = :district_code order by ID, DistrictName, TraderName, Commodity', {
+        replacements: { district_code: districtCode }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getStockInDetails = function (districtCode, blockCode, categoryID, areaType) {
+    return sequelize.query("select DistrictName, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, ItemName, Unit, Quantity, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(10), convert(date, AvailableFrom), 105) + ' - ' + convert(varchar(10), convert(date, AvailableTill), 105) end as AvailableDate, Photo from StockIn a inner join Items b on a.ItemID = b.ItemID left join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join (select BlockCode, BlockName from LGDBlock union all select ULBCode, ULBName from LGDULB) d on a.BlockCode = d.BlockCode left join LGDGP e on a.GPCode = e.GPCode left join LGDVillage f on a.VillageCode = f.VillageCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:area_type is null or AreaType = :area_type) order by DistrictName, BlockName, GPName, VillageName, FarmerName, ItemName", {
+        replacements: { district_code: districtCode, block_code: blockCode, category_id: categoryID, area_type: areaType }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getStockOutDetails = function (districtCode, blockCode, categoryID, areaType) {
+    return sequelize.query("select DistrictName, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, ItemName, Unit, SaleQuantity, convert(varchar(10), h.DateTime, 105) as Date, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(10), convert(date, AvailableFrom), 105) + ' - ' + convert(varchar(10), convert(date, AvailableTill), 105) end as AvailableDate, Photo from StockIn a inner join StockOut h on a.StockID = h.StockID inner join Items b on a.ItemID = b.ItemID left join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join (select BlockCode, BlockName from LGDBlock union all select ULBCode, ULBName from LGDULB) d on a.BlockCode = d.BlockCode left join LGDGP e on a.GPCode = e.GPCode left join LGDVillage f on a.VillageCode = f.VillageCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:area_type is null or AreaType = :area_type) order by h.DateTime, DistrictName, BlockName, GPName, VillageName, FarmerName, ItemName desc", {
+        replacements: { district_code: districtCode, block_code: blockCode, category_id: categoryID, area_type: areaType }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getDDHDetails = function (userID) {
+    return sequelize.query('select DDHName, DistrictName from DDHDistrictMapping a inner join LGDDistrict b on a.DistrictCode = b.DistrictCode where DDHUserID = :user_id', {
+        replacements: { user_id: userID }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
     }).catch(function error(err) {
         console.log('An error occurred...', err);
     });

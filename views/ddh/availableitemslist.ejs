@@ -1,0 +1,234 @@
+<div class="content-wrapper" ng-controller="myDDHAvailableItemsListCtrl" ng-init="getItemDetails();">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h1><%= title %></h1>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active"><%= title %></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="modal fade" id="myModal">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>
+                                Block, GP and VIllage-wise
+                                "{{itemDetailsBGVWise[0].ItemName | capitalize}}"
+                                availability</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Block</th>
+                                        <th>GP</th>
+                                        <th>Village</th>
+                                        <th>Farmer's Name</th>
+                                        <th>Farmer's Mobile No.</th>
+                                        <th>Available Quantity
+                                            <span ng-show="itemDetailsBGVWise[0].Unit == 'Q'">(Qtls.)</span>
+                                            <span ng-show="itemDetailsBGVWise[0].Unit == 'No'">(Lakh Nos.)</span>
+                                        </th>
+                                        <th>Available Date</th>
+                                    </tr>
+                                    <tr ng-repeat="i in itemDetailsBGVWise">
+                                        <td>{{i.BlockName | capitalize}}</td>
+                                        <td>{{i.GPName | capitalize}}</td>
+                                        <td>{{i.VillageName | capitalize}}</td>
+                                        <td>{{i.FarmerName | capitalize}}</td>
+                                        <td>{{i.FarmerMobileNo}}</td>
+                                        <td>{{i.Quantity}}</td>
+                                        <td>{{(i.AvailableDate == '01-01-2200 - 01-01-2200') ? 'NA' : i.AvailableDate}}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="text-align: right;">
+                                <h4>
+                                    Total: {{totalQuantityBGVWise.toFixed(2)}}
+                                    <span ng-show="itemDetailsBGVWise[0].Unit == 'Q'">Qtls.</span>
+                                    <span ng-show="itemDetailsBGVWise[0].Unit == 'No'">Lakh Nos.</span>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Fruits</h3>
+                        </div>
+                        <div id="divFruits" class="card-body table-responsive" style="overflow-y: auto;">
+                            <table ng-show="foundFruits == true" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantity (in Qtls.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-click="getItemDetailsBGVWise(i.ItemID)" data-toggle="modal"
+                                        data-target="#myModal"
+                                        ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Fruits' }">
+                                        <td><a href="" data-toggle="tooltip" data-placement="top"
+                                                title="Click to view details">{{i.ItemName | capitalize}}</a></td>
+                                        <td><a href="" data-toggle="tooltip" data-placement="top"
+                                                title="Click to view details">{{i.Quantity}}&nbsp;&nbsp;&nbsp;<i
+                                                    class="fa fa-eye"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h4 ng-show="foundFruits == false" style="color: red">No Fruits are available</h4>
+                        </div>
+                        <div class="card-footer clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Vegetables</h3>
+                        </div>
+                        <div id="divVegetables" class="card-body table-responsive" style="overflow-y: auto;">
+                            <table ng-show="foundVegetables == true" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantity (in Qtls.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-click="getItemDetailsBGVWise(i.ItemID)" data-toggle="modal"
+                                        data-target="#myModal"
+                                        ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Vegetables' }">
+                                        <td><a href="" data-toggle="tooltip" data-placement="top"
+                                                title="Click to view details">{{i.ItemName | capitalize}}</a></td>
+                                        <td><a href="" data-toggle="tooltip" data-placement="top"
+                                                title="Click to view details">{{i.Quantity}}&nbsp;&nbsp;&nbsp;<i
+                                                    class="fa fa-eye"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h4 ng-show="foundVegetables == false" style="color: red">No Vegetables are available</h4>
+                        </div>
+                        <div class="card-footer clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Flowers</h3>
+                        </div>
+                        <div id="divFlowers" class="card-body table-responsive" style="overflow-y: auto;">
+                            <table ng-show="foundFlowers == true" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantity (in Qtls.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-click="getItemDetailsBGVWise(i.ItemID)" data-toggle="modal"
+                                        data-target="#myModal"
+                                        ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Flowers' }">
+                                        <td><a href="" data-toggle="tooltip" data-placement="top"
+                                                title="Click to view details">{{i.ItemName | capitalize}}</a></td>
+                                        <td><a href="" data-toggle="tooltip" data-placement="top"
+                                                title="Click to view details">{{i.Quantity}}&nbsp;&nbsp;&nbsp;<i
+                                                    class="fa fa-eye"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h4 ng-show="foundFlowers == false" style="color: red">No Flowers are available</h4>
+                        </div>
+                        <div class="card-footer clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Plantation Crops</h3>
+                        </div>
+                        <div id="divPlantationCrops" class="card-body table-responsive" style="overflow-y: auto;">
+                            <table ng-show="foundPlantationCrops == true" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantity (in Qtls.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-click="getItemDetailsBGVWise(i.ItemID)" data-toggle="modal"
+                                        data-target="#myModal"
+                                        ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Plantation Crops' }">
+                                        <td><a href="" data-toggle="tooltip" data-placement="top"
+                                                title="Click to view details">{{i.ItemName | capitalize}}</a></td>
+                                        <td><a href="" data-toggle="tooltip" data-placement="top"
+                                                title="Click to view details">{{i.Quantity}}&nbsp;&nbsp;&nbsp;<i
+                                                    class="fa fa-eye"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h4 ng-show="foundPlantationCrops == false" style="color: red">No Plantation Crops are
+                                available</h4>
+                        </div>
+                        <div class="card-footer clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Spices</h3>
+                        </div>
+                        <div id="divSpices" class="card-body table-responsive" style="overflow-y: auto;">
+                            <table ng-show="foundSpices == true" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantity (in Qtls.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-click="getItemDetailsBGVWise(i.ItemID)" data-toggle="modal"
+                                        data-target="#myModal"
+                                        ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Spices' }">
+                                        <td><a href="" data-toggle="tooltip" data-placement="top"
+                                                title="Click to view details">{{i.ItemName | capitalize}}</a></td>
+                                        <td><a href="" data-toggle="tooltip" data-placement="top"
+                                                title="Click to view details">{{i.Quantity}}&nbsp;&nbsp;&nbsp;<i
+                                                    class="fa fa-eye"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h4 ng-show="foundSpices == false" style="color: red">No Spices are available</h4>
+                        </div>
+                        <div class="card-footer clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
