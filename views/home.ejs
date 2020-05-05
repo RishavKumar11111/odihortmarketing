@@ -254,7 +254,7 @@
         right: 0;
     }
 </style>
-<div ng-controller="myHomeCtrl" ng-init="getItemDetails();">
+<div ng-app="myApp" ng-cloak ng-controller="myHomeCtrl" ng-init="getItemDetails();">
     <div class="slider-outer">
         <script type="text/javascript" src="../gigw/nielit.gov.in/sites/all/themes/berry/js/jssor.core.js"></script>
         <script type="text/javascript" src="../gigw/nielit.gov.in/sites/all/themes/berry/js/jssor.utils.js"></script>
@@ -433,7 +433,7 @@
                     // fourth message end
                     <div class="clear"></div>
                 </div>-->
-                <div class="latestnews">
+                <!-- <div class="latestnews">
                     <div class="breakingNews" id="bn3">
                         <div class="bn-title">
                             <h2>Latest News</h2><span></span>
@@ -447,7 +447,7 @@
                         </div>
                         <span class="latest-news-span"><a href="newsevents">View More</a></span>
                     </div>
-                </div>
+                </div> -->
                 <!-- Trigger/Open The Modal -->
                 <!-- <button id="myBtn">Open Modal</button> -->
                 <!-- The Modal -->
@@ -1322,6 +1322,7 @@
                     document.body.style.overflowY = "scroll";
                 }
                 window.onclick = function (event) {
+                    event.stopPropagation();
                     if (event.target == modal) {
                         modal.style.display = "none";
                         document.body.style.overflowY = "scroll";

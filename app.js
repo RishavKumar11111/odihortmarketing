@@ -91,9 +91,9 @@ app.use(function (err, req, res, next) {
 });
 
 // Certificate
-// const privateKey = fs.readFileSync('/etc/letsencrypt/live/www.odihortmarketing.nic.in/privkey.pem', 'utf8');
-// const certificate = fs.readFileSync('/etc/letsencrypt/live/www.odihortmarketing.nic.in/cert.pem', 'utf8');
-// const ca = fs.readFileSync('/etc/letsencrypt/live/www.odihortmarketing.nic.in/chain.pem', 'utf8');
+// const privateKey = fs.readFileSync('/etc/letsencrypt/live/odihortmarketing.nic.in/privkey.pem', 'utf8');
+// const certificate = fs.readFileSync('/etc/letsencrypt/live/odihortmarketing.nic.in/cert.pem', 'utf8');
+// const ca = fs.readFileSync('/etc/letsencrypt/live/odihortmarketing.nic.in/chain.pem', 'utf8');
 // const credentials = {
 //  key: privateKey,
 // 	cert: certificate,
