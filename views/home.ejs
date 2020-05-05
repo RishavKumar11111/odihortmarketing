@@ -457,14 +457,11 @@
                         <div class="modal-header">
                             <span class="close">&times;</span>
                             <h2 ng-show="itemDetailsBGVWise.length == 0 && itemDetailsDistrictWise.length > 0"
-                                style="color: black; margin-bottom: 0;">District-wise
-                                "{{itemDetailsDistrictWise[0].ItemName | capitalize}}"
-                                availability
+                                style="color: black; margin-bottom: 0;">Availability of "{{itemDetailsDistrictWise[0].ItemName | capitalize}}"
                             </h2>
                             <h2 ng-show="itemDetailsBGVWise.length > 0" style="color: black; margin-bottom: 10px;">
-                                Block, GP and VIllage-wise
-                                "{{itemDetailsBGVWise[0].ItemName | capitalize}}"
-                                availability</h2>
+                                Availability of "{{itemDetailsBGVWise[0].ItemName | capitalize}}"
+                                </h2>
                             <div style="display: inline-flex;">
                                 <p ng-show="itemDetailsBGVWise.length > 0"
                                     style="color: black; font-size: 15px; font-weight: bold;">District:
@@ -494,8 +491,9 @@
                                     <td>{{i.DDHName | capitalize}}</td>
                                     <td>{{i.DDHMobileNo}}</td>
                                     <td ng-click="getItemDetailsBGVWise(i.DistrictCode, i.ItemID)"><a href=""
-                                            class="tooltip" style="color: black">{{i.Quantity}} <i
-                                                class="fa fa-eye"></i><span class="tooltiptext">Click to view
+                                            class="tooltip" style="color: black">{{i.Quantity}} <img
+                                                src="../public/images/icons/binocular.png" alt="binocular"
+                                                style="height: 9px;"></i><span class="tooltiptext">Click to view
                                                 details</span></a>
                                     </td>
                                 </tr>
@@ -1321,13 +1319,19 @@
                     modal.style.display = "none";
                     document.body.style.overflowY = "scroll";
                 }
-                window.onclick = function (event) {
-                    event.stopPropagation();
-                    if (event.target == modal) {
-                        modal.style.display = "none";
-                        document.body.style.overflowY = "scroll";
+                window.onclick = function () {
+                    if (event.target.className.includes('openModal')) {
+                        modal.style.display = "block";
+                        document.body.style.overflowY = "hidden";
                     }
-                }
+                };
+                // window.onclick = function (event) {
+                //     event.stopPropagation();
+                //     if (event.target == modal) {
+                //         modal.style.display = "none";
+                //         document.body.style.overflowY = "scroll";
+                //     }
+                // }
                 // Get the modal
                 // var modal = document.getElementById("myModal");
                 // Get the button that opens the modal

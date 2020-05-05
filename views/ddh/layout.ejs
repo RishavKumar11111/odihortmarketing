@@ -127,20 +127,20 @@
                 </li> -->
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="" data-toggle="tooltip" data-placement="top"
-                        title="Logout">
-                        <i class="fa fa-sign-out-alt"></i>
+                        title="Click here to Logout">
+                        <i class="fa fa-power-off"></i> Logout
                     </a>
                     <div class="dropdown-menu">
                         <a href="http://localhost:3000/ddh/logout" class="dropdown-item">
-                            <i class="fa fa-sign-out-alt"></i> Logout
+                            <i class="fa fa-power-off"></i> Logout
                         </a>
                     </div>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="" role="button">
                         <i class="fas fa-th-large"></i>
                     </a>
-                </li>
+                </li> -->
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -166,8 +166,8 @@
                         <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div> -->
                     <div class="info">
-                        <a href="" class="d-block">Welcome,<br>{{ddhDetails.DDHName}},<br>DDH
-                            {{ddhDetails.DistrictName}}</a>
+                        <a href="" class="d-block">Welcome<br>{{ddhDetails.DDHName | capitalize}}<br>DDH
+                            {{ddhDetails.DistrictName | capitalize}}</a>
                     </div>
                 </div>
 
