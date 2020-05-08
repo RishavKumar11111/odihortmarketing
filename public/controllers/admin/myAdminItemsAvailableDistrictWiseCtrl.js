@@ -6,12 +6,32 @@ app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http,
             var categoryAll = { CategoryID: 0, CategoryName: 'All' };
             $scope.categories.unshift(categoryAll);
             $scope.ddlCategories = 0;
+            var itemAll = { ItemID: 0, ItemName: 'All' };
+            $scope.items = [];
+            $scope.items.unshift(itemAll);
+            $scope.ddlItems = 0;
             $scope.itemsAvailable = [];
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {
             console.log('An error occurred...', error);
         });
+    };
+
+    $scope.getItemsByCategory = function (categoryID) {
+        if (categoryID != undefined) {
+            $http.get('http://localhost:3000/admin/getItemsByCategory?categoryID=' + categoryID).then(function success(response) {
+                $scope.items = response.data;
+                var itemAll = { ItemID: 0, ItemName: 'All' };
+                $scope.items.unshift(itemAll);
+                $scope.ddlItems = 0;
+                $scope.itemsAvailable = [];
+            }, function error(response) {
+                console.log(response.status);
+            }).catch(function err(error) {
+                console.log('An error occurred...', error);
+            });
+        }
     };
 
     $scope.getDistricts = function () {
@@ -29,9 +49,21 @@ app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http,
     };
 
     $scope.getAvailabilityDetails = function () {
-        $http.get('http://localhost:3000/admin/getAvailabilityDetails?districtCode=' + $scope.ddlDistricts + '&categoryID=' + $scope.ddlCategories).then(function success(response) {
+        $http.get('http://localhost:3000/admin/getAvailabilityDetails?districtCode=' + $scope.ddlDistricts + '&categoryID=' + $scope.ddlCategories + '&itemID=' + $scope.ddlItems).then(function success(response) {
             $scope.itemsAvailable = response.data;
-            if ($scope.itemsAvailable.length == 0) {
+            if ($scope.itemsAvailable.length != 0) {
+                $scope.totalQuintal = 0;
+                $scope.totalNo = 0;
+                angular.forEach($scope.itemsAvailable, function (i) {
+                    if (i.Unit == 'Q') {
+                        $scope.totalQuintal += i.Quantity;
+                    }
+                    else {
+                        $scope.totalNo += i.Quantity;
+                    }
+                })
+            }
+            else {
                 alert('No items are available.');
             }
         }, function error(response) {

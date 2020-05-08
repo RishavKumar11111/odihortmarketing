@@ -94,6 +94,11 @@ router.get('/availableItemsList', csrfProtection, permit.permission('ADMIN'), ca
   res.render('admin/availableitemslist', { title: 'Available Items List', csrfToken: req.csrfToken() });
 });
 
+router.get('/itemsAvailableDistrictWise', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('admin/itemsavailabledistrictwise', { title: 'List of Items Available District-wise', csrfToken: req.csrfToken() });
+});
+
 router.get('/stockInList', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   res.render('admin/stockinlist', { title: 'Stock In List', csrfToken: req.csrfToken() });
@@ -285,7 +290,20 @@ router.get('/getAvailabilityDetails', permit.permission('ADMIN'), function (req,
   res.get('X-Frame-Options');
   var districtCode = req.query.districtCode
   var categoryID = req.query.categoryID;
-  balModule.getAvailabilityDetails(districtCode, categoryID).then(function success(response) {
+  var itemID = req.query.itemID;
+  balModule.getAvailabilityDetails(districtCode, categoryID, itemID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getItemsByCategory', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var categoryID = req.query.categoryID;
+  balModule.getItemsByCategory(categoryID).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);

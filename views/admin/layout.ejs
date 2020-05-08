@@ -200,6 +200,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="#!itemsAvailableDistrictWise" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>List of Items Available District-wise</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="#!stockInList" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Stock In List</p>
@@ -284,6 +290,9 @@
                 .when("/", {
                     templateUrl: "admin/availableItemsList",
                     controller: 'myAdminAvailableItemsListCtrl'
+                }).when("/itemsAvailableDistrictWise", {
+                    templateUrl: "admin/itemsAvailableDistrictWise",
+                    controller: 'myAdminItemsAvailableDistrictWiseCtrl'
                 }).when("/stockInList", {
                     templateUrl: "admin/stockInList",
                     controller: 'myAdminStockInListCtrl'
@@ -328,6 +337,7 @@
     </script>
     <script src="../../public/controllers/admin/myAdminDashboardCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminAvailableItemsListCtrl.js"></script>
+    <script src="../../public/controllers/admin/myAdminItemsAvailableDistrictWiseCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminStockInListCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminStockOutListCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminTradersListCtrl.js"></script>
