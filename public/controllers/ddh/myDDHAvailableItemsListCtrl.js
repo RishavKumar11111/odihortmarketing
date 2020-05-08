@@ -25,10 +25,10 @@ app.controller('myDDHAvailableItemsListCtrl', function ($scope, $http, $filter) 
                     $scope.foundSpices = true;
                 }
             });
-            setTimeout(function () {
-                document.getElementById('divVegetables').style.maxHeight = document.getElementById('divFruits').offsetHeight + 'px';
-                document.getElementById('divFlowers').style.minHeight = document.getElementById('divPlantationCrops').offsetHeight + 'px';
-            }, 1000);
+            // setTimeout(function () {
+            //     document.getElementById('divVegetables').style.maxHeight = document.getElementById('divFruits').offsetHeight + 'px';
+            //     document.getElementById('divFlowers').style.minHeight = document.getElementById('divPlantationCrops').offsetHeight + 'px';
+            // }, 1000);
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {

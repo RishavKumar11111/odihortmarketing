@@ -41,14 +41,14 @@
                             <div class="form-group clearfix" style="margin-top: 8px;">
                                 <div class="icheck-success d-inline">
                                     <input type="radio" name="areaType" ng-model="rbAreaType" value="Rural"
-                                        id="radioRural" ng-change="getBlocks()">
+                                        id="radioRural" ng-change="getBlocks();">
                                     <label for="radioRural">
                                         Rural
                                     </label>
                                 </div>
                                 <div class="icheck-success d-inline">
                                     <input type="radio" name="areaType" ng-model="rbAreaType" value="Urban"
-                                        id="radioUrban" ng-change="getBlocks()">
+                                        id="radioUrban" ng-change="getBlocks();">
                                     <label for="radioUrban">
                                         Urban
                                     </label>
@@ -60,12 +60,12 @@
                                 <label class="control-label">Blocks</label>
                                 <select ng-show="rbAreaType == 'Rural'" class="form-control select2"
                                     ng-model="ddlBlocks" ng-options="i.BlockCode as i.BlockName for i in blocks"
-                                    ng-change="stockOutDetails = []; ddlBlocks = 0;">
+                                    ng-change="stockOutDetails = [];">
                                     <option value="" disabled>Select Blocks</option>
                                 </select>
                                 <select ng-show="rbAreaType == 'Urban'" class="form-control select2"
                                     ng-model="ddlBlocks" ng-options="i.ULBCode as i.ULBName for i in blocks"
-                                    ng-change="stockOutDetails = []; ddlBlocks = 0;">
+                                    ng-change="stockOutDetails = [];">
                                     <option value="" disabled>Select Blocks</option>
                                 </select>
                             </div>
@@ -80,7 +80,7 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Stock Out Details</h3>
+                            <h3 class="card-title">Stock Out Details</h3><br>
                             <div class="card-tools">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="table_search" ng-model="search"
@@ -91,6 +91,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <p style="margin-bottom: 0;"><b>Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</b></p>
+                            <p ng-show="totalNo.toFixed(2) != 0.00" style="margin-bottom: 0;"><b>Total Quantity: {{totalNo.toFixed(2)}} Lakh Nos.</b></p>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-wrap">

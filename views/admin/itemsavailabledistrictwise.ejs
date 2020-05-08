@@ -1,4 +1,4 @@
-<div class="content-wrapper" ng-controller="myAdminStockOutListCtrl" ng-init="getCategories(); getDistricts();">
+<div class="content-wrapper" ng-controller="myAdminItemsAvailableDistrictWiseCtrl" ng-init="getCategories(); getDistricts();">
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -31,7 +31,7 @@
                                 <label class="control-label">Categories</label>
                                 <select class="form-control select2" ng-model="ddlCategories"
                                     ng-options="i.CategoryID as i.CategoryName for i in categories"
-                                    ng-change="stockOutDetails = [];">
+                                    ng-change="itemsAvailable = [];">
                                     <option value="" disabled>Select Category</option>
                                 </select>
                             </div>
@@ -41,7 +41,7 @@
                                 <label class="control-label">Districts</label>
                                 <select class="form-control select2" ng-model="ddlDistricts"
                                     ng-options="i.DistrictCode as i.DistrictName for i in districts"
-                                    ng-change="stockOutDetails = [];">
+                                    ng-change="itemsAvailable = [];">
                                     <option value="" disabled>Select District</option>
                                 </select>
                             </div>
@@ -49,14 +49,14 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary" ng-click="getStockOutDetails()">View List</button>
+                    <button type="submit" class="btn btn-primary" ng-click="getAvailabilityDetails()">View List</button>
                 </div>
             </div>
-            <div class="row" ng-show="stockOutDetails.length > 0">
+            <div class="row" ng-show="itemsAvailable.length > 0">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Stock Out Details</h3><br>
+                            <h3 class="card-title">Items Available District-wise</h3>
                             <div class="card-tools">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="table_search" ng-model="search"
@@ -67,8 +67,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <p style="margin-bottom: 0;"><b>Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</b></p>
-                            <p style="margin-bottom: 0;"><b>Total Quantity: {{totalNo.toFixed(2)}} Lakh Nos.</b></p>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-wrap">
@@ -77,6 +75,21 @@
                                         <th ng-click="sort('DistrictName')" style="cursor: pointer;">
                                             District
                                             <span class="fa fa-sort" ng-show="sortKey=='DistrictName'"
+                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
+                                        </th>
+                                        <th ng-click="sort('BlockName')" style="cursor: pointer;">
+                                            Block
+                                            <span class="fa fa-sort" ng-show="sortKey=='BlockName'"
+                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
+                                        </th>
+                                        <th ng-click="sort('GPName')" style="cursor: pointer;">
+                                            GP
+                                            <span class="fa fa-sort" ng-show="sortKey=='GPName'"
+                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
+                                        </th>
+                                        <th ng-click="sort('VillageName')" style="cursor: pointer;">
+                                            Village
+                                            <span class="fa fa-sort" ng-show="sortKey=='VillageName'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
                                         <th ng-click="sort('FarmerName')" style="cursor: pointer;">
@@ -94,27 +107,31 @@
                                             <span class="fa fa-sort" ng-show="sortKey=='ItemName'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('SaleQuantity')" style="cursor: pointer;">
-                                            Sale Quantity
-                                            <span class="fa fa-sort" ng-show="sortKey=='SaleQuantity'"
+                                        <th ng-click="sort('Quantity')" style="cursor: pointer;">
+                                            Quantity
+                                            <span class="fa fa-sort" ng-show="sortKey=='Quantity'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('SaleDate')" style="cursor: pointer;">
-                                            Sale Date
-                                            <span class="fa fa-sort" ng-show="sortKey=='SaleDate'"
+                                        <th ng-click="sort('AvailableDate')" style="cursor: pointer;">
+                                            Available Date
+                                            <span class="fa fa-sort" ng-show="sortKey=='AvailableDate'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr
-                                        dir-paginate="i in stockOutDetails | orderBy: sortKey: reverse | filter: search | itemsPerPage: 3000">
+                                        dir-paginate="i in itemsAvailable | orderBy: sortKey: reverse | filter: search | itemsPerPage: 3000">
                                         <td>{{i.DistrictName | capitalize}}</td>
+                                        <td>{{i.BlockName | capitalize}}</td>
+                                        <td>{{i.GPName | capitalize}}</td>
+                                        <td>{{i.VillageName | capitalize}}</td>
                                         <td>{{i.FarmerName | capitalize}}</td>
                                         <td>{{i.FarmerMobileNo}}</td>
                                         <td>{{i.ItemName | capitalize}}</td>
-                                        <td>{{i.SaleQuantity}} {{(i.Unit == 'Q') ? 'Qtls.' : 'Lakh Nos.'}}</td>
-                                        <td>{{i.Date}}</td>
+                                        <td>{{i.Quantity}} {{(i.Unit == 'Q') ? 'Qtls.' : 'Lakh Nos.'}}</td>
+                                        <td>{{(i.AvailableDate == '01-01-2200 - 01-01-2200') ? 'NA' : i.AvailableDate}}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

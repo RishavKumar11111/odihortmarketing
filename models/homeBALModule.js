@@ -97,7 +97,7 @@ exports.changePasssword = function (obj, callback) {
 };
 
 exports.getItemDetails = function () {
-    return sequelize.query('select a.ItemID, ItemName, CategoryName, sum(Quantity) - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemId = c.ItemId left join StockOut b on a.StockId = b.StockId inner join Category d on c.CategoryID = d.CategoryID group by a.ItemID, ItemName, CategoryName, Unit having sum(Quantity) - isnull((sum(SaleQuantity)) ,0) > 0 order by ItemName', {
+    return sequelize.query('select a.ItemID, ItemName, CategoryName, sum(Quantity) - isnull(sum(SaleQuantity), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemId = c.ItemId left join (select StockID, isnull(sum(SaleQuantity), 0) SaleQuantity from StockOut group by StockID) b on a.StockId = b.StockId inner join Category d on c.CategoryID = d.CategoryID group by a.ItemID, ItemName, CategoryName, Unit having sum(Quantity) - isnull(sum(SaleQuantity) ,0) > 0 order by ItemName, CategoryName', {
         type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
@@ -107,7 +107,7 @@ exports.getItemDetails = function () {
 };
 
 exports.getItemDetailsDistrictWise = function (itemID) {
-    return sequelize.query('select d.DistrictCode, DistrictName, DDHName, DDHMobileNo, a.ItemID, ItemName, sum(Quantity) - isnull((sum(SaleQuantity)), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemID and a.ItemId = :item_id inner join LGDDistrict d on d.DistrictCode = substring(a.UserID, 5, 3) inner join DDHDistrictMapping e on substring(e.DDHUserID, 5, 3) = d.DistrictCode left join StockOut b on a.StockID = b.StockID group by d.DistrictCode, DistrictName, DDHName, DDHMobileNo, a.ItemID, ItemName, Unit having sum(Quantity) - isnull((sum(SaleQuantity)), 0) > 0 order by DistrictName, DDHName, ItemName', {
+    return sequelize.query('select d.DistrictCode, DistrictName, DDHName, DDHMobileNo, a.ItemID, ItemName, sum(Quantity) - isnull(sum(SaleQuantity), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemID and a.ItemId = :item_id inner join LGDDistrict d on d.DistrictCode = substring(a.UserID, 5, 3) inner join DDHDistrictMapping e on substring(e.DDHUserID, 5, 3) = d.DistrictCode left join (select StockID, isnull(sum(SaleQuantity), 0) SaleQuantity from StockOut group by StockID) b on a.StockID = b.StockID group by d.DistrictCode, DistrictName, DDHName, DDHMobileNo, a.ItemID, ItemName, Unit having sum(Quantity) - isnull(sum(SaleQuantity), 0) > 0 order by DistrictName, DDHName, ItemName', {
         replacements: { item_id: itemID }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;

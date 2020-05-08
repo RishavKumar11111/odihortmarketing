@@ -55,6 +55,7 @@
 </head>
 
 <body class="hold-transition sidebar-mini" ng-app="myAdminApp" ng-cloak>
+    <div data-loading></div>
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -211,9 +212,9 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#!traderDetailsList" class="nav-link">
+                                    <a href="#!tradersList" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Trader Details List</p>
+                                        <p>Traders List</p>
                                     </a>
                                 </li>
                             </ul>
@@ -289,9 +290,9 @@
                 }).when("/stockOutList", {
                     templateUrl: "admin/stockOutList",
                     controller: 'myAdminStockOutListCtrl'
-                }).when("/traderDetailsList", {
-                    templateUrl: "admin/traderDetailsList",
-                    controller: 'myAdminTraderDetailsListCtrl'
+                }).when("/tradersList", {
+                    templateUrl: "admin/tradersList",
+                    controller: 'myAdminTradersListCtrl'
                 }).when("/changePassword", {
                     templateUrl: "admin/changePassword",
                     controller: 'myAdminChangePasswordCtrl'
@@ -329,7 +330,7 @@
     <script src="../../public/controllers/admin/myAdminAvailableItemsListCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminStockInListCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminStockOutListCtrl.js"></script>
-    <script src="../../public/controllers/admin/myAdminTraderDetailsListCtrl.js"></script>
+    <script src="../../public/controllers/admin/myAdminTradersListCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminChangePasswordCtrl.js"></script>
     <!-- jQuery -->
     <script src="../../AdminLTE/plugins/jquery/jquery.min.js"></script>

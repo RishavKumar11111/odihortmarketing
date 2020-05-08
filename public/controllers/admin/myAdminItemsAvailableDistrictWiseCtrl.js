@@ -1,4 +1,4 @@
-app.controller('myAdminStockInListCtrl', function ($scope, $http, $filter) {
+app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http, $filter) {
 
     $scope.getCategories = function () {
         $http.get('http://localhost:3000/admin/getCategories').then(function success(response) {
@@ -6,7 +6,7 @@ app.controller('myAdminStockInListCtrl', function ($scope, $http, $filter) {
             var categoryAll = { CategoryID: 0, CategoryName: 'All' };
             $scope.categories.unshift(categoryAll);
             $scope.ddlCategories = 0;
-            $scope.stockInDetails = [];
+            $scope.itemsAvailable = [];
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {
@@ -20,7 +20,7 @@ app.controller('myAdminStockInListCtrl', function ($scope, $http, $filter) {
             var districtAll = { DistrictCode: 0, DistrictName: 'All' };
             $scope.districts.unshift(districtAll);
             $scope.ddlDistricts = 0;
-            $scope.stockInDetails = [];
+            $scope.itemsAvailable = [];
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {
@@ -28,23 +28,11 @@ app.controller('myAdminStockInListCtrl', function ($scope, $http, $filter) {
         });
     };
 
-    $scope.getStockInDetails = function () {
-        $http.get('http://localhost:3000/admin/getStockInDetails?districtCode=' + $scope.ddlDistricts + '&categoryID=' + $scope.ddlCategories).then(function success(response) {
-            $scope.stockInDetails = response.data;
-            if ($scope.stockInDetails.length != 0) {
-                $scope.totalQuintal = 0;
-                $scope.totalNo = 0;
-                angular.forEach($scope.stockInDetails, function (i) {
-                    if (i.Unit == 'Q') {
-                        $scope.totalQuintal += i.Quantity;
-                    }
-                    else {
-                        $scope.totalNo += i.Quantity;
-                    }
-                })
-            }
-            else {
-                alert('No Stock In records found!');
+    $scope.getAvailabilityDetails = function () {
+        $http.get('http://localhost:3000/admin/getAvailabilityDetails?districtCode=' + $scope.ddlDistricts + '&categoryID=' + $scope.ddlCategories).then(function success(response) {
+            $scope.itemsAvailable = response.data;
+            if ($scope.itemsAvailable.length == 0) {
+                alert('No items are available.');
             }
         }, function error(response) {
             console.log(response.status);

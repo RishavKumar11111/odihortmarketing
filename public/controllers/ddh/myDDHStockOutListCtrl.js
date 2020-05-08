@@ -48,7 +48,19 @@ app.controller('myDDHStockOutListCtrl', function ($scope, $http, $filter) {
     $scope.getStockOutDetails = function () {
         $http.get('http://localhost:3000/ddh/getStockOutDetails?blockCode=' + $scope.ddlBlocks + '&categoryID=' + $scope.ddlCategories + '&areaType=' + $scope.rbAreaType).then(function success(response) {
             $scope.stockOutDetails = response.data;
-            if ($scope.stockOutDetails.length == 0) {
+            if ($scope.stockOutDetails.length != 0) {
+                $scope.totalQuintal = 0;
+                $scope.totalNo = 0;
+                angular.forEach($scope.stockOutDetails, function (i) {
+                    if (i.Unit == 'Q') {
+                        $scope.totalQuintal += i.SaleQuantity;
+                    }
+                    else {
+                        $scope.totalNo += i.SaleQuantity;
+                    }
+                })
+            }
+            else {
                 alert('No Stock Out records found!');
             }
         }, function error(response) {

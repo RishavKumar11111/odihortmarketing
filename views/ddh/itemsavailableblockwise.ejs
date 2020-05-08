@@ -1,4 +1,4 @@
-<div class="content-wrapper" ng-controller="myAdminStockOutListCtrl" ng-init="getCategories(); getDistricts();">
+<div class="content-wrapper" ng-controller="myDDHItemsAvailableBlockWiseCtrl" ng-init="getCategories(); getBlocks();">
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -18,7 +18,7 @@
         <div class="container-fluid">
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Select Category and District</h3>
+                    <h3 class="card-title">Select Category, Area and Block</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
                                 class="fas fa-minus"></i></button>
@@ -26,37 +26,61 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group">
                                 <label class="control-label">Categories</label>
                                 <select class="form-control select2" ng-model="ddlCategories"
                                     ng-options="i.CategoryID as i.CategoryName for i in categories"
-                                    ng-change="stockOutDetails = [];">
+                                    ng-change="itemsAvailable = [];">
                                     <option value="" disabled>Select Category</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-md-4 col-sm-4 col-xs-12" style="text-align: center;">
+                            <label class="control-label">Area</label>
+                            <div class="form-group clearfix" style="margin-top: 8px;">
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="areaType" ng-model="rbAreaType" value="Rural"
+                                        id="radioRural" ng-change="getBlocks()">
+                                    <label for="radioRural">
+                                        Rural
+                                    </label>
+                                </div>
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="areaType" ng-model="rbAreaType" value="Urban"
+                                        id="radioUrban" ng-change="getBlocks()">
+                                    <label for="radioUrban">
+                                        Urban
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group">
-                                <label class="control-label">Districts</label>
-                                <select class="form-control select2" ng-model="ddlDistricts"
-                                    ng-options="i.DistrictCode as i.DistrictName for i in districts"
-                                    ng-change="stockOutDetails = [];">
-                                    <option value="" disabled>Select District</option>
+                                <label class="control-label">Blocks</label>
+                                <select ng-show="rbAreaType == 'Rural'" class="form-control select2"
+                                    ng-model="ddlBlocks" ng-options="i.BlockCode as i.BlockName for i in blocks"
+                                    ng-change="itemsAvailable = []; ddlBlocks = 0;">
+                                    <option value="" disabled>Select Blocks</option>
+                                </select>
+                                <select ng-show="rbAreaType == 'Urban'" class="form-control select2"
+                                    ng-model="ddlBlocks" ng-options="i.ULBCode as i.ULBName for i in blocks"
+                                    ng-change="itemsAvailable = []; ddlBlocks = 0;">
+                                    <option value="" disabled>Select Blocks</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary" ng-click="getStockOutDetails()">View List</button>
+                    <button type="submit" class="btn btn-primary" ng-click="getAvailabilityDetails()">View List</button>
                 </div>
             </div>
-            <div class="row" ng-show="stockOutDetails.length > 0">
+            <div class="row" ng-show="itemsAvailable.length > 0">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Stock Out Details</h3><br>
+                            <h3 class="card-title">Items Available Block-wise</h3>
                             <div class="card-tools">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="table_search" ng-model="search"
@@ -67,16 +91,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <p style="margin-bottom: 0;"><b>Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</b></p>
-                            <p style="margin-bottom: 0;"><b>Total Quantity: {{totalNo.toFixed(2)}} Lakh Nos.</b></p>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-wrap">
                                 <thead>
                                     <tr>
-                                        <th ng-click="sort('DistrictName')" style="cursor: pointer;">
-                                            District
-                                            <span class="fa fa-sort" ng-show="sortKey=='DistrictName'"
+                                        <th ng-click="sort('BlockName')" style="cursor: pointer;">
+                                            Block
+                                            <span class="fa fa-sort" ng-show="sortKey=='BlockName'"
+                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
+                                        </th>
+                                        <th ng-click="sort('GPName')" style="cursor: pointer;">
+                                            GP
+                                            <span class="fa fa-sort" ng-show="sortKey=='GPName'"
+                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
+                                        </th>
+                                        <th ng-click="sort('VillageName')" style="cursor: pointer;">
+                                            Village
+                                            <span class="fa fa-sort" ng-show="sortKey=='VillageName'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
                                         <th ng-click="sort('FarmerName')" style="cursor: pointer;">
@@ -94,27 +126,30 @@
                                             <span class="fa fa-sort" ng-show="sortKey=='ItemName'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('SaleQuantity')" style="cursor: pointer;">
-                                            Sale Quantity
-                                            <span class="fa fa-sort" ng-show="sortKey=='SaleQuantity'"
+                                        <th ng-click="sort('Quantity')" style="cursor: pointer;">
+                                            Quantity
+                                            <span class="fa fa-sort" ng-show="sortKey=='Quantity'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('SaleDate')" style="cursor: pointer;">
-                                            Sale Date
-                                            <span class="fa fa-sort" ng-show="sortKey=='SaleDate'"
+                                        <th ng-click="sort('AvailableDate')" style="cursor: pointer;">
+                                            Available Date
+                                            <span class="fa fa-sort" ng-show="sortKey=='AvailableDate'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr
-                                        dir-paginate="i in stockOutDetails | orderBy: sortKey: reverse | filter: search | itemsPerPage: 3000">
-                                        <td>{{i.DistrictName | capitalize}}</td>
+                                        dir-paginate="i in itemsAvailable | orderBy: sortKey: reverse | filter: search | itemsPerPage: 3000">
+                                        <td>{{i.BlockName | capitalize}}</td>
+                                        <td>{{i.GPName | capitalize}}</td>
+                                        <td>{{i.VillageName | capitalize}}</td>
                                         <td>{{i.FarmerName | capitalize}}</td>
                                         <td>{{i.FarmerMobileNo}}</td>
                                         <td>{{i.ItemName | capitalize}}</td>
-                                        <td>{{i.SaleQuantity}} {{(i.Unit == 'Q') ? 'Qtls.' : 'Lakh Nos.'}}</td>
-                                        <td>{{i.Date}}</td>
+                                        <td>{{i.Quantity}} {{(i.Unit == 'Q') ? 'Qtls.' : 'Lakh Nos.'}}</td>
+                                        <td>{{(i.AvailableDate == '01-01-2200 - 01-01-2200') ? 'NA' : i.AvailableDate}}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

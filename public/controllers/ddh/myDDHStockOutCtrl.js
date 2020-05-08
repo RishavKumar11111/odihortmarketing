@@ -99,6 +99,7 @@ app.controller('myDDHStockOutCtrl', function ($scope, $http, $filter) {
     };
 
     $scope.getStockDetails = function (overloading) {
+        $scope.isAllSelected = false;
         if ($scope.ddlItems !== null && $scope.ddlItems !== undefined && $scope.ddlItems !== '' && $scope.ddlBlocks !== null && $scope.ddlBlocks !== undefined && $scope.ddlBlocks !== '') {
             if ($scope.rbAreaType == 'Rural' && $scope.ddlGPs !== null && $scope.ddlGPs !== undefined && $scope.ddlGPs !== '' && $scope.ddlVillages !== null && $scope.ddlVillages !== undefined && $scope.ddlVillages !== '') {
                 $http.get('http://localhost:3000/ddh/getStockDetails?itemID=' + $scope.ddlItems + '&blockCode=' + $scope.ddlBlocks + '&gpCode=' + $scope.ddlGPs + '&villageCode=' + $scope.ddlVillages).then(function success(response) {
@@ -184,11 +185,14 @@ app.controller('myDDHStockOutCtrl', function ($scope, $http, $filter) {
                 var count = 0;
                 angular.forEach($scope.stockDetails, function (i) {
                     if (i.hasOwnProperty('SaleQuantity')) {
-                        count++;
+                        if (i.SaleQuantity == 0 || i.SaleQuantity == '0' || i.SaleQuantity == '' || i.SaleQuantity == null || i.SaleQuantity == undefined) {}
+                        else {
+                            count++;
+                        }
                     }
                 });
                 if (count !== $scope.stockArray.length) {
-                    alert('Please enter the Sale quantity for all the selected Stock records.');
+                    alert('Please enter the Sale quantity for all the selected Stock records. Sale Quantity value must be greater than 0.');
                 }
                 else {
                     var counter = 0;

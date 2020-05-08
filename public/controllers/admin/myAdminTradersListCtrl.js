@@ -1,8 +1,8 @@
-app.controller('myDDHTraderDetailsListCtrl', function ($scope, $http, $filter) {
+app.controller('myAdminTradersListCtrl', function ($scope, $http, $filter) {
 
-    $scope.getTraderDetails = function () {
-        $http.get('http://localhost:3000/ddh/getTraderDetails').then(function success(response) {
-            $scope.traderDetails = response.data;
+    $scope.getTradersList = function () {
+        $http.get('http://localhost:3000/admin/getTradersList').then(function success(response) {
+            $scope.tradersList = response.data;
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {

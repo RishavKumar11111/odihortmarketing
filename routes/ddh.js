@@ -114,9 +114,9 @@ router.get('/stockOutList', csrfProtection, permit.permission('DDH'), cache.over
   res.render('ddh/stockoutlist', { title: 'Stock Out List', csrfToken: req.csrfToken() });
 });
 
-router.get('/traderDetailsList', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+router.get('/tradersList', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
-  res.render('ddh/traderdetailslist', { title: 'Trader Details List', csrfToken: req.csrfToken() });
+  res.render('ddh/traderslist', { title: 'Traders List', csrfToken: req.csrfToken() });
 });
 
 router.get('/changePassword', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
@@ -357,10 +357,10 @@ router.get('/getItemDetailsBGVWise', permit.permission('DDH'), function (req, re
   });
 });
 
-router.get('/getTraderDetails', permit.permission('DDH'), function (req, res, next) {
+router.get('/getTradersList', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
   var districtCode = req.session.username.substr(4, 3);
-  balModule.getTraderDetails(districtCode).then(function success(response) {
+  balModule.getTradersList(districtCode).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);
@@ -403,6 +403,21 @@ router.get('/getDDHDetails', permit.permission('DDH'), function (req, res, next)
   res.get('X-Frame-Options');
   var userID = req.session.username;
   balModule.getDDHDetails(userID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getAvailabilityDetails', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.session.username.substr(4, 3);
+  var blockCode = req.query.blockCode;
+  var categoryID = req.query.categoryID;
+  var areaType = req.query.areaType;
+  balModule.getAvailabilityDetails(districtCode, blockCode, categoryID, areaType).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);

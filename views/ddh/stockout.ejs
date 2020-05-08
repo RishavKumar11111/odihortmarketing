@@ -190,18 +190,12 @@
                                             <td style="vertical-align: middle;">{{i.ItemName | capitalize}}</td>
                                             <td style="vertical-align: middle;">{{i.Quantity}}
                                                 {{(i.Unit == 'Q') ? '(in Quintal)' : '(in Numbers)'}}</td>
-                                            <td ng-show="i.Unit == 'Q'">
+                                            <td>
                                                 <input type="text"
                                                     ng-disabled="i.selected == false || i.selected == undefined"
                                                     class="form-control" valid-number-upto-two-decimal
                                                     ng-model="i.SaleQuantity" placeholder="0.00" minlength="1"
                                                     maxlength="10">
-                                            </td>
-                                            <td ng-show="i.Unit == 'No'">
-                                                <input type="text"
-                                                    ng-disabled="i.selected == false || i.selected == undefined"
-                                                    class="form-control" numbers-only ng-model="i.SaleQuantity"
-                                                    placeholder="0" minlength="1" maxlength="10">
                                             </td>
                                         </tr>
                                     </tbody>

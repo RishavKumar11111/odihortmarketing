@@ -56,7 +56,7 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Stock In Details</h3>
+                            <h3 class="card-title">Stock In Details</h3><br>
                             <div class="card-tools">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="table_search" ng-model="search"
@@ -67,6 +67,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <p style="margin-bottom: 0;"><b>Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</b></p>
+                            <p style="margin-bottom: 0;"><b>Total Quantity: {{totalNo.toFixed(2)}} Lakh Nos.</b></p>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-wrap">
@@ -75,21 +77,6 @@
                                         <th ng-click="sort('DistrictName')" style="cursor: pointer;">
                                             District
                                             <span class="fa fa-sort" ng-show="sortKey=='DistrictName'"
-                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
-                                        </th>
-                                        <th ng-click="sort('BlockName')" style="cursor: pointer;">
-                                            Block
-                                            <span class="fa fa-sort" ng-show="sortKey=='BlockName'"
-                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
-                                        </th>
-                                        <th ng-click="sort('GPName')" style="cursor: pointer;">
-                                            GP
-                                            <span class="fa fa-sort" ng-show="sortKey=='GPName'"
-                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
-                                        </th>
-                                        <th ng-click="sort('VillageName')" style="cursor: pointer;">
-                                            Village
-                                            <span class="fa fa-sort" ng-show="sortKey=='VillageName'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
                                         <th ng-click="sort('FarmerName')" style="cursor: pointer;">
@@ -123,9 +110,6 @@
                                     <tr
                                         dir-paginate="i in stockInDetails | orderBy: sortKey: reverse | filter: search | itemsPerPage: 3000">
                                         <td>{{i.DistrictName | capitalize}}</td>
-                                        <td>{{i.BlockName | capitalize}}</td>
-                                        <td>{{i.GPName | capitalize}}</td>
-                                        <td>{{i.VillageName | capitalize}}</td>
                                         <td>{{i.FarmerName | capitalize}}</td>
                                         <td>{{i.FarmerMobileNo}}</td>
                                         <td>{{i.ItemName | capitalize}}</td>
