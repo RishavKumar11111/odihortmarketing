@@ -52,6 +52,8 @@ app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http,
         $http.get('http://localhost:3000/admin/getAvailabilityDetails?districtCode=' + $scope.ddlDistricts + '&categoryID=' + $scope.ddlCategories + '&itemID=' + $scope.ddlItems).then(function success(response) {
             $scope.itemsAvailable = response.data;
             if ($scope.itemsAvailable.length != 0) {
+                $scope.districtName = $filter('filter')($scope.districts, { DistrictCode: $scope.ddlDistricts }, true)[0].DistrictName;
+                $scope.itemName = $filter('filter')($scope.items, { ItemID: $scope.ddlItems }, true)[0].ItemName;
                 $scope.totalQuintal = 0;
                 $scope.totalNo = 0;
                 angular.forEach($scope.itemsAvailable, function (i) {

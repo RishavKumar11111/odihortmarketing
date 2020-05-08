@@ -91,8 +91,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p ng-show="totalQuintal.toFixed(2) != 0.00" style="margin-bottom: 0;"><b>Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</b></p>
-                            <p ng-show="totalNo.toFixed(2) != 0.00" style="margin-bottom: 0;"><b>Total Quantity: {{totalNo.toFixed(2)}} Lakh Nos.</b></p>
+                            <p style="margin-bottom: 0;"><b ng-show="totalQuintal.toFixed(2) != 0.00">Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</b> <b ng-show="totalNo.toFixed(2) != 0.00">& {{totalNo.toFixed(2)}} Lakh Nos.</b></p>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-wrap">

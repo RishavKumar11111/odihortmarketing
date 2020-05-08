@@ -54,7 +54,7 @@ exports.updateIsLoggedIn = function (isLoggedIn, userID) {
 };
 
 exports.getLastLoginStatus = function (userName) {
-    return sequelize.query("select top 1 convert(varchar(10), DateTime, 105) + ' ' + convert(varchar(8), DateTime, 108) as LastLoginDateTime from ActivityLog where UserID = :user_name order by DateTime desc", {
+    return sequelize.query("select top 1 convert(varchar(10), DateTime, 105) + ' ' + convert(varchar(8), DateTime, 108) LastLoginDateTime from ActivityLog where UserID = :user_name order by DateTime desc", {
         replacements: { user_name: userName }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;

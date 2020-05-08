@@ -104,6 +104,11 @@ router.get('/availableItemsList', csrfProtection, permit.permission('DDH'), cach
   res.render('ddh/availableitemslist', { title: 'Available Items List', csrfToken: req.csrfToken() });
 });
 
+router.get('/itemsAvailableBlockWise', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('ddh/itemsavailableblockwise', { title: 'List of Items Available Block-wise', csrfToken: req.csrfToken() });
+});
+
 router.get('/stockInList', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   res.render('ddh/stockinlist', { title: 'Stock In List', csrfToken: req.csrfToken() });

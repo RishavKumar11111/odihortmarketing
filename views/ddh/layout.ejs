@@ -218,6 +218,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="#!itemsAvailableBlockWise" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>List of Items Available Block-wise</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="#!stockInList" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Stock In List</p>
@@ -320,6 +326,9 @@
                 }).when("/availableItemsList", {
                     templateUrl: "ddh/availableItemsList",
                     controller: 'myDDHAvailableItemsListCtrl'
+                }).when("/itemsAvailableBlockWise", {
+                    templateUrl: "ddh/itemsAvailableBlockWise",
+                    controller: 'myDDHItemsAvailableBlockWiseCtrl'
                 }).when("/stockInList", {
                     templateUrl: "ddh/stockInList",
                     controller: 'myDDHStockInListCtrl'
@@ -486,6 +495,7 @@
     <script src="../../public/controllers/ddh/myDDHStockInCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHStockOutCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHAvailableItemsListCtrl.js"></script>
+    <script src="../../public/controllers/ddh/myDDHItemsAvailableBlockWiseCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHStockInListCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHStockOutListCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHTradersListCtrl.js"></script>

@@ -14,7 +14,7 @@ exports.addActivityLog = function (ipAddress, userID, url, deviceType, os, brows
 };
 
 exports.getAuditLog = function () {
-    return sequelize.query("select ActivityCode, IPAddress, UserID, URL, DeviceType, OS, Browser, convert(varchar(10), DateTime, 105) + ' ' +  convert(varchar(8), DateTime, 108) as DateTime, Action, Attack, Mode from ActivityLog", {
+    return sequelize.query("select ActivityCode, IPAddress, UserID, URL, DeviceType, OS, Browser, convert(varchar(10), DateTime, 105) + ' ' +  convert(varchar(8), DateTime, 108) DateTime, Action, Attack, Mode from ActivityLog", {
         type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
