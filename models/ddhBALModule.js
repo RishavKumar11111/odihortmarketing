@@ -229,24 +229,46 @@ exports.getTradersList = function (districtCode) {
     });
 };
 
-exports.getStockInDetails = function (districtCode, blockCode, categoryID, areaType) {
-    return sequelize.query("select DistrictName, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, ItemName, Unit, Quantity, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) end AvailableDate, Photo from StockIn a inner join Items b on a.ItemID = b.ItemID inner join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join (select BlockCode, BlockName from LGDBlock union all select ULBCode, ULBName from LGDULB) d on a.BlockCode = d.BlockCode left join LGDGP e on a.GPCode = e.GPCode left join LGDVillage f on a.VillageCode = f.VillageCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:area_type is null or AreaType = :area_type) order by DistrictName, BlockName, GPName, VillageName, FarmerName, ItemName", {
-        replacements: { district_code: districtCode, block_code: blockCode, category_id: categoryID, area_type: areaType }, type: sequelize.QueryTypes.SELECT
-    }).then(function success(data) {
-        return data;
-    }).catch(function error(err) {
-        console.log('An error occurred...', err);
-    });
+exports.getStockInDetails = function (districtCode, blockCode, categoryID, areaType, itemID, dateFrom, dateTill) {
+    if (dateFrom == '' && dateTill == '') {
+        return sequelize.query("select DistrictName, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, ItemName, Unit, Quantity, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) end AvailableDate, Photo from StockIn a inner join Items b on a.ItemID = b.ItemID inner join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join (select BlockCode, BlockName from LGDBlock union all select ULBCode, ULBName from LGDULB) d on a.BlockCode = d.BlockCode left join LGDGP e on a.GPCode = e.GPCode left join LGDVillage f on a.VillageCode = f.VillageCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:area_type is null or AreaType = :area_type) and (:item_id = 0 or a.ItemID = :item_id) order by DistrictName, BlockName, GPName, VillageName, FarmerName, ItemName", {
+            replacements: { district_code: districtCode, block_code: blockCode, category_id: categoryID, area_type: areaType, item_id: itemID }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+    else {
+        return sequelize.query("select DistrictName, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, ItemName, Unit, Quantity, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) end AvailableDate, Photo from StockIn a inner join Items b on a.ItemID = b.ItemID inner join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join (select BlockCode, BlockName from LGDBlock union all select ULBCode, ULBName from LGDULB) d on a.BlockCode = d.BlockCode left join LGDGP e on a.GPCode = e.GPCode left join LGDVillage f on a.VillageCode = f.VillageCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:area_type is null or AreaType = :area_type) and (:item_id = 0 or a.ItemID = :item_id) and convert(date, DateTime) between convert(date, :date_from) and convert(date, :date_till) order by DistrictName, BlockName, GPName, VillageName, FarmerName, ItemName", {
+            replacements: { district_code: districtCode, block_code: blockCode, category_id: categoryID, area_type: areaType, item_id: itemID, date_from: dateFrom, date_till: dateTill }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
 };
 
-exports.getStockOutDetails = function (districtCode, blockCode, categoryID, areaType) {
-    return sequelize.query("select DistrictName, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, ItemName, Unit, SaleQuantity, convert(varchar(30), h.DateTime, 106) Date, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) end AvailableDate, Photo from StockIn a inner join StockOut h on a.StockID = h.StockID inner join Items b on a.ItemID = b.ItemID inner join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join (select BlockCode, BlockName from LGDBlock union all select ULBCode, ULBName from LGDULB) d on a.BlockCode = d.BlockCode left join LGDGP e on a.GPCode = e.GPCode left join LGDVillage f on a.VillageCode = f.VillageCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:area_type is null or AreaType = :area_type) order by h.DateTime, DistrictName, BlockName, GPName, VillageName, FarmerName, ItemName desc", {
-        replacements: { district_code: districtCode, block_code: blockCode, category_id: categoryID, area_type: areaType }, type: sequelize.QueryTypes.SELECT
-    }).then(function success(data) {
-        return data;
-    }).catch(function error(err) {
-        console.log('An error occurred...', err);
-    });
+exports.getStockOutDetails = function (districtCode, blockCode, categoryID, areaType, itemID, dateFrom, dateTill) {
+    if (dateFrom == '' && dateTill == '') {
+        return sequelize.query("select DistrictName, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, ItemName, Unit, SaleQuantity, convert(varchar(30), h.DateTime, 106) Date, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) end AvailableDate from StockIn a inner join StockOut h on a.StockID = h.StockID inner join Items b on a.ItemID = b.ItemID inner join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join (select BlockCode, BlockName from LGDBlock union all select ULBCode, ULBName from LGDULB) d on a.BlockCode = d.BlockCode left join LGDGP e on a.GPCode = e.GPCode left join LGDVillage f on a.VillageCode = f.VillageCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:area_type is null or AreaType = :area_type) and (:item_id = 0 or a.ItemID = :item_id) order by h.DateTime, DistrictName, BlockName, GPName, VillageName, FarmerName, ItemName desc", {
+            replacements: { district_code: districtCode, block_code: blockCode, category_id: categoryID, area_type: areaType, item_id: itemID }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+    else {
+        return sequelize.query("select DistrictName, BlockName, GPName, VillageName, FarmerName, FarmerMobileNo, ItemName, Unit, SaleQuantity, convert(varchar(30), h.DateTime, 106) Date, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) end AvailableDate from StockIn a inner join StockOut h on a.StockID = h.StockID inner join Items b on a.ItemID = b.ItemID inner join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join (select BlockCode, BlockName from LGDBlock union all select ULBCode, ULBName from LGDULB) d on a.BlockCode = d.BlockCode left join LGDGP e on a.GPCode = e.GPCode left join LGDVillage f on a.VillageCode = f.VillageCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:block_code = 0 or a.BlockCode = :block_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:area_type is null or AreaType = :area_type) and (:item_id = 0 or a.ItemID = :item_id) and convert(date, h.DateTime) between convert(date, :date_from) and convert(date, :date_till) order by h.DateTime, DistrictName, BlockName, GPName, VillageName, FarmerName, ItemName desc", {
+            replacements: { district_code: districtCode, block_code: blockCode, category_id: categoryID, area_type: areaType, item_id: itemID, date_from: dateFrom, date_till: dateTill }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
 };
 
 exports.getDDHDetails = function (userID) {

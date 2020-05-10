@@ -64,6 +64,8 @@ app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http,
                         $scope.totalNo += i.Quantity;
                     }
                 })
+                $scope.pageSize = 50;
+                $scope.search = '';
             }
             else {
                 alert('No items are available.');

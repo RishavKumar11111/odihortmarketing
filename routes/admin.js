@@ -117,7 +117,7 @@ router.get('/tradersList', csrfProtection, permit.permission('ADMIN'), cache.ove
 router.get('/changePassword', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
-  res.render('ddh/changepassword', { title: 'Change Password', csrfToken: req.csrfToken(), randomNo: req.session.RandomNo });
+  res.render('admin/changepassword', { title: 'Change Password', csrfToken: req.csrfToken(), randomNo: req.session.RandomNo });
 });
 
 router.post('/changePassword', parseForm, csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
@@ -264,7 +264,10 @@ router.get('/getStockInDetails', permit.permission('ADMIN'), function (req, res,
   res.get('X-Frame-Options');
   var districtCode = req.query.districtCode
   var categoryID = req.query.categoryID;
-  balModule.getStockInDetails(districtCode, categoryID).then(function success(response) {
+  var itemID = req.query.itemID;
+  var dateFrom = req.query.dateFrom;
+  var dateTill = req.query.dateTill;
+  balModule.getStockInDetails(districtCode, categoryID, itemID, dateFrom, dateTill).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);
@@ -277,7 +280,10 @@ router.get('/getStockOutDetails', permit.permission('ADMIN'), function (req, res
   res.get('X-Frame-Options');
   var districtCode = req.query.districtCode
   var categoryID = req.query.categoryID;
-  balModule.getStockOutDetails(districtCode, categoryID).then(function success(response) {
+  var itemID = req.query.itemID;
+  var dateFrom = req.query.dateFrom;
+  var dateTill = req.query.dateTill;
+  balModule.getStockOutDetails(districtCode, categoryID, itemID, dateFrom, dateTill).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);

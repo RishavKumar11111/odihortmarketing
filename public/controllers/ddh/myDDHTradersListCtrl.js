@@ -3,6 +3,8 @@ app.controller('myDDHTradersListCtrl', function ($scope, $http, $filter) {
     $scope.getTradersList = function () {
         $http.get('http://localhost:3000/ddh/getTradersList').then(function success(response) {
             $scope.tradersList = response.data;
+            $scope.pageSize = 50;
+            $scope.search = '';
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {

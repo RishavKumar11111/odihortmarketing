@@ -8,12 +8,32 @@ app.controller('myDDHStockInListCtrl', function ($scope, $http, $filter) {
             var categoryAll = { CategoryID: 0, CategoryName: 'All' };
             $scope.categories.unshift(categoryAll);
             $scope.ddlCategories = 0;
+            var itemAll = { ItemID: 0, ItemName: 'All' };
+            $scope.items = [];
+            $scope.items.unshift(itemAll);
+            $scope.ddlItems = 0;
             $scope.stockInDetails = [];
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {
             console.log('An error occurred...', error);
         });
+    };
+
+    $scope.getItemsByCategory = function (categoryID) {
+        if (categoryID != undefined) {
+            $http.get('http://localhost:3000/ddh/getItemsByCategory?categoryID=' + categoryID).then(function success(response) {
+                $scope.items = response.data;
+                var itemAll = { ItemID: 0, ItemName: 'All' };
+                $scope.items.unshift(itemAll);
+                $scope.ddlItems = 0;
+                $scope.stockInDetails = [];
+            }, function error(response) {
+                console.log(response.status);
+            }).catch(function err(error) {
+                console.log('An error occurred...', error);
+            });
+        }
     };
 
     $scope.getBlocks = function () {
@@ -46,9 +66,26 @@ app.controller('myDDHStockInListCtrl', function ($scope, $http, $filter) {
     };
 
     $scope.getStockInDetails = function () {
-        $http.get('http://localhost:3000/ddh/getStockInDetails?blockCode=' + $scope.ddlBlocks + '&categoryID=' + $scope.ddlCategories + '&areaType=' + $scope.rbAreaType).then(function success(response) {
+        var date = document.getElementById("dateRange").value;
+        var dateFrom = '';
+        var dateTill = '';
+        $scope.displayDate = '';
+        if (date !== undefined && date !== null && date !== '') {
+            dateFrom = date.split(' - ')[0].split("-").reverse().join("-");
+            dateTill = date.split(' - ')[1].split("-").reverse().join("-");
+            $scope.displayDate = new Date(dateFrom).toString().substring(4, 15) + ' - ' + new Date(dateTill).toString().substring(4, 15);
+        }
+        $http.get('http://localhost:3000/ddh/getStockInDetails?blockCode=' + $scope.ddlBlocks + '&categoryID=' + $scope.ddlCategories + '&areaType=' + $scope.rbAreaType + '&itemID=' + $scope.ddlItems + '&dateFrom=' + dateFrom + '&dateTill=' + dateTill).then(function success(response) {
             $scope.stockInDetails = response.data;
             if ($scope.stockInDetails.length != 0) {
+                var k = $filter('filter')($scope.blocks, { BlockCode: $scope.ddlBlocks }, true)[0];
+                if (k == undefined) {
+                    $scope.blockName = $filter('filter')($scope.blocks, { ULBCode: $scope.ddlBlocks }, true)[0].ULBName;
+                }
+                else {
+                    $scope.blockName = k.BlockName;
+                }
+                $scope.itemName = $filter('filter')($scope.items, { ItemID: $scope.ddlItems }, true)[0].ItemName;
                 $scope.totalQuintal = 0;
                 $scope.totalNo = 0;
                 angular.forEach($scope.stockInDetails, function (i) {
@@ -59,6 +96,8 @@ app.controller('myDDHStockInListCtrl', function ($scope, $http, $filter) {
                         $scope.totalNo += i.Quantity;
                     }
                 })
+                $scope.pageSize = 50;
+                $scope.search = '';
             }
             else {
                 alert('No Stock In records found!');

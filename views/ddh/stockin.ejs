@@ -223,6 +223,7 @@
     if (mm < 10) { mm = '0' + mm }
     var today = dd + '/' + mm + '/' + yyyy;
     $('#availabilityRange').daterangepicker({
+        autoUpdateInput: false,
         showDropdowns: true,
         showWeekNumbers: true,
         // autoApply: true,
@@ -237,7 +238,14 @@
             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
         locale: {
-            format: 'DD-MM-YYYY'
+            format: 'DD-MM-YYYY',
+            cancelLabel: 'Clear'
         }
-    })
+    });
+    $('#availabilityRange').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+    });
+    $('#availabilityRange').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
 </script>

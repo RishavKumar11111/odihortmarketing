@@ -87,6 +87,8 @@ app.controller('myDDHItemsAvailableBlockWiseCtrl', function ($scope, $http, $fil
                         $scope.totalNo += i.Quantity;
                     }
                 })
+                $scope.pageSize = 50;
+                $scope.search = '';
             }
             else {
                 alert('No items are available.');

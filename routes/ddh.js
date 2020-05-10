@@ -380,7 +380,10 @@ router.get('/getStockInDetails', permit.permission('DDH'), function (req, res, n
   var blockCode = req.query.blockCode;
   var categoryID = req.query.categoryID;
   var areaType = req.query.areaType;
-  balModule.getStockInDetails(districtCode, blockCode, categoryID, areaType).then(function success(response) {
+  var itemID = req.query.itemID;
+  var dateFrom = req.query.dateFrom;
+  var dateTill = req.query.dateTill;
+  balModule.getStockInDetails(districtCode, blockCode, categoryID, areaType, itemID, dateFrom, dateTill).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);
@@ -395,7 +398,10 @@ router.get('/getStockOutDetails', permit.permission('DDH'), function (req, res, 
   var blockCode = req.query.blockCode;
   var categoryID = req.query.categoryID;
   var areaType = req.query.areaType;
-  balModule.getStockOutDetails(districtCode, blockCode, categoryID, areaType).then(function success(response) {
+  var itemID = req.query.itemID;
+  var dateFrom = req.query.dateFrom;
+  var dateTill = req.query.dateTill;
+  balModule.getStockOutDetails(districtCode, blockCode, categoryID, areaType, itemID, dateFrom, dateTill).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);

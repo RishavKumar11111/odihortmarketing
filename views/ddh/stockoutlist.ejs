@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="../../public/stylesheets/pagination.css">
 <div class="content-wrapper" ng-controller="myDDHStockOutListCtrl" ng-init="getCategories(); getBlocks();">
     <section class="content-header">
         <div class="container-fluid">
@@ -18,7 +19,7 @@
         <div class="container-fluid">
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Select Category, Area and Block</h3>
+                    <h3 class="card-title">Select Category, Item, Date Range, Area and Block</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
                                 class="fas fa-minus"></i></button>
@@ -26,14 +27,38 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="form-group">
                                 <label class="control-label">Categories</label>
                                 <select class="form-control select2" ng-model="ddlCategories"
                                     ng-options="i.CategoryID as i.CategoryName for i in categories"
-                                    ng-change="stockOutDetails = [];">
+                                    ng-change="getItemsByCategory(ddlCategories); stockOutDetails = [];">
                                     <option value="" disabled>Select Category</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label">Items</label>
+                                <select class="form-control select2" ng-model="ddlItems"
+                                    ng-options="i.ItemID as i.ItemName for i in items"
+                                    ng-change="stockOutDetails = [];">
+                                    <option value="" disabled>Select Item</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label>Date Range</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control float-right" id="dateRange"
+                                        required>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-4 col-xs-12" style="text-align: center;">
@@ -73,7 +98,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary" ng-click="getStockOutDetails()">View List</button>
+                    <button type="button" class="btn btn-primary" ng-click="getStockOutDetails()">View List</button>
                 </div>
             </div>
             <div class="row" ng-show="stockOutDetails.length > 0">
@@ -81,23 +106,35 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Stock Out Details</h3><br>
-                            <div class="card-tools">
+                            <div class="card-tools" style="display: inline-flex">
+                                <p style="margin-bottom: -3px;"><b>No. of Records</b>&nbsp;</p>
+                                <div class="input-group input-group-sm" style="width: 150px;">
+                                    <input type="number" ng-model="pageSize" min="1" max="10000000"
+                                        class="form-control float-right" placeholder="No. of Records">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-default"><i
+                                                class="fas fa-edit"></i></button>
+                                    </div>
+                                </div>
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="table_search" ng-model="search"
                                         class="form-control float-right" placeholder="Search">
                                     <div class="input-group-append">
-                                        <button type="submit" class="btn btn-default"><i
+                                        <button type="button" class="btn btn-default"><i
                                                 class="fas fa-search"></i></button>
                                     </div>
                                 </div>
                             </div>
                             <p style="margin-bottom: 0;"><b ng-show="totalQuintal.toFixed(2) != 0.00">Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</b> <b ng-show="totalNo.toFixed(2) != 0.00">& {{totalNo.toFixed(2)}} Lakh Nos.</b></p>
+                            <p ng-show="ddlBlocks != 0" style="margin-bottom: 0;"><b>Block: {{blockName | capitalize}}</b></p>
+                            <p ng-show="ddlItems != 0" style="margin-bottom: 0;"><b>Item: {{itemName | capitalize}}</b></p>
+                            <p ng-show="displayDate != ''" style="margin-bottom: 0;"><b>Date Range: {{displayDate}}</b></p>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-wrap">
                                 <thead>
                                     <tr>
-                                        <th ng-click="sort('BlockName')" style="cursor: pointer;">
+                                        <th ng-click="sort('BlockName')" style="cursor: pointer;" ng-show="ddlBlocks == 0">
                                             Block
                                             <span class="fa fa-sort" ng-show="sortKey=='BlockName'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
@@ -122,7 +159,7 @@
                                             <span class="fa fa-sort" ng-show="sortKey=='FarmerMobileNo'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('ItemName')" style="cursor: pointer;">
+                                        <th ng-click="sort('ItemName')" style="cursor: pointer;" ng-show="ddlItems == 0">
                                             Items
                                             <span class="fa fa-sort" ng-show="sortKey=='ItemName'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
@@ -141,13 +178,13 @@
                                 </thead>
                                 <tbody>
                                     <tr
-                                        dir-paginate="i in stockOutDetails | orderBy: sortKey: reverse | filter: search | itemsPerPage: 3000">
-                                        <td>{{i.BlockName | capitalize}}</td>
+                                        dir-paginate="i in stockOutDetails | orderBy: sortKey: reverse | filter: search | itemsPerPage: pageSize">
+                                        <td ng-show="ddlBlocks == 0">{{i.BlockName | capitalize}}</td>
                                         <td>{{i.GPName | capitalize}}</td>
                                         <td>{{i.VillageName | capitalize}}</td>
                                         <td>{{i.FarmerName | capitalize}}</td>
                                         <td>{{i.FarmerMobileNo}}</td>
-                                        <td>{{i.ItemName | capitalize}}</td>
+                                        <td ng-show="ddlItems == 0">{{i.ItemName | capitalize}}</td>
                                         <td>{{i.SaleQuantity}} {{(i.Unit == 'Q') ? 'Qtls.' : 'Lakh Nos.'}}</td>
                                         <td>{{i.Date}}</td>
                                     </tr>
@@ -164,3 +201,38 @@
         </div>
     </section>
 </div>
+<script>
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    if (dd < 10) { dd = '0' + dd }
+    if (mm < 10) { mm = '0' + mm }
+    var today = dd + '/' + mm + '/' + yyyy;
+    $('#dateRange').daterangepicker({
+        autoUpdateInput: false,
+        showDropdowns: true,
+        showWeekNumbers: true,
+        // autoApply: true,
+        maxDate: today,
+        alwaysShowCalendars: true,
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        locale: {
+            format: 'DD-MM-YYYY',
+            cancelLabel: 'Clear'
+        }
+    });
+    $('#dateRange').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+    });
+    $('#dateRange').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
+</script>
