@@ -199,7 +199,7 @@ router.get('/logout', function (req, res, next) {
   }
   req.session.destroy();
   res.get('X-Frame-Options');
-  res.redirect('../login');
+  res.redirect('../');
 });
 
 router.get('/getCategories', permit.permission('DDH'), function (req, res, next) {

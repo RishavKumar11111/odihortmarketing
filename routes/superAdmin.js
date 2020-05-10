@@ -175,7 +175,7 @@ router.get('/logout', function (req, res, next) {
   }
   req.session.destroy();
   res.get('X-Frame-Options');
-  res.redirect('../login');
+  res.redirect('../');
 });
 
 module.exports = router;
