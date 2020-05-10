@@ -47,7 +47,6 @@ app.disable('x-powered-by');
 app.use('/public', express.static('public'));
 app.use('/gigw', express.static('gigw'));
 app.use('/AdminLTE', express.static('AdminLTE'));
-app.use('/app_login', express.static('app_login'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
