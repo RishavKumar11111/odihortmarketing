@@ -156,7 +156,7 @@
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
                                         <th ng-click="sort('AvailableDate')" style="cursor: pointer;">
-                                            Available Date
+                                            Available From
                                             <span class="fa fa-sort" ng-show="sortKey=='AvailableDate'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
@@ -172,7 +172,7 @@
                                         <td>{{i.FarmerMobileNo}}</td>
                                         <td ng-show="ddlItems == 0">{{i.ItemName | capitalize}}</td>
                                         <td>{{i.Quantity}} {{(i.Unit == 'Q') ? 'Qtls.' : 'Lakh Nos.'}}</td>
-                                        <td>{{(i.AvailableDate == '01 Jan 2200 - 01 Jan 2200') ? 'NA' : i.AvailableDate}}
+                                        <td>{{(i.AvailableDate == '01 Jan 2200') ? '25 Apr 2020' : i.AvailableDate}}
                                         </td>
                                     </tr>
                                 </tbody>

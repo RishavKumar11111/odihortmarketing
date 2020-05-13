@@ -79,7 +79,7 @@
                                             <span ng-show="itemDetailsBGVWise[0].Unit == 'Q'">(Qtls.)</span>
                                             <span ng-show="itemDetailsBGVWise[0].Unit == 'No'">(Lakh Nos.)</span>
                                         </th>
-                                        <th>Available Date</th>
+                                        <th>Available From</th>
                                     </tr>
                                     <tr ng-repeat="i in itemDetailsBGVWise">
                                         <td>{{i.BlockName | capitalize}}</td>
@@ -88,7 +88,7 @@
                                         <td>{{i.FarmerName | capitalize}}</td>
                                         <td>{{i.FarmerMobileNo}}</td>
                                         <td>{{i.Quantity}}</td>
-                                        <td>{{(i.AvailableDate == '01 Jan 2200 - 01 Jan 2200') ? 'NA' : i.AvailableDate}}
+                                        <td>{{(i.AvailableDate == '01 Jan 2200') ? '25 Apr 2020' : i.AvailableDate}}
                                         </td>
                                     </tr>
                                 </table>
