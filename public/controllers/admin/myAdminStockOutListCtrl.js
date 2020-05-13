@@ -10,7 +10,6 @@ app.controller('myAdminStockOutListCtrl', function ($scope, $http, $filter) {
             $scope.items = [];
             $scope.items.unshift(itemAll);
             $scope.ddlItems = 0;
-            $scope.stockOutDetails = [];
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {
@@ -25,7 +24,6 @@ app.controller('myAdminStockOutListCtrl', function ($scope, $http, $filter) {
                 var itemAll = { ItemID: 0, ItemName: 'All' };
                 $scope.items.unshift(itemAll);
                 $scope.ddlItems = 0;
-                $scope.stockInDetails = [];
             }, function error(response) {
                 console.log(response.status);
             }).catch(function err(error) {
@@ -40,7 +38,6 @@ app.controller('myAdminStockOutListCtrl', function ($scope, $http, $filter) {
             var districtAll = { DistrictCode: 0, DistrictName: 'All' };
             $scope.districts.unshift(districtAll);
             $scope.ddlDistricts = 0;
-            $scope.stockOutDetails = [];
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {
@@ -56,12 +53,14 @@ app.controller('myAdminStockOutListCtrl', function ($scope, $http, $filter) {
         if (date !== undefined && date !== null && date !== '') {
             dateFrom = date.split(' - ')[0].split("-").reverse().join("-");
             dateTill = date.split(' - ')[1].split("-").reverse().join("-");
-            $scope.displayDate = new Date(dateFrom).toString().substring(4, 15) + ' - ' + new Date(dateTill).toString().substring(4, 15);
+            // $scope.displayDate = new Date(dateFrom).toString().substring(4, 15) + ' - ' + new Date(dateTill).toString().substring(4, 15);
+            $scope.displayDate = date.split(' - ')[0].split("-").join("/") + ' - ' + date.split(' - ')[1].split("-").join("/");
         }
         $http.get('http://localhost:3000/admin/getStockOutDetails?districtCode=' + $scope.ddlDistricts + '&categoryID=' + $scope.ddlCategories + '&itemID=' + $scope.ddlItems + '&dateFrom=' + dateFrom + '&dateTill=' + dateTill).then(function success(response) {
             $scope.stockOutDetails = response.data;
-            if ($scope.stockOutDetails.length != 0) {
+            if ($scope.stockOutDetails.length > 0) {
                 $scope.districtName = $filter('filter')($scope.districts, { DistrictCode: $scope.ddlDistricts }, true)[0].DistrictName;
+                $scope.categoryName = $filter('filter')($scope.categories, { CategoryID: $scope.ddlCategories }, true)[0].CategoryName;
                 $scope.itemName = $filter('filter')($scope.items, { ItemID: $scope.ddlItems }, true)[0].ItemName;
                 $scope.totalQuintal = 0;
                 $scope.totalNo = 0;

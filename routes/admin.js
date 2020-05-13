@@ -109,6 +109,11 @@ router.get('/stockOutList', csrfProtection, permit.permission('ADMIN'), cache.ov
   res.render('admin/stockoutlist', { title: 'Stock Out List', csrfToken: req.csrfToken() });
 });
 
+router.get('/stockInOutAvailableDistrictBlockWise', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('admin/stockinoutavailabledistrictblockwise', { title: 'Stock In, Stock Out and Available Quantity', csrfToken: req.csrfToken() });
+});
+
 router.get('/tradersList', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   res.render('admin/traderslist', { title: 'Traders List', csrfToken: req.csrfToken() });
@@ -315,6 +320,38 @@ router.get('/getItemsByCategory', permit.permission('ADMIN'), function (req, res
     console.log(response.status);
   }).catch(function err(error) {
     console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getItemDetails', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getItemDetails().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getDashboardNoDetails', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getDashboardNoDetails(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  });
+});
+
+router.get('/getStockInOutAvailableDistrictBlockWise', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.query.districtCode;
+  var itemID = req.query.itemID;
+  var categoryID = req.query.categoryID;
+  balModule.getStockInOutAvailableDistrictBlockWise(districtCode, itemID, categoryID, function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
   });
 });
 

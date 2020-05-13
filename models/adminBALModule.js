@@ -139,7 +139,7 @@ exports.getDistricts = function () {
 
 exports.getStockInDetails = function (districtCode, categoryID, itemID, dateFrom, dateTill) {
     if (dateFrom == '' && dateTill == '') {
-        return sequelize.query("select DistrictName, FarmerName, FarmerMobileNo, ItemName, Unit, sum(Quantity) Quantity, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) end AvailableDate, Photo from StockIn a inner join Items b on a.ItemID = b.ItemID inner join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:item_id = 0 or a.ItemID = :item_id) group by DistrictName, FarmerName, FarmerMobileNo, ItemName, Unit, Photo, convert(datetime, AvailableTill), convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) order by DistrictName, FarmerName, ItemName", {
+        return sequelize.query("select DistrictName, FarmerName, FarmerMobileNo, ItemName, Unit, sum(Quantity) Quantity, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) end AvailableDate, case when Photo is not null then 'A' else 'NA' end PhotoAvailability from StockIn a inner join Items b on a.ItemID = b.ItemID inner join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:item_id = 0 or a.ItemID = :item_id) group by DistrictName, FarmerName, FarmerMobileNo, ItemName, Unit, Photo, convert(datetime, AvailableTill), convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) order by DistrictName, FarmerName, ItemName", {
             replacements: { district_code: districtCode, category_id: categoryID, item_id: itemID }, type: sequelize.QueryTypes.SELECT
         }).then(function success(data) {
             return data;
@@ -148,7 +148,7 @@ exports.getStockInDetails = function (districtCode, categoryID, itemID, dateFrom
         });
     }
     else {
-        return sequelize.query("select DistrictName, FarmerName, FarmerMobileNo, ItemName, Unit, sum(Quantity) Quantity, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) end AvailableDate, Photo from StockIn a inner join Items b on a.ItemID = b.ItemID inner join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:item_id = 0 or a.ItemID = :item_id) and convert(date, DateTime) between convert(date, :date_from) and convert(date, :date_till) group by DistrictName, FarmerName, FarmerMobileNo, ItemName, Unit, Photo, convert(datetime, AvailableTill), convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) order by DistrictName, FarmerName, ItemName", {
+        return sequelize.query("select DistrictName, FarmerName, FarmerMobileNo, ItemName, Unit, sum(Quantity) Quantity, case when convert(datetime, AvailableTill) <= getdate() then 'NA' else convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) end AvailableDate, case when Photo is not null then 'A' else 'NA' end PhotoAvailability from StockIn a inner join Items b on a.ItemID = b.ItemID inner join LGDDistrict c on substring(a.UserID, 5, 3) = c.DistrictCode inner join Category g on b.CategoryID = g.CategoryID where (:district_code = 0 or substring(a.UserID, 5, 3) = :district_code) and (:category_id = 0 or b.CategoryID = :category_id) and (:item_id = 0 or a.ItemID = :item_id) and convert(date, DateTime) between convert(date, :date_from) and convert(date, :date_till) group by DistrictName, FarmerName, FarmerMobileNo, ItemName, Unit, Photo, convert(datetime, AvailableTill), convert(varchar(30), convert(date, AvailableFrom), 106) + ' - ' + convert(varchar(30), convert(date, AvailableTill), 106) order by DistrictName, FarmerName, ItemName", {
             replacements: { district_code: districtCode, category_id: categoryID, item_id: itemID, date_from: dateFrom, date_till: dateTill }, type: sequelize.QueryTypes.SELECT
         }).then(function success(data) {
             return data;
@@ -194,6 +194,45 @@ exports.getItemsByCategory = function (categoryID) {
         replacements: { category_id: categoryID }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getDashboardNoDetails = function (callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const request = new sql.Request(con);
+        request.execute('spGetDashboardNoDetails', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.recordsets);
+            }
+            con.close();
+        });
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getStockInOutAvailableDistrictBlockWise = function (districtCode, itemID, categoryID, callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const request = new sql.Request(con);
+        request.input('DistrictCode', districtCode);
+        request.input('ItemID', itemID);
+        request.input('CategoryID', categoryID);
+        request.execute('spGetStockInOutAvailableDistrictBlockWise', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.recordsets);
+            }
+            con.close();
+        });
     }).catch(function error(err) {
         console.log('An error occurred...', err);
     });

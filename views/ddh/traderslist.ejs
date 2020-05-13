@@ -46,14 +46,9 @@
                             <table class="table table-hover text-wrap">
                                 <thead>
                                     <tr>
-                                        <th ng-click="sort('ID')" style="cursor: pointer;">
+                                        <th ng-click="sort('DuplicateID')" style="cursor: pointer;">
                                             Serial No.
-                                            <span class="fa fa-sort" ng-show="sortKey=='ID'"
-                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
-                                        </th>
-                                        <th ng-click="sort('DistrictName')" style="cursor: pointer;">
-                                            District
-                                            <span class="fa fa-sort" ng-show="sortKey=='DistrictName'"
+                                            <span class="fa fa-sort" ng-show="sortKey=='DuplicateID'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
                                         <th ng-click="sort('TraderName')" style="cursor: pointer;">
@@ -76,8 +71,7 @@
                                 <tbody>
                                     <tr
                                         dir-paginate="i in tradersList | orderBy: sortKey: reverse | filter: search | itemsPerPage: pageSize">
-                                        <td>{{i.ID}}</td>
-                                        <td>{{i.DistrictName | capitalize}}</td>
+                                        <td>{{i.DuplicateID}}</td>
                                         <td>{{i.TraderName | capitalize}}</td>
                                         <td>{{i.TraderContactNo}}</td>
                                         <td>{{i.Commodity | capitalize}}</td>

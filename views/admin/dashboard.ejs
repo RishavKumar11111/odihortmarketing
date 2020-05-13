@@ -1,93 +1,214 @@
-<div class="content-wrapper" ng-controller="myAdminDashboardCtrl" ng-init="">
-    <!-- Content Header (Page header) -->
+<script src="../../public/javascripts/apexcharts.min.js"></script>
+<div class="content-wrapper" ng-controller="myAdminDashboardCtrl"
+    ng-init="getAvailabilityDetails(); getDashboardNoDetails(); getCategories(); getDistricts();">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <h1 class="m-0 text-dark"><%= title %></h1>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item active"><%= title %></li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
-
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                    <div class="small-box bg-info" style="min-height: 90%; max-height: 90%;">
                         <div class="inner">
-                            <h3>100</h3>
-
-                            <p></p>
+                            <p style="margin-bottom: 5px;">Total No. of Farmers (Stock In)</p>
+                            <h3>{{dashboardNoDetails[0][0].NoOfFarmersStockIn}}</h3>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>100<sup style="font-size: 20px">%</sup></h3>
-
-                            <p></p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>100</h3>
-
-                            <p></p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>100</h3>
-
-                            <p></p>
-                        </div>
-                        <div class="icon">
+                        <!-- <div class="icon">
                             <i class="ion ion-pie-graph"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
                     </div>
                 </div>
-                <!-- ./col -->
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                    <div class="small-box bg-success" style="min-height: 90%; max-height: 90%;">
+                        <div class="inner">
+                            <p style="margin-bottom: 5px;">Total No. of Farmers (Stock Out)</p>
+                            <h3>{{dashboardNoDetails[1][0].NoOfFarmersStockOut}}</h3>
+                        </div>
+                        <!-- <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                    <a href="#!stockInList">
+                        <div class="small-box bg-warning" style="min-height: 90%; max-height: 90%;">
+                            <div class="inner" style="padding: 10px 10px 0;">
+                                <p style="margin-bottom: 5px;">Total Stock In Quantity</p>
+                                <h6><b>{{dashboardNoDetails[2][1].Quantity}} {{dashboardNoDetails[2][1].Unit}}</b></h6>
+                                <h6><b>{{dashboardNoDetails[2][0].Quantity}} {{dashboardNoDetails[2][0].Unit}}</b></h6>
+                            </div>
+                            <!-- <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div> -->
+                            <p style="text-align: center;">More info <i class="fas fa-arrow-circle-right"></i></p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                    <a href="#!stockOutList">
+                        <div class="small-box bg-danger" style="min-height: 90%; max-height: 90%;">
+                            <div class="inner" style="padding: 10px 10px 0;">
+                                <p style="margin-bottom: 5px;">Total Stock Out Quantity</p>
+                                <h6><b>{{dashboardNoDetails[3][1].SaleQuantity}} {{dashboardNoDetails[3][1].Unit}}</b>
+                                </h6>
+                                <h6><b>{{dashboardNoDetails[3][0].SaleQuantity}} {{dashboardNoDetails[3][0].Unit}}</b>
+                                </h6>
+                            </div>
+                            <!-- <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div> -->
+                            <p style="text-align: center;">More info <i class="fas fa-arrow-circle-right"></i></p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                    <a href="#!itemsAvailableDistrictWise">
+                        <div class="small-box bg-info" style="min-height: 90%; max-height: 90%;">
+                            <div class="inner" style="padding: 10px 10px 0;">
+                                <p style="margin-bottom: 5px;">Total Available Quantity</p>
+                                <h6><b>{{dashboardNoDetails[4][1].AvailableQuantity}}
+                                        {{dashboardNoDetails[4][1].Unit}}</b>
+                                </h6>
+                                <h6><b>{{dashboardNoDetails[4][0].AvailableQuantity}}
+                                        {{dashboardNoDetails[4][0].Unit}}</b>
+                                </h6>
+                            </div>
+                            <!-- <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div> -->
+                            <p style="text-align: center;">More info <i class="fas fa-arrow-circle-right"></i></p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                    <a href="#!tradersList">
+                        <div class="small-box bg-success" style="min-height: 90%; max-height: 90%;">
+                            <div class="inner">
+                                <p style="margin-bottom: 20px;">Total No. of Traders</p>
+                                <h3>{{dashboardNoDetails[5][0].NoOfTraders}}</h3>
+                            </div>
+                            <!-- <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div> -->
+                            <p style="text-align: center;">More info <i class="fas fa-arrow-circle-right"></i></p>
+                        </div>
+                    </a>
+                </div>
             </div>
-            <!-- /.row -->
-            <!-- Main row -->
-
-            <!-- /.row (main row) -->
-        </div><!-- /.container-fluid -->
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Select Category, Item and District</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label">Categories</label>
+                                <select class="form-control select2" ng-model="ddlCategories"
+                                    ng-options="i.CategoryID as i.CategoryName for i in categories"
+                                    ng-change="getItemsByCategory(ddlCategories); destroyGraph();">
+                                    <option value="" disabled>Select Category</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label">Items</label>
+                                <select class="form-control select2" ng-model="ddlItems"
+                                    ng-options="i.ItemID as i.ItemName for i in items"
+                                    ng-change=" destroyGraph();">
+                                    <option value="" disabled>Select Item</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label">Districts</label>
+                                <select class="form-control select2" ng-model="ddlDistricts"
+                                    ng-options="i.DistrictCode as i.DistrictName for i in districts"
+                                    ng-change=" destroyGraph();">
+                                    <option value="" disabled>Select District</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary" ng-click="destroyGraph(); getAvailabilityDetails()">View List</button>
+                </div>
+            </div>
+        </div>
     </section>
-    <!-- /.content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Stock In, Stock Out and Available Quantity</h3>
+                                <a href="#!stockInOutAvailableDistrictBlockWise">View Report</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-block" ng-show="totalStockAvailableQtls > 0 || totalStockAvailableNos > 0">
+                                <p style="margin-bottom: 0;"><b
+                                        ng-show="totalStockAvailableQtls.toFixed(2) != 0.00">Total Available:
+                                        {{totalStockAvailableQtls.toFixed(2)}} Qtls.</b> <b
+                                        ng-show="totalStockAvailableNos.toFixed(2) != 0.00">&
+                                        {{totalStockAvailableNos.toFixed(2)}} Lakh Nos.</b></p>
+                                <p ng-show="ddlDistricts != 0" style="margin-bottom: 0;"><b>District:
+                                        {{districtName | capitalize}}</b></p>
+                                <p ng-show="ddlCategories != 0" style="margin-bottom: 0;"><b>Category:
+                                        {{categoryName | capitalize}}</b>
+                                <p ng-show="ddlItems != 0" style="margin-bottom: 0;"><b>Item:
+                                        {{itemName | capitalize}}</b>
+                                </p>
+                                <!-- <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">820</span>
+                                    <span>Visitors Over Time</span>
+                                </p> -->
+                                <!-- <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                        <i class="fas fa-arrow-up"></i> 12.5%
+                                    </span>
+                                    <span class="text-muted">Since last week</span>
+                                </p> -->
+                            </div>
+                            <div class="position-relative mb-4">
+                                <div id="chartSIOAQ"></div>
+                                <!-- <canvas id="visitors-chart" height="200"></canvas> -->
+                            </div>
+                            <!-- <div class="d-flex flex-row justify-content-end">
+                                <span class="mr-2">
+                                    <i class="fas fa-square text-primary"></i> This Week
+                                </span>
+                                <span>
+                                    <i class="fas fa-square text-gray"></i> Last Week
+                                </span>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

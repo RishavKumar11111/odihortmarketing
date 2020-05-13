@@ -89,6 +89,7 @@
                             </div>
                             <p style="margin-bottom: 0;"><b ng-show="totalQuintal.toFixed(2) != 0.00">Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</b> <b ng-show="totalNo.toFixed(2) != 0.00">& {{totalNo.toFixed(2)}} Lakh Nos.</b></p>
                             <p ng-show="ddlDistricts != 0" style="margin-bottom: 0;"><b>District: {{districtName | capitalize}}</b></p>
+                            <p ng-show="ddlCategories != 0" style="margin-bottom: 0;"><b>Category: {{categoryName | capitalize}}</b>
                             <p ng-show="ddlItems != 0" style="margin-bottom: 0;"><b>Item: {{itemName | capitalize}}</b></p>
                         </div>
                         <div class="card-body table-responsive p-0">

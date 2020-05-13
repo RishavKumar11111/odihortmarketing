@@ -1,8 +1,187 @@
 app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
 
-    $scope.getDashboardDetails = function () {
-        $http.get('http://localhost:3000/admin/getDashboardDetails').then(function success(response) {
-            $scope.getDetails = response.data;
+    $scope.getDashboardNoDetails = function () {
+        $http.get('http://localhost:3000/admin/getDashboardNoDetails').then(function success(response) {
+            $scope.dashboardNoDetails = response.data;
+        }, function error(response) {
+            console.log(response.status);
+        }).catch(function err(error) {
+            console.log('An error occurred...', error);
+        });
+    };
+
+    $scope.destroyGraph = function () {
+        if (chartSIOAQ) chartSIOAQ.destroy();
+        $scope.stockInOutAvailableDistrictBlockWise = [];
+        $scope.totalStockAvailableQtls = 0;
+        $scope.totalStockAvailableNos = 0;
+    };
+
+    $scope.getCategories = function () {
+        $http.get('http://localhost:3000/admin/getCategories').then(function success(response) {
+            $scope.categories = response.data;
+            var categoryAll = { CategoryID: 0, CategoryName: 'All' };
+            $scope.categories.unshift(categoryAll);
+            $scope.ddlCategories = 0;
+            var itemAll = { ItemID: 0, ItemName: 'All' };
+            $scope.items = [];
+            $scope.items.unshift(itemAll);
+            $scope.ddlItems = 0;
+        }, function error(response) {
+            console.log(response.status);
+        }).catch(function err(error) {
+            console.log('An error occurred...', error);
+        });
+    };
+
+    $scope.getItemsByCategory = function (categoryID) {
+        if (categoryID != undefined) {
+            $http.get('http://localhost:3000/admin/getItemsByCategory?categoryID=' + categoryID).then(function success(response) {
+                $scope.items = response.data;
+                var itemAll = { ItemID: 0, ItemName: 'All' };
+                $scope.items.unshift(itemAll);
+                $scope.ddlItems = 0;
+            }, function error(response) {
+                console.log(response.status);
+            }).catch(function err(error) {
+                console.log('An error occurred...', error);
+            });
+        }
+    };
+
+    $scope.getDistricts = function () {
+        $http.get('http://localhost:3000/admin/getDistricts').then(function success(response) {
+            $scope.districts = response.data;
+            var districtAll = { DistrictCode: 0, DistrictName: 'All' };
+            $scope.districts.unshift(districtAll);
+            $scope.ddlDistricts = 0;
+        }, function error(response) {
+            console.log(response.status);
+        }).catch(function err(error) {
+            console.log('An error occurred...', error);
+        });
+    };
+
+    var ctxSIOAQ = document.querySelector("#chartSIOAQ");
+    var chartSIOAQ = null;
+    $scope.getAvailabilityDetails = function () {
+        $scope.ddlDistricts = ($scope.ddlDistricts == undefined || $scope.ddlDistricts == null || $scope.ddlDistricts == '') ? 0 : $scope.ddlDistricts;
+        $scope.ddlItems = ($scope.ddlItems == undefined || $scope.ddlItems == null || $scope.ddlItems == '') ? 0 : $scope.ddlItems;
+        $scope.ddlCategories = ($scope.ddlCategories == undefined || $scope.ddlCategories == null || $scope.ddlCategories == '') ? 0 : $scope.ddlCategories;
+        $http.get('http://localhost:3000/admin/getStockInOutAvailableDistrictBlockWise?districtCode=' + $scope.ddlDistricts + '&categoryID=' + $scope.ddlCategories + '&itemID=' + $scope.ddlItems).then(function success(response) {
+            $scope.stockInOutAvailableDistrictBlockWise = response.data;
+            if ($scope.stockInOutAvailableDistrictBlockWise.length > 0) {
+                $scope.districtName = $filter('filter')($scope.districts, { DistrictCode: $scope.ddlDistricts }, true)[0].DistrictName;
+                $scope.categoryName = $filter('filter')($scope.categories, { CategoryID: $scope.ddlCategories }, true)[0].CategoryName;
+                $scope.itemName = $filter('filter')($scope.items, { ItemID: $scope.ddlItems }, true)[0].ItemName;
+                $scope.totalStockInQtls = 0;
+                $scope.totalStockOutQtls = 0;
+                $scope.totalStockAvailableQtls = 0;
+                $scope.totalStockInNos = 0;
+                $scope.totalStockOutNos = 0;
+                $scope.totalStockAvailableNos = 0;
+                if ($scope.stockInOutAvailableDistrictBlockWise[0].length > 0) {
+                    angular.forEach($scope.stockInOutAvailableDistrictBlockWise[0], function (i) {
+                        $scope.totalStockInQtls += i.Quantity;
+                        $scope.totalStockOutQtls += i.SaleQuantity;
+                        $scope.totalStockAvailableQtls += i.AvailableQuantity;
+                    })
+                }
+                if ($scope.stockInOutAvailableDistrictBlockWise[1].length > 0) {
+                    angular.forEach($scope.stockInOutAvailableDistrictBlockWise[1], function (i) {
+                        $scope.totalStockInNos += i.Quantity;
+                        $scope.totalStockOutNos += i.SaleQuantity;
+                        $scope.totalStockAvailableNos += i.AvailableQuantity;
+                    })
+                }
+                if ($scope.totalStockAvailableQtls != 0 || $scope.totalStockAvailableNos != 0) {
+                    var districtsblocks = [];
+                    var availableQuantitiesQtls = [];
+                    var availableQuantitiesNos = [];
+                    angular.forEach($scope.stockInOutAvailableDistrictBlockWise[0], function (i) {
+                        if (i.DistrictName != undefined) {
+                            districtsblocks.push(i.DistrictName);
+                        }
+                        availableQuantitiesQtls.push(i.AvailableQuantity);
+                    })
+                    angular.forEach($scope.stockInOutAvailableDistrictBlockWise[1], function (i) {
+                        if (i.BlockName != undefined) {
+                            districtsblocks.push(i.BlockName);
+                        }
+                        availableQuantitiesNos.push(i.AvailableQuantity);
+                    })
+                    var optionsSIOAQ = {
+                        series: [{
+                            name: 'Available Quantity (in Lakh Nos.)',
+                            type: 'column',
+                            data: availableQuantitiesNos
+                        }, {
+                            name: 'Available Quantity (in Qtls.)',
+                            type: 'area',
+                            data: availableQuantitiesQtls
+                        }],
+                        chart: {
+                            height: 350,
+                            type: 'line',
+                            stacked: false,
+                        },
+                        stroke: {
+                            width: [0, 2, 5],
+                            curve: 'smooth'
+                        },
+                        plotOptions: {
+                            bar: {
+                                columnWidth: '50%'
+                            }
+                        },
+                        fill: {
+                            opacity: [0.85, 0.25, 1],
+                            gradient: {
+                                inverseColors: false,
+                                shade: 'light',
+                                type: "vertical",
+                                opacityFrom: 0.85,
+                                opacityTo: 0.55,
+                                stops: [0, 100, 100, 100]
+                            }
+                        },
+                        labels: districtsblocks,
+                        markers: {
+                            size: 0
+                        },
+                        xaxis: {
+                            type: 'category'
+                        },
+                        yaxis: {
+                            title: {
+                                text: 'Available Quantity',
+                            },
+                            min: 0
+                        },
+                        tooltip: {
+                            shared: true,
+                            intersect: false,
+                            y: {
+                                formatter: function (y) {
+                                    if (typeof y !== "undefined") {
+                                        return y.toFixed(0) + "";
+                                    }
+                                    return y;
+                                }
+                            }
+                        }
+                    };
+                    chartSIOAQ = new ApexCharts(ctxSIOAQ, optionsSIOAQ);
+                    chartSIOAQ.render();
+                }
+                else {
+                    $scope.destroyGraph();
+                    alert('No records are available.');
+                }
+            }
+            else {
+                alert('No records are available.');
+            }
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {

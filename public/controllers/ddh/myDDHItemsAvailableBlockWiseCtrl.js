@@ -12,7 +12,6 @@ app.controller('myDDHItemsAvailableBlockWiseCtrl', function ($scope, $http, $fil
             $scope.items = [];
             $scope.items.unshift(itemAll);
             $scope.ddlItems = 0;
-            $scope.itemsAvailable = [];
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {
@@ -27,7 +26,6 @@ app.controller('myDDHItemsAvailableBlockWiseCtrl', function ($scope, $http, $fil
                 var itemAll = { ItemID: 0, ItemName: 'All' };
                 $scope.items.unshift(itemAll);
                 $scope.ddlItems = 0;
-                $scope.itemsAvailable = [];
             }, function error(response) {
                 console.log(response.status);
             }).catch(function err(error) {
@@ -68,7 +66,7 @@ app.controller('myDDHItemsAvailableBlockWiseCtrl', function ($scope, $http, $fil
     $scope.getAvailabilityDetails = function () {
         $http.get('http://localhost:3000/ddh/getAvailabilityDetails?blockCode=' + $scope.ddlBlocks + '&categoryID=' + $scope.ddlCategories + '&areaType=' + $scope.rbAreaType).then(function success(response) {
             $scope.itemsAvailable = response.data;
-            if ($scope.itemsAvailable.length != 0) {
+            if ($scope.itemsAvailable.length > 0) {
                 var k = $filter('filter')($scope.blocks, { BlockCode: $scope.ddlBlocks }, true)[0];
                 if (k == undefined) {
                     $scope.blockName = $filter('filter')($scope.blocks, { ULBCode: $scope.ddlBlocks }, true)[0].ULBName;
@@ -76,6 +74,7 @@ app.controller('myDDHItemsAvailableBlockWiseCtrl', function ($scope, $http, $fil
                 else {
                     $scope.blockName = k.BlockName;
                 }
+                $scope.categoryName = $filter('filter')($scope.categories, { CategoryID: $scope.ddlCategories }, true)[0].CategoryName;
                 $scope.itemName = $filter('filter')($scope.items, { ItemID: $scope.ddlItems }, true)[0].ItemName;
                 $scope.totalQuintal = 0;
                 $scope.totalNo = 0;

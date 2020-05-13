@@ -10,7 +10,6 @@ app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http,
             $scope.items = [];
             $scope.items.unshift(itemAll);
             $scope.ddlItems = 0;
-            $scope.itemsAvailable = [];
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {
@@ -25,7 +24,6 @@ app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http,
                 var itemAll = { ItemID: 0, ItemName: 'All' };
                 $scope.items.unshift(itemAll);
                 $scope.ddlItems = 0;
-                $scope.itemsAvailable = [];
             }, function error(response) {
                 console.log(response.status);
             }).catch(function err(error) {
@@ -40,7 +38,6 @@ app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http,
             var districtAll = { DistrictCode: 0, DistrictName: 'All' };
             $scope.districts.unshift(districtAll);
             $scope.ddlDistricts = 0;
-            $scope.itemsAvailable = [];
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {
@@ -51,8 +48,9 @@ app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http,
     $scope.getAvailabilityDetails = function () {
         $http.get('http://localhost:3000/admin/getAvailabilityDetails?districtCode=' + $scope.ddlDistricts + '&categoryID=' + $scope.ddlCategories + '&itemID=' + $scope.ddlItems).then(function success(response) {
             $scope.itemsAvailable = response.data;
-            if ($scope.itemsAvailable.length != 0) {
+            if ($scope.itemsAvailable.length > 0) {
                 $scope.districtName = $filter('filter')($scope.districts, { DistrictCode: $scope.ddlDistricts }, true)[0].DistrictName;
+                $scope.categoryName = $filter('filter')($scope.categories, { CategoryID: $scope.ddlCategories }, true)[0].CategoryName;
                 $scope.itemName = $filter('filter')($scope.items, { ItemID: $scope.ddlItems }, true)[0].ItemName;
                 $scope.totalQuintal = 0;
                 $scope.totalNo = 0;
