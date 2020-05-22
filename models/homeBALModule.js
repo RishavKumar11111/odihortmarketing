@@ -23,6 +23,16 @@ exports.getUserDetails = function (userName) {
     });
 };
 
+exports.getUserContactDetails = function (userName) {
+    return sequelize.query('select a.UserID, MobileNo, EmailID, RoleName from UserLogin a inner join UserRole b on a.RoleID = b.RoleID inner join (select DDHUserID UserID, DDHMobileNo MobileNo, DDHEmailID EmailID from DDHDistrictMapping union all select ADMINUserID UserID, ADMINMobileNo MobileNo, ADMINEmailID EmailID from ADMINDetails) c on a.UserID = c.UserID where a.UserID = :user_name', {
+        replacements: { user_name: userName }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
 exports.checkCPStatus = function (userName) {
     return sequelize.query('select UserID from ChangePasswordStatus where UserID = :user_name', {
         replacements: { user_name: userName }, type: sequelize.QueryTypes.SELECT

@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var balModule = require('../models/superAdminBALModule');
-var atob = require('atob');
 var crypto = require('crypto');
 var sha256 = require('js-sha256');
 var csrf = require('csurf');
@@ -11,8 +10,13 @@ var parseForm = bodyParser.urlencoded({ extended: false });
 var os = require('os');
 var cache = require('cache-headers');
 var permit = require('../models/permission');
+var moment = require('moment'); moment().format();
+var nodeCache = require('node-cache');
+var atob = require('atob');
+const myCache = new nodeCache({ stdTTL: 24 * 60 * 60, checkperiod: 24 * 60 * 60 * 0.3, useClones: false });
 var request = require('request');
 var soap = require('soap');
+var svgCaptcha = require('svg-captcha');
 
 var overrideConfig = {
   'maxAge': 2000,

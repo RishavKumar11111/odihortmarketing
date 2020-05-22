@@ -29,7 +29,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" style="font-weight: bold; background: #074b72;color: white">Security
                             Guidelines</div>
-                        <div class="panel-body" style="height: 275px">
+                        <div class="panel-body" style="height: auto">
                             <ul>
                                 <li style="margin-top: 5px; text-align: justify; font-weight: bold"><span
                                         class="glyphicon glyphicon-hand-right"></span>&nbsp; Never write your password
@@ -62,7 +62,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" style="font-weight: bold; background: #074b72; color: white">Login
                         </div>
-                        <div class="panel-body" style="height: 275px">
+                        <div class="panel-body" style="height: auto">
                             <ul class="newsticker">
                                 <input type="hidden" name="randomNo" id="rno" value="<%= randomNo %>">
                                 <form method="POST" id="formLogin" action="/plogin" autocomplete="off">
@@ -80,7 +80,7 @@
                                     <div class="form-group" style="margin-bottom: 5px">
                                         <label for="exampleInputPassword1">Enter Captcha:</label>
                                         <div style="display: flex">
-                                            <img ng-src="{{URL}}">
+                                            <img ng-src="{{URL}}" style="border-radius: 10px;">
                                             <div style="padding: 17px 0 0 5px">=</div>
                                             <input type="text" class="form-control" id="captcha" maxlength="10"
                                                 name="captcha" style="margin: 9px 0 0 10px">

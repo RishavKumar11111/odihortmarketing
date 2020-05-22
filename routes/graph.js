@@ -1,8 +1,22 @@
 var express = require('express');
 var router = express.Router();
-var soap = require('soap');
+var bodyParser = require('body-parser');
+var csrf = require('csurf');
+var moment = require('moment'); moment().format();
 var nodeCache = require('node-cache');
 const myCache = new nodeCache({ stdTTL: 24 * 60 * 60, checkperiod: 24 * 60 * 60 * 0.3, useClones: false });
+var soap = require('soap');
+var balModule = require('../models/superAdminBALModule');
+var crypto = require('crypto');
+var sha256 = require('js-sha256');
+var csrfProtection = csrf();
+var parseForm = bodyParser.urlencoded({ extended: false });
+var os = require('os');
+var cache = require('cache-headers');
+var permit = require('../models/permission');
+var atob = require('atob');
+var request = require('request');
+var svgCaptcha = require('svg-captcha');
 
 router.get('/getGraph', function (req, res) {
   var getValue = myCache.get('graphData');

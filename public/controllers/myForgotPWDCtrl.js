@@ -12,7 +12,7 @@ app.controller('myForgotPWDCtrl', function ($scope, $http) {
     $scope.xyz = false;
     $scope.showHide = function () {
         if (document.getElementById('msg').value.includes('Accepted')) {
-            alert('An OTP has been sent to your registered Mobile No.');
+            alert('An OTP has been sent to your registered Mobile No. ending with ' + document.getElementById('mno').value);
             $scope.abc = false;
             $scope.def = true;
             $scope.xyz = false;
@@ -28,6 +28,11 @@ app.controller('myForgotPWDCtrl', function ($scope, $http) {
             $scope.def = false;
             $scope.xyz = true;
         }
+        else if (document.getElementById('msg').value == 'Password already used') {
+            $scope.abc = false;
+            $scope.def = false;
+            $scope.xyz = true;
+        }
         else if (document.getElementById('msg').value == 'Password updated successfully.') {
             alert('Password updated successfully.');
             location.href = 'http://localhost:3000/login';
@@ -37,7 +42,8 @@ app.controller('myForgotPWDCtrl', function ($scope, $http) {
     $scope.sendOTP = function () {
         $http.get('http://localhost:3000/sendOTP').then(function success(response1) {
             if (response1.data.includes('Accepted')) {
-                alert('An OTP has been sent to your registered Mobile No.');
+                alert('An OTP has been sent to your registered Mobile No. ending with ' + document.getElementById('mno').value + ' again.');
+                document.getElementById('otp').value = null;
             }
             else {
                 alert('Oops! An error occurred.');
@@ -52,20 +58,27 @@ app.controller('myForgotPWDCtrl', function ($scope, $http) {
     var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})");
     var mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
 
-    $scope.npCheck = {
-        'padding-top': '8px'
-    };
-
-    $scope.cpCheck = {
-        'padding-top': '8px'
-    };
+    $scope.npCheck = {};
+    $scope.cpCheck = {};
 
     $scope.analyzeNP = function (value) {
+        $scope.pnm = null;
+        $scope.nPWDCheck = null;
+        $scope.npCheck['color'] = null;
         if (strongRegex.test(value)) {
             $scope.nPWDCheck = "glyphicon glyphicon-ok";
             $scope.npCheck['color'] = 'green';
+            if ($scope.np !== $scope.cp && $scope.cp !== undefined) {
+                $scope.nPWDCheck = "glyphicon glyphicon-remove";
+                $scope.npCheck['color'] = 'red';
+                $scope.pnm = 'The New Password and Confirm Password do not match';
+            }
+            else if ($scope.cp !== undefined) {
+                $scope.cPWDCheck = "glyphicon glyphicon-ok";
+                $scope.cpCheck['color'] = 'green';
+            }
         } else if (mediumRegex.test(value)) {
-            $scope.nPWDCheck = "glyphicon glyphicon-remove";
+            $scope.nPWDCheck = "glyphicon glyphicon-alert";
             $scope.npCheck['color'] = 'orange';
         } else {
             $scope.nPWDCheck = "glyphicon glyphicon-remove";
@@ -75,17 +88,21 @@ app.controller('myForgotPWDCtrl', function ($scope, $http) {
 
     $scope.analyzeCP = function (value) {
         $scope.pnm = null;
+        $scope.cPWDCheck = null;
+        $scope.cpCheck['color'] = null;
         if (strongRegex.test(value)) {
-            if ($scope.txtNewPassword === $scope.txtConfirmPassword) {
+            if ($scope.np === $scope.cp) {
                 $scope.cPWDCheck = "glyphicon glyphicon-ok";
                 $scope.cpCheck['color'] = 'green';
+                $scope.nPWDCheck = "glyphicon glyphicon-ok";
+                $scope.npCheck['color'] = 'green';
             } else {
                 $scope.cPWDCheck = "glyphicon glyphicon-remove";
                 $scope.cpCheck['color'] = 'red';
                 $scope.pnm = 'The New Password and Confirm Password do not match';
             }
         } else if (mediumRegex.test(value)) {
-            $scope.cPWDCheck = "glyphicon glyphicon-remove";
+            $scope.cPWDCheck = "glyphicon glyphicon-alert";
             $scope.cpCheck['color'] = 'orange';
         } else {
             $scope.cPWDCheck = "glyphicon glyphicon-remove";

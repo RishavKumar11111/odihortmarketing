@@ -14,7 +14,7 @@ exports.addActivityLog = function (ipAddress, userID, url, deviceType, os, brows
 };
 
 exports.getUserDetails = function (userName) {
-    return sequelize.query('select ul.UserID, ul.PasswordHash, ul.RoleID, ul.ContactNo, ul.AccessFailedCount, ul.Status, ur.RoleName from UserLogin ul inner join UserRole ur on ul.RoleID = ur.RoleID where UserID = :user_name', {
+    return sequelize.query('select ul.UserID, ul.PasswordHash, ul.RoleID, ul.AccessFailedCount, ul.IsLoggedIn, ul.Status, ur.RoleName from UserLogin ul inner join UserRole ur on ul.RoleID = ur.RoleID where UserID = :user_name', {
         replacements: { user_name: userName }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;

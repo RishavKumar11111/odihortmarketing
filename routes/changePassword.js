@@ -10,6 +10,13 @@ var parseForm = bodyParser.urlencoded({ extended: false });
 var os = require('os');
 var cache = require('cache-headers');
 var permit = require('../models/permission');
+var moment = require('moment'); moment().format();
+var nodeCache = require('node-cache');
+var atob = require('atob');
+const myCache = new nodeCache({ stdTTL: 24 * 60 * 60, checkperiod: 24 * 60 * 60 * 0.3, useClones: false });
+var request = require('request');
+var soap = require('soap');
+var svgCaptcha = require('svg-captcha');
 
 var overrideConfig = {
   'maxAge': 2000,
@@ -88,10 +95,10 @@ router.post('/', parseForm, csrfProtection, permit.permission('DDH', 'ADMIN', 'S
       balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/changePassword', 'FAILED', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
       res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Invalid Username or Password' });
     }
-    else if (response[0].Status !== true) {
-      balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/changePassword', 'FAILED', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
-      res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Invalid Username' });
-    }
+    // else if (response[0].Status !== true) {
+    //   balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/changePassword', 'FAILED', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
+    //   res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Invalid Username' });
+    // }
     else {
       balModule.getPasswordHistory(req.session.username).then(function success(response1) {
         var objP = req.body.data;
@@ -108,7 +115,7 @@ router.post('/', parseForm, csrfProtection, permit.permission('DDH', 'ADMIN', 'S
               balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/changePassword', 'UPDATE / INSERT', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
               delete objP.OldPassword; delete objP.ConfirmPassword;
               objP.UserID = req.session.username;
-              objP.Status = 1;
+              objP.Status = null;
               objP.IPAddress = req.connection.remoteAddress;
               objP.FinancialYear = getFinancialYear();
               balModule.changePasssword(objP, function (response1) {

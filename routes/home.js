@@ -1,17 +1,22 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
-var svgCaptcha = require('svg-captcha');
-var crypto = require('crypto');
-var csrf = require('csurf');
-var sha256 = require('js-sha256');
 var balModule = require('../models/homeBALModule');
+var crypto = require('crypto');
+var sha256 = require('js-sha256');
+var csrf = require('csurf');
 var csrfProtection = csrf();
 var parseForm = bodyParser.urlencoded({ extended: false });
 var os = require('os');
 var cache = require('cache-headers');
-var moment = require('moment'); moment().format();
 var request = require('request');
+var svgCaptcha = require('svg-captcha');
+var moment = require('moment'); moment().format();
+var nodeCache = require('node-cache');
+var atob = require('atob');
+const myCache = new nodeCache({ stdTTL: 24 * 60 * 60, checkperiod: 24 * 60 * 60 * 0.3, useClones: false });
+var permit = require('../models/permission');
+var soap = require('soap');
 
 var overrideConfig = {
   'maxAge': 2000,
@@ -80,7 +85,7 @@ var getURL = function (req) {
 
 router.get('/captcha', function (req, res) {
   res.get('X-Frame-Options');
-  var captcha = svgCaptcha.createMathExpr({ color: true, noise: 5 });
+  var captcha = svgCaptcha.createMathExpr({ color: false, noise: 3, background: '#83a5b8', mathMin: 1, mathMax: 9, mathOperator: '+' });
   req.session.captcha = captcha.text;
   res.type('svg');
   res.status(200).send(captcha.data);
@@ -191,80 +196,80 @@ router.post('/plogin', parseForm, csrfProtection, cache.overrideCacheHeaders(ove
         var pwdHash = response[0].PasswordHash;
         var pwdRNo = sha256(pwdHash + req.session.RandomNo);
         if (pwdRNo === req.body.password) {
-          // if (response[0].AccessFailedCount < 5) {
-          //   balModule.getLastLoginStatus(req.body.userName).then(function success(response1) {
-          //     var s = '00:00:00';
-          //     if (response1.length > 0) {
-          //       var ms = moment(getCurrentDateTime(), "DD-MM-YYYY HH:mm:ss").diff(moment(response1[0].LastLoginDateTime, "DD-MM-YYYY HH:mm:ss"));
-          //       var d = moment.duration(ms);
-          //       s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
-          //     }
-          //     if ((response[0].IsLoggedIn === true && (s.substring(0, 1) == 0 && s.substring(2, 4) >= 10) || (s.substring(0, 1) > 0)) || (response[0].IsLoggedIn !== true)) {
-          req.session.username = req.body.userName;
-          req.session.role = response[0].RoleName;
-          req.session.cookie.expires = 1800000;
-          let tempSession = req.session;
-          req.session.regenerate(function (err) {
-            Object.assign(req.session, tempSession);
-          });
-          balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/login', 'LOGIN', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
-          // if (req.session.role != 'JDA_PP' && req.session.role != 'ADMIN') {
-          //   balModule.updateFailedCount(0, response[0].UserID, function success(response) { }, function error(response) { console.log(response.status); });
-          // }
-          // balModule.updateIsLoggedIn(0, response[0].UserID, function success(response) { }, function error(response) { console.log(response.status); });
-          // balModule.checkCPStatus(req.session.username).then(function success(response) {
-          //   if (response.length > 0) {
-          req.session.save(function (err) {
-            switch (req.session.role) {
-              case 'DDH':
-                res.redirect('ddh');
-                break;
-              case 'ADMIN':
-                res.redirect('admin');
-                break;
-              case 'SUPERADMIN':
-                res.redirect('superAdmin');
-                break;
+          if (response[0].AccessFailedCount < 5) {
+            //   balModule.getLastLoginStatus(req.body.userName).then(function success(response1) {
+            //     var s = '00:00:00';
+            //     if (response1.length > 0) {
+            //       var ms = moment(getCurrentDateTime(), "DD-MM-YYYY HH:mm:ss").diff(moment(response1[0].LastLoginDateTime, "DD-MM-YYYY HH:mm:ss"));
+            //       var d = moment.duration(ms);
+            //       s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
+            //     }
+            //     if ((response[0].IsLoggedIn === true && (s.substring(0, 1) == 0 && s.substring(2, 4) >= 10) || (s.substring(0, 1) > 0)) || (response[0].IsLoggedIn !== true)) {
+            req.session.username = req.body.userName;
+            req.session.role = response[0].RoleName;
+            req.session.cookie.expires = 1800000;
+            let tempSession = req.session;
+            req.session.regenerate(function (err) {
+              Object.assign(req.session, tempSession);
+            });
+            balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/login', 'LOGIN', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
+            if (req.session.role != 'ADMIN') {
+              balModule.updateFailedCount(0, response[0].UserID, function success(response) { }, function error(response) { console.log(response.status); });
             }
-          });
-          //   }
-          //   else {
-          //     req.session.save(function (err) {
-          //       res.redirect('changePassword');
-          //     });
-          //   }
-          // }, function error(response) {
-          //   console.log(response.status);
-          // }).catch(function err(error) {
-          //   console.log('An error occurred...', error);
-          // });
-          //     }
-          //     else {
-          //       res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Already Logged In' });
-          //     }
-          //   }, function error(response) {
-          //     console.log(response.status);
-          //   }).catch(function err(error) {
-          //     console.log('An error occurred...', error);
-          //   });
-          // }
-          // else {
-          //   balModule.addActivityLog(req.connection.remoteAddress, response[0].UserID, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/login', 'FAILED', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
-          //   res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Account is locked. Contact Admin.' });
-          // }
+            // balModule.updateIsLoggedIn(0, response[0].UserID, function success(response) { }, function error(response) { console.log(response.status); });
+            balModule.checkCPStatus(req.session.username).then(function success(response) {
+              if (response.length > 0) {
+                req.session.save(function (err) {
+                  switch (req.session.role) {
+                    case 'DDH':
+                      res.redirect('ddh');
+                      break;
+                    case 'ADMIN':
+                      res.redirect('admin');
+                      break;
+                    case 'SUPERADMIN':
+                      res.redirect('superAdmin');
+                      break;
+                  }
+                });
+              }
+              else {
+                req.session.save(function (err) {
+                  res.redirect('changePassword');
+                });
+              }
+            }, function error(response) {
+              console.log(response.status);
+            }).catch(function err(error) {
+              console.log('An error occurred...', error);
+            });
+            //     }
+            //     else {
+            //       res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Already Logged In' });
+            //     }
+            //   }, function error(response) {
+            //     console.log(response.status);
+            //   }).catch(function err(error) {
+            //     console.log('An error occurred...', error);
+            //   });
+          }
+          else {
+            balModule.addActivityLog(req.connection.remoteAddress, response[0].UserID, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/login', 'FAILED', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
+            res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Account is locked due to multiple invalid attempts. Reset your password using the forgot password option.' });
+          }
         }
         else {
           balModule.addActivityLog(req.connection.remoteAddress, response[0].UserID, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/login', 'FAILED', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
-          // if (response[0].AccessFailedCount < 5) {
-          //   if (response[0].RoleName != 'JDA_PP' && response[0].RoleName != 'ADMIN') {
-          //     var failedCount = response[0].AccessFailedCount + 1;
-          //     balModule.updateFailedCount(failedCount, response[0].UserID, function success(response) { }, function error(response) { console.log(response.status); });
-          //   }
-          //   res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Invalid Username or Password' });
-          // }
-          // else {
-          //   res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Account is locked. Contact Admin.' });
-          // }
+          if (response[0].AccessFailedCount < 5) {
+            if (response[0].RoleName != 'ADMIN') {
+              var failedCount = response[0].AccessFailedCount + 1;
+              balModule.updateFailedCount(failedCount, response[0].UserID, function success(response) { }, function error(response) { console.log(response.status); });
+            }
+            res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Invalid Username or Password' });
+          }
+          else {
+            res.render('login', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Login', error: 'Account is locked due to multiple invalid attempts. Reset your password using the forgot password option.' });
+          }
         }
       }
     }, function error(response) {
@@ -278,37 +283,37 @@ router.post('/plogin', parseForm, csrfProtection, cache.overrideCacheHeaders(ove
 router.get('/forgotPassword', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
-  res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', error: '' });
+  res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', mobileNo: '', error: '' });
 });
 
 router.post('/pforgotPassword', parseForm, csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   if (req.body.captcha !== req.session.captcha) {
-    res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', error: 'Invalid Captcha' });
+    res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', mobileNo: '', error: 'Invalid Captcha' });
   }
   else {
-    balModule.getUserDetails(req.body.userName).then(function success(response) {
+    balModule.getUserContactDetails(req.body.userName).then(function success(response) {
       if (response.length === 0) {
-        res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', error: 'Invalid Username' });
+        res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', mobileNo: '', error: 'Invalid Username' });
       }
-      else if (response[0].Status !== true) {
+      // else if (response[0].Status !== true) {
+      //   balModule.addActivityLog(req.connection.remoteAddress, response[0].UserID, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/getUserDetails', 'FAILED', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
+      //   res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', mobileNo: '', error: 'Invalid Username' });
+      // }
+      else if (response[0].MobileNo == null || response[0].MobileNo == 0) {
         balModule.addActivityLog(req.connection.remoteAddress, response[0].UserID, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/getUserDetails', 'FAILED', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
-        res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', error: 'Invalid Username' });
-      }
-      else if (response[0].ContactNo == null || response[0].ContactNo == 0) {
-        balModule.addActivityLog(req.connection.remoteAddress, response[0].UserID, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/getUserDetails', 'FAILED', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
-        res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', error: 'Your mobile number is not registered. Please contact the concerned authority.' });
+        res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', mobileNo: '', error: 'Your mobile number is not registered. Please contact the concerned authority.' });
       }
       else {
         var otp = generateOTP();
         req.session.cookie.expires = 900000;
         req.session.OTP = sha256(otp.toString());
-        req.session.MobileNo = response[0].ContactNo;
+        req.session.MobileNo = response[0].MobileNo;
         req.session.username = req.body.userName;
         req.session.role = response[0].RoleName;
-        var mobileNo = response[0].ContactNo;
+        var mobileNo = response[0].MobileNo;
         SendOTP(mobileNo, otp, function (response1) {
-          res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: response1, error: '' });
+          res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: response1, mobileNo: req.session.MobileNo.toString().substr(6, 4), error: '' });
         });
       }
     }, function error(response) {
@@ -327,6 +332,7 @@ function generateOTP() {
 function SendOTP(mobileNo, OTP, callback) {
   var sms = 'Horticulture Produce Marketing - OTP for Password Reset is ' + OTP;
   var encodeSMS = encodeURI(sms);
+  console.log(sms, encodeSMS, mobileNo);
   request('http://www.apicol.nic.in/Registration/EPestSMS?mobileNo=' + mobileNo + '&sms=' + encodeSMS, { json: true }, (err, res, body) => {
     if (err) {
       console.log(err);
@@ -351,10 +357,10 @@ router.get('/sendOTP', function (req, res, next) {
 router.post('/verifyOTP', parseForm, csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   if (req.session.OTP == sha256(req.body.otp.toString())) {
-    res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: 'Correct OTP', error: '' });
+    res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: 'Correct OTP', mobileNo: '', error: '' });
   }
   else {
-    res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: 'Wrong OTP', error: 'Invalid OTP' });
+    res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: 'Wrong OTP', mobileNo: '', error: 'Invalid OTP' });
   }
 });
 
@@ -371,18 +377,18 @@ router.post('/updatePassword', parseForm, csrfProtection, cache.overrideCacheHea
       var objP = {};
       objP.NewPassword = req.body.npassword;
       objP.UserID = req.session.username;
-      objP.Status = 1;
+      objP.Status = null;
       objP.IPAddress = req.connection.remoteAddress;
       objP.FinancialYear = getFinancialYear();
-      if (req.session.role != 'JDA_PP' && req.session.role != 'ADMIN') {
+      if (req.session.role != 'ADMIN') {
         balModule.updateFailedCount(0, req.session.username, function success(response) { }, function error(response) { console.log(response.status); });
       }
       balModule.changePasssword(objP, function (response1) {
         if (response1 > 0) {
-          res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: 'Password updated successfully.', error: '' });
+          res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: 'Password updated successfully.', mobileNo: '', error: '' });
         }
         else {
-          res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', error: 'Oops! An error has occurred. Please try after sometime.' });
+          res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', mobileNo: '', error: 'Oops! An error has occurred. Please try after sometime.' });
         }
       }, function error(response1) {
         console.log(response1.status);
@@ -390,7 +396,7 @@ router.post('/updatePassword', parseForm, csrfProtection, cache.overrideCacheHea
     }
     else {
       balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/updatePassword', 'FAILED', 'POST', function success(response) { }, function error(response) { console.log(response.status); });
-      res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: '', error: 'This password is already used. Please try a new one.' });
+      res.render('forgotpassword', { randomNo: req.session.RandomNo, csrfToken: req.csrfToken(), title: 'Forgot Password', message: 'Password already used', mobileNo: '', error: 'This password is already used. Please try a new one.' });
     }
   }, function error(response) {
     console.log(response.status);
