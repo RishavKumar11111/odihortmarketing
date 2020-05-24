@@ -11,9 +11,15 @@ app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
     };
 
     $scope.destroyGraph = function () {
-        if (chartSIOAQ) chartSIOAQ.destroy();
+        if (chartSAQ) chartSAQ.destroy();
+        if (chartSIQ) chartSIQ.destroy();
+        if (chartSOQ) chartSOQ.destroy();
         $scope.stockInOutAvailableDistrictBlockWise = [];
+        $scope.totalStockInQtls = 0;
+        $scope.totalStockOutQtls = 0;
         $scope.totalStockAvailableQtls = 0;
+        $scope.totalStockInNos = 0;
+        $scope.totalStockOutNos = 0;
         $scope.totalStockAvailableNos = 0;
     };
 
@@ -62,8 +68,12 @@ app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
         });
     };
 
-    var ctxSIOAQ = document.querySelector("#chartSIOAQ");
-    var chartSIOAQ = null;
+    var ctxSAQ = document.querySelector("#chartSAQ");
+    var chartSAQ = null;
+    var ctxSIQ = document.querySelector("#chartSIQ");
+    var chartSIQ = null;
+    var ctxSOQ = document.querySelector("#chartSOQ");
+    var chartSOQ = null;
     $scope.getAvailabilityDetails = function () {
         $scope.ddlDistricts = ($scope.ddlDistricts == undefined || $scope.ddlDistricts == null || $scope.ddlDistricts == '') ? 0 : $scope.ddlDistricts;
         $scope.ddlItems = ($scope.ddlItems == undefined || $scope.ddlItems == null || $scope.ddlItems == '') ? 0 : $scope.ddlItems;
@@ -98,19 +108,27 @@ app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
                     var districtsblocks = [];
                     var availableQuantitiesQtls = [];
                     var availableQuantitiesNos = [];
+                    var stockInQuantitiesQtls = [];
+                    var stockInQuantitiesNos = [];
+                    var stockOutQuantitiesQtls = [];
+                    var stockOutQuantitiesNos = [];
                     angular.forEach($scope.stockInOutAvailableDistrictBlockWise[0], function (i) {
                         if (i.DistrictName != undefined) {
                             districtsblocks.push(i.DistrictName);
                         }
                         availableQuantitiesQtls.push(i.AvailableQuantity);
+                        stockInQuantitiesQtls.push(i.Quantity);
+                        stockOutQuantitiesQtls.push(i.SaleQuantity);
                     })
                     angular.forEach($scope.stockInOutAvailableDistrictBlockWise[1], function (i) {
                         if (i.BlockName != undefined) {
                             districtsblocks.push(i.BlockName);
                         }
                         availableQuantitiesNos.push(i.AvailableQuantity);
+                        stockInQuantitiesNos.push(i.Quantity);
+                        stockOutQuantitiesNos.push(i.SaleQuantity);
                     })
-                    var optionsSIOAQ = {
+                    var optionsSAQ = {
                         series: [{
                             name: 'Available Quantity (in Lakh Nos.)',
                             type: 'column',
@@ -171,8 +189,106 @@ app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
                             }
                         }
                     };
-                    chartSIOAQ = new ApexCharts(ctxSIOAQ, optionsSIOAQ);
-                    chartSIOAQ.render();
+                    var optionsSIQ = {
+                        series: [{
+                            name: 'Stock In Quantity (in Lakh Nos.)',
+                            data: stockInQuantitiesNos
+                        }, {
+                            name: 'Stock In Quantity (in Qtls.)',
+                            data: stockInQuantitiesQtls
+                        }],
+                        colors: ['rgb(0, 143, 251)', 'rgb(0, 227, 150)'],
+                        chart: {
+                            type: 'bar',
+                            height: 350
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                                columnWidth: '75%',
+                                endingShape: 'rounded'
+                            },
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        stroke: {
+                            show: true,
+                            width: 2,
+                            colors: ['transparent']
+                        },
+                        xaxis: {
+                            categories: districtsblocks,
+                        },
+                        yaxis: {
+                            title: {
+                                text: 'Stock In Quantity'
+                            }
+                        },
+                        fill: {
+                            opacity: 1
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function (val) {
+                                    return val
+                                }
+                            }
+                        }
+                    };
+                    var optionsSOQ = {
+                        series: [{
+                            name: 'Stock Out Quantity (in Lakh Nos.)',
+                            data: stockOutQuantitiesNos
+                        }, {
+                            name: 'Stock Out Quantity (in Qtls.)',
+                            data: stockOutQuantitiesQtls
+                        }],
+                        colors: ['rgb(0, 143, 251)', 'rgb(0, 227, 150)'],
+                        chart: {
+                            type: 'bar',
+                            height: 350
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                                columnWidth: '75%',
+                                endingShape: 'rounded'
+                            },
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        stroke: {
+                            show: true,
+                            width: 2,
+                            colors: ['transparent']
+                        },
+                        xaxis: {
+                            categories: districtsblocks,
+                        },
+                        yaxis: {
+                            title: {
+                                text: 'Stock Out Quantity'
+                            }
+                        },
+                        fill: {
+                            opacity: 1
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function (val) {
+                                    return val
+                                }
+                            }
+                        }
+                    };
+                    chartSAQ = new ApexCharts(ctxSAQ, optionsSAQ);
+                    chartSAQ.render();
+                    chartSIQ = new ApexCharts(ctxSIQ, optionsSIQ);
+                    chartSIQ.render();
+                    chartSOQ = new ApexCharts(ctxSOQ, optionsSOQ);
+                    chartSOQ.render();
                 }
                 else {
                     $scope.destroyGraph();
