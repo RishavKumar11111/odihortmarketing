@@ -123,6 +123,16 @@ router.get('/tradersList', csrfProtection, permit.permission('ADMIN'), cache.ove
   res.render('admin/traderslist', { title: 'Traders List', csrfToken: req.csrfToken() });
 });
 
+router.get('/farmersCountDistrictWise', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('admin/farmerscountdistrictwise', { title: 'Farmers\' Count District-wise', csrfToken: req.csrfToken() });
+});
+
+router.get('/unavailableItemsList', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('admin/unavailableitemslist', { title: 'Unavailable Items List', csrfToken: req.csrfToken() });
+});
+
 router.get('/changePassword', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
@@ -356,6 +366,40 @@ router.get('/getStockInOutAvailableDistrictBlockWise', permit.permission('ADMIN'
     res.send(response);
   }, function error(response) {
     console.log(response.status);
+  });
+});
+
+router.get('/getFarmersCount', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getFarmersCount().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getFarmerDetailsDistrictWise', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.query.districtCode;
+  balModule.getFarmerDetailsDistrictWise(districtCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getUnavailableItems', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getUnavailableItems().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
   });
 });
 

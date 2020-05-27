@@ -229,6 +229,18 @@
                                         <p>Traders List</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="#!farmersCountDistrictWise" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Farmers' Count District-wise</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#!unavailableItemsList" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Unavailable Items List</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -314,6 +326,12 @@
                 }).when("/tradersList", {
                     templateUrl: "admin/tradersList",
                     controller: 'myAdminTradersListCtrl'
+                }).when("/farmersCountDistrictWise", {
+                    templateUrl: "admin/farmersCountDistrictWise",
+                    controller: 'myAdminFarmersCountCtrl'
+                }).when("/unavailableItemsList", {
+                    templateUrl: "admin/unavailableItemsList",
+                    controller: 'myAdminUnavailableItemsListCtrl'
                 }).when("/changePassword", {
                     templateUrl: "admin/changePassword",
                     controller: 'myAdminChangePasswordCtrl'
@@ -354,6 +372,8 @@
     <script src="../../public/controllers/admin/myAdminStockOutListCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminStockInOutAvailableDistrictBlockWiseCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminTradersListCtrl.js"></script>
+    <script src="../../public/controllers/admin/myAdminFarmersCountCtrl.js"></script>
+    <script src="../../public/controllers/admin/myAdminUnavailableItemsListCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminChangePasswordCtrl.js"></script>
     <!-- jQuery -->
     <script src="../../AdminLTE/plugins/jquery/jquery.min.js"></script>

@@ -237,3 +237,33 @@ exports.getStockInOutAvailableDistrictBlockWise = function (districtCode, itemID
         console.log('An error occurred...', err);
     });
 };
+
+exports.getFarmersCount = function () {
+    return sequelize.query('select count(distinct(FarmerMobileNo)) FarmerCount from StockIn select DistrictCode, DistrictName, isnull(FarmerCount, 0) FarmerCount from LGDDistrict a left join (select substring(UserID, 5, 3) District, count(distinct(FarmerMobileNo)) FarmerCount from StockIn group by UserID) b on a.DistrictCode = b.District order by DistrictName', {
+        type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getFarmerDetailsDistrictWise = function (districtCode) {
+    return sequelize.query('select FarmerName, FarmerMobileNo from StockIn where substring(UserID, 5, 3) = :district_code group by FarmerName, FarmerMobileNo order by FarmerName', {
+        replacements: { district_code: districtCode }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getUnavailableItems = function () {
+    return sequelize.query("select ItemName, sum(Quantity) StockInQuantity, isnull((sum(SaleQuantity)), 0) StockOutQuantity, sum(Quantity) - isnull((sum(SaleQuantity)), 0) AvailableQuantity, case when Unit = 'Q' then 'Qtls.' else 'Lakh Nos.' end Unit from StockIn a inner join Items b on a.ItemID = b.ItemID left join (select StockID, isnull(sum(SaleQuantity), 0) SaleQuantity from StockOut group by StockID) c on a.StockID = c.StockID group by ItemName, Unit having sum(Quantity) - isnull(sum(SaleQuantity), 0) = 0 order by ItemName", {
+        type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
