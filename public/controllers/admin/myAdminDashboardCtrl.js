@@ -1,8 +1,206 @@
 app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
 
+    var ctxSIOQ = document.querySelector("#chartSIOQ");
+    var chartSIOQ = null;
+    var ctxSION = document.querySelector("#chartSION");
+    var chartSION = null;
     $scope.getDashboardNoDetails = function () {
         $http.get('http://localhost:3000/admin/getDashboardNoDetails').then(function success(response) {
             $scope.dashboardNoDetails = response.data;
+            var sioPercentQtls = [100];
+            var sioQuantityQtls = [];
+            var sioUnitQtls = {};
+            var sioPercentNos = [100];
+            var sioQuantityNos = [];
+            var sioUnitNos = {};
+            angular.forEach($scope.dashboardNoDetails[2], function (i) {
+                if (i.Unit == 'Qtls.') {
+                    $scope.siQtls = i.Quantity;
+                    sioQuantityQtls.push(i.Quantity);
+                    sioUnitQtls = i.Unit;
+                }
+                else {
+                    $scope.siNos = i.Quantity;
+                    sioQuantityNos.push(i.Quantity);
+                    sioUnitNos = i.Unit;
+                }
+            });
+            angular.forEach($scope.dashboardNoDetails[3], function (i) {
+                if (i.Unit == 'Qtls.') {
+                    var percentSOQQtls = ((i.SaleQuantity / $scope.siQtls) * 100).toFixed(2)
+                    sioPercentQtls.push(percentSOQQtls);
+                    sioQuantityQtls.push(i.SaleQuantity);
+                    sioUnitQtls = i.Unit;
+                }
+                else {
+                    var percentSOQNos = ((i.SaleQuantity / $scope.siNos) * 100).toFixed(2)
+                    sioPercentNos.push(percentSOQNos);
+                    sioQuantityNos.push(i.SaleQuantity);
+                    sioUnitNos = i.Unit;
+                }
+            });
+            var optionsSIOQ = {
+                series: sioPercentQtls,
+                realQuantity: sioQuantityQtls,
+                unit: sioUnitQtls,
+                chart: {
+                    height: 350,
+                    type: 'radialBar',
+                    toolbar: {
+                        show: true
+                    }
+                },
+                plotOptions: {
+                    radialBar: {
+                        dataLabels: {
+                            name: {
+                                fontSize: '20px',
+                                show: true
+                            },
+                            value: {
+                                fontSize: '15px',
+                                show: true
+                            },
+                            total: {
+                                show: true,
+                                color: '#000000',
+                                label: 'Stock Out',
+                                formatter: function (w) {
+                                    return w.globals.series[1] + '%';
+                                }
+                            }
+                        }
+                    }
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'light',
+                        type: 'horizontal',
+                        shadeIntensity: 0.3,
+                        inverseColors: true,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
+                    },
+                },
+                stroke: {
+                    lineCap: 'round'
+                },
+                // colors: ['', ''],
+                labels: ['Stock In', 'Stock Out'],
+                legend: {
+                    show: true,
+                    floating: true,
+                    fontSize: '15px',
+                    position: 'left',
+                    offsetX: -50,
+                    offsetY: -10,
+                    labels: {
+                        useSeriesColors: true,
+                    },
+                    markers: {
+                        size: 0
+                    },
+                    formatter: function (seriesName, opts) {
+                        return seriesName + ':  ' + opts.w.config.realQuantity[opts.seriesIndex] + ' ' + opts.w.config.unit;
+                    },
+                    itemMargin: {
+                        vertical: 1
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        legend: {
+                            show: false
+                        }
+                    }
+                }]
+            };
+            var optionsSION = {
+                series: sioPercentNos,
+                realQuantity: sioQuantityNos,
+                unit: sioUnitNos,
+                chart: {
+                    height: 350,
+                    type: 'radialBar',
+                    toolbar: {
+                        show: true
+                    }
+                },
+                plotOptions: {
+                    radialBar: {
+                        dataLabels: {
+                            name: {
+                                fontSize: '20px',
+                                show: true
+                            },
+                            value: {
+                                fontSize: '15px',
+                                show: true
+                            },
+                            total: {
+                                show: true,
+                                color: '#000000',
+                                label: 'Stock Out',
+                                formatter: function (w) {
+                                    return w.globals.series[1] + '%';
+                                }
+                            }
+                        }
+                    }
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'light',
+                        type: 'horizontal',
+                        shadeIntensity: 0.3,
+                        inverseColors: true,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
+                    },
+                },
+                stroke: {
+                    lineCap: 'round'
+                },
+                // colors: ['', ''],
+                labels: ['Stock In', 'Stock Out'],
+                legend: {
+                    show: true,
+                    floating: true,
+                    fontSize: '15px',
+                    position: 'left',
+                    offsetX: -50,
+                    offsetY: -10,
+                    labels: {
+                        useSeriesColors: true,
+                    },
+                    markers: {
+                        size: 0
+                    },
+                    formatter: function (seriesName, opts) {
+                        return seriesName + ':  ' + opts.w.config.realQuantity[opts.seriesIndex] + ' ' + opts.w.config.unit;
+                    },
+                    itemMargin: {
+                        vertical: 1
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        legend: {
+                            show: false
+                        }
+                    }
+                }]
+            };
+            chartSIOQ = new ApexCharts(ctxSIOQ, optionsSIOQ);
+            chartSIOQ.render();
+            chartSION = new ApexCharts(ctxSION, optionsSION);
+            chartSION.render();
         }, function error(response) {
             console.log(response.status);
         }).catch(function err(error) {
@@ -231,7 +429,7 @@ app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
                         tooltip: {
                             y: {
                                 formatter: function (val) {
-                                    return val
+                                    return val;
                                 }
                             }
                         }
@@ -278,7 +476,7 @@ app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
                         tooltip: {
                             y: {
                                 formatter: function (val) {
-                                    return val
+                                    return val;
                                 }
                             }
                         }

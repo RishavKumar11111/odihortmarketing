@@ -20,16 +20,18 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
-                    <div class="small-box bg-info" style="min-height: 90%; max-height: 90%;">
-                        <div class="inner">
-                            <p style="margin-bottom: 5px;">Total No. of Farmers (Stock In)</p>
-                            <h3>{{dashboardNoDetails[0][0].NoOfFarmersStockIn}}</h3>
-                        </div>
-                        <!-- <div class="icon">
+                    <a href="#!farmersCountDistrictWise">
+                        <div class="small-box bg-info" style="min-height: 90%; max-height: 90%;">
+                            <div class="inner">
+                                <p style="margin-bottom: 5px;">Total No. of Farmers (Stock In)</p>
+                                <h3>{{dashboardNoDetails[0][0].NoOfFarmersStockIn}}</h3>
+                            </div>
+                            <!-- <div class="icon">
                             <i class="ion ion-pie-graph"></i>
+                        </div> -->
+                            <p style="text-align: center;">More info <i class="fas fa-arrow-circle-right"></i></p>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
-                    </div>
+                    </a>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
                     <div class="small-box bg-success" style="min-height: 90%; max-height: 90%;">
@@ -109,59 +111,132 @@
                     </a>
                 </div>
             </div>
-            <div class="card card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Select Category, Item and District</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                class="fas fa-minus"></i></button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group">
-                                <label class="control-label">Categories</label>
-                                <select class="form-control select2" ng-model="ddlCategories"
-                                    ng-options="i.CategoryID as i.CategoryName for i in categories"
-                                    ng-change="getItemsByCategory(ddlCategories); destroyGraph();">
-                                    <option value="" disabled>Select Category</option>
-                                </select>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="card card-primary">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Stock In & Stock Out Quantity (in Qtls)</h3>
+                                <a href="#!stockInOutAvailableDistrictBlockWise">View Report</a>
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group">
-                                <label class="control-label">Items</label>
-                                <select class="form-control select2" ng-model="ddlItems"
-                                    ng-options="i.ItemID as i.ItemName for i in items"
-                                    ng-change=" destroyGraph();">
-                                    <option value="" disabled>Select Item</option>
-                                </select>
+                        <div class="card-body">
+                            <!-- <div class="d-block">
+                                <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">820</span>
+                                    <span>Visitors Over Time</span>
+                                </p>
+                                <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                        <i class="fas fa-arrow-up"></i> 12.5%
+                                    </span>
+                                    <span class="text-muted">Since last week</span>
+                                </p>
+                            </div> -->
+                            <div class="position-relative mb-4">
+                                <div id="chartSIOQ"></div>
                             </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group">
-                                <label class="control-label">Districts</label>
-                                <select class="form-control select2" ng-model="ddlDistricts"
-                                    ng-options="i.DistrictCode as i.DistrictName for i in districts"
-                                    ng-change=" destroyGraph();">
-                                    <option value="" disabled>Select District</option>
-                                </select>
-                            </div>
+                            <!-- <div class="d-flex flex-row justify-content-end">
+                                <span class="mr-2">
+                                    <i class="fas fa-square text-primary"></i> This Week
+                                </span>
+                                <span>
+                                    <i class="fas fa-square text-gray"></i> Last Week
+                                </span>
+                            </div> -->
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <button type="button" class="btn btn-primary" ng-click="destroyGraph(); getAvailabilityDetails()">Generate Graphs</button>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="card card-primary">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Stock In & Stock Out Quantity (in Lakh Nos.)</h3>
+                                <a href="#!stockInOutAvailableDistrictBlockWise">View Report</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- <div class="d-block">
+                                <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">820</span>
+                                    <span>Visitors Over Time</span>
+                                </p>
+                                <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                        <i class="fas fa-arrow-up"></i> 12.5%
+                                    </span>
+                                    <span class="text-muted">Since last week</span>
+                                </p>
+                            </div> -->
+                            <div class="position-relative mb-4">
+                                <div id="chartSION"></div>
+                            </div>
+                            <!-- <div class="d-flex flex-row justify-content-end">
+                                <span class="mr-2">
+                                    <i class="fas fa-square text-primary"></i> This Week
+                                </span>
+                                <span>
+                                    <i class="fas fa-square text-gray"></i> Last Week
+                                </span>
+                            </div> -->
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <div class="content">
-        <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Select Category, Item and District</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                        class="fas fa-minus"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Categories</label>
+                                        <select class="form-control select2" ng-model="ddlCategories"
+                                            ng-options="i.CategoryID as i.CategoryName for i in categories"
+                                            ng-change="getItemsByCategory(ddlCategories); destroyGraph();">
+                                            <option value="" disabled>Select Category</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Items</label>
+                                        <select class="form-control select2" ng-model="ddlItems"
+                                            ng-options="i.ItemID as i.ItemName for i in items"
+                                            ng-change=" destroyGraph();">
+                                            <option value="" disabled>Select Item</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Districts</label>
+                                        <select class="form-control select2" ng-model="ddlDistricts"
+                                            ng-options="i.DistrictCode as i.DistrictName for i in districts"
+                                            ng-change=" destroyGraph();">
+                                            <option value="" disabled>Select District</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-primary"
+                                ng-click="destroyGraph(); getAvailabilityDetails()">Generate Graphs</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card card-primary">
                         <div class="card-header border-0">
                             <div class="d-flex justify-content-between">
                                 <h3 class="card-title">Stock In, Stock Out and Available Quantity</h3>
@@ -196,9 +271,11 @@
                             <div class="position-relative mb-4">
                                 <div id="chartSAQ"></div>
                             </div>
+                            <hr>
                             <div class="position-relative mb-4">
                                 <div id="chartSIQ"></div>
                             </div>
+                            <hr>
                             <div class="position-relative mb-4">
                                 <div id="chartSOQ"></div>
                             </div>
@@ -215,5 +292,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
