@@ -1,0 +1,34 @@
+<%- include('header.ejs') -%>
+<script type="text/javascript" src="../public/controllers/myDDHListCtrl.js"></script>
+<link type="text/css" rel=stylesheet href="../public/stylesheets/bootstrap.min.css" />
+<div class="content-outer" id="COntentDiv" ng-app="myApp" ng-controller="myDDHListCtrl" ng-cloak
+    ng-init="getDDHDetails()">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="font-weight: bold; background: #074b72; color: white;">DDH List
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover table-striped jambo_table bulk_action">
+                            <thead>
+                                <tr class="headings">
+                                    <td style="vertical-align: middle"><b>Serial No.</b></td>
+                                    <td style="vertical-align: middle"><b>District</b></td>
+                                    <td style="vertical-align: middle"><b>DDH Name</b></td>
+                                    <td style="vertical-align: middle"><b>DDH Mobile No.</b></td>
+                                </tr>
+                            </thead>
+                            <tr ng-repeat="i in ddhDetails">
+                                <td style="vertical-align: middle">{{$index + 1}}</td>
+                                <td style="vertical-align: middle">{{i.DistrictName}}</td>
+                                <td style="vertical-align: middle">{{i.DDHName}}</td>
+                                <td style="vertical-align: middle">{{i.DDHMobileNo}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('footer.ejs') -%>
