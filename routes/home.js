@@ -172,6 +172,11 @@ router.get('/videoGallery', csrfProtection, cache.overrideCacheHeaders(overrideC
   res.render('videogallery', { title: 'Video Gallery', csrfToken: req.csrfToken() });
 });
 
+router.get('/ddhList', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('ddhlist', { title: 'DDH List', csrfToken: req.csrfToken() });
+});
+
 router.get('/login', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
@@ -436,6 +441,17 @@ router.get('/getItemDetailsBGVWise', function (req, res, next) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);
+  });
+});
+
+router.get('/getDDHDetails', function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getDDHDetails().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
   });
 });
 

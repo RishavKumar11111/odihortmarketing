@@ -146,3 +146,13 @@ exports.getItemDetailsBGVWise = function (districtCode, itemID, callback) {
         console.log('An error occurred...', err);
     });
 };
+
+exports.getDDHDetails = function () {
+    return sequelize.query('select DistrictName, DDHName, DDHMobileNo from DDHDistrictMapping a inner join LGDDistrict b on a.DistrictCode = b.DistrictCode order by DistrictName, DDHName', {
+        type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
