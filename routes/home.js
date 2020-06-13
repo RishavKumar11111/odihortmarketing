@@ -17,6 +17,22 @@ var atob = require('atob');
 const myCache = new nodeCache({ stdTTL: 24 * 60 * 60, checkperiod: 24 * 60 * 60 * 0.3, useClones: false });
 var permit = require('../models/permission');
 var soap = require('soap');
+var fse = require('fs-extra');
+
+const documentsFolder = './public/documents/soil_fertility_maps';
+
+const getAllDirFiles = function (documentsFolder, arrayOfFiles) {
+  files = fse.readdirSync(documentsFolder)
+  arrayOfFiles = arrayOfFiles || [];
+  files.forEach(function (file) {
+    if (fse.statSync(documentsFolder + "/" + file).isDirectory()) {
+      arrayOfFiles = getAllFiles(documentsFolder + "/" + file, arrayOfFiles)
+    } else {
+      arrayOfFiles.push(file)
+    }
+  })
+  return arrayOfFiles;
+}
 
 var overrideConfig = {
   'maxAge': 2000,
@@ -175,6 +191,16 @@ router.get('/videoGallery', csrfProtection, cache.overrideCacheHeaders(overrideC
 router.get('/ddhList', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   res.render('ddhlist', { title: 'DDH List', csrfToken: req.csrfToken() });
+});
+
+router.get('/soilFertilityStatus', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('soilfertilitystatus', { title: 'Soil Fertility Status', csrfToken: req.csrfToken(), message: '' });
+});
+
+router.get('/soilProperties', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('soilproperties', { title: 'Soil Properties', csrfToken: req.csrfToken() });
 });
 
 router.get('/login', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
@@ -453,6 +479,100 @@ router.get('/getDDHDetails', function (req, res, next) {
   }).catch(function err(error) {
     console.log('An error occurred...', error);
   });
+});
+
+router.get('/getSoilNutrients', function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getSoilNutrients().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getSoilTypes', function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getSoilTypes().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getDistrictsByDistrictCodes', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCodes = [];
+  var type = req.query.type;
+  if (type == 'fertilityStatus') {
+    fse.readdirSync(documentsFolder).forEach(file => {
+      if (districtCodes.length == 0) {
+        districtCodes.push(file.substr(0, 3));
+      }
+      else {
+        if (!districtCodes.includes(file.substr(0, 3))) {
+          districtCodes.push(file.substr(0, 3));
+        }
+      }
+    })
+  }
+  else {
+    fse.readdirSync('./public/documents/soil_properties').forEach(file => {
+      if (districtCodes.length == 0) {
+        districtCodes.push(file.substr(0, 3));
+      }
+      else {
+        if (!districtCodes.includes(file.substr(0, 3))) {
+          districtCodes.push(file.substr(0, 3));
+        }
+      }
+    })
+  }
+  balModule.getDistrictsByDistrictCodes(districtCodes).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/checkSoilFertilityMaps', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var soilNutrientName = req.query.soilNutrientName;
+  var soilTypeName = req.query.soilTypeName;
+  var districtCode = req.query.districtCode;
+  var counter = 0, count = 0;
+  fse.readdirSync(documentsFolder).forEach(file => {
+    count++;
+    if (file == districtCode.toString() + ' - ' + soilNutrientName + ' - ' + soilTypeName + '.pdf') {
+      counter++;
+    }
+  })
+  if (getAllDirFiles(documentsFolder).length == count && counter == 1) {
+    res.send('The Soil Fertility Map is found.');
+    // res.sendFile(process.cwd() + documentsFolder.replace('.', '') + '/' + districtCode.toString() + ' - ' + soilNutrientName + ' - ' + soilTypeName + '.pdf')
+  }
+  else {
+    res.send('The Soil Fertility Map is not found.');
+  }
+});
+
+router.get('/getSoilFertilityMaps', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var soilNutrientName = req.query.soilNutrientName;
+  var soilTypeName = req.query.soilTypeName;
+  var districtCode = req.query.districtCode;
+  res.sendFile(process.cwd() + documentsFolder.replace('.', '') + '/' + districtCode.toString() + ' - ' + soilNutrientName + ' - ' + soilTypeName + '.pdf')
+});
+
+router.get('/getSoilProperties', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.query.districtCode;
+  res.sendFile(process.cwd() + './public/documents/soil_properties'.replace('.', '') + '/' + districtCode.toString() + ' Soil Properties.pdf')
 });
 
 module.exports = router;

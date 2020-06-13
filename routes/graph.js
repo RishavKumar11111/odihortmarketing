@@ -17,6 +17,7 @@ var permit = require('../models/permission');
 var atob = require('atob');
 var request = require('request');
 var svgCaptcha = require('svg-captcha');
+var fse = require('fs-extra');
 
 router.get('/getGraph', function (req, res) {
   var getValue = myCache.get('graphData');

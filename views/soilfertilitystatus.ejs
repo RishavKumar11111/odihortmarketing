@@ -1,0 +1,59 @@
+<%- include('header.ejs') -%>
+<script type="text/javascript" src="../public/controllers/mySoilFertilityStatusCtrl.js"></script>
+<link type="text/css" rel=stylesheet href="../public/stylesheets/bootstrap.min.css" />
+<div class="content-outer" id="COntentDiv" ng-app="myApp" ng-controller="mySoilFertilityStatusCtrl" ng-cloak
+    ng-init="getSoilNutrients(); getSoilTypes(); getDistrictsByDistrictCodes();" style="margin-bottom: 2.2%;">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="font-weight: bold; background: #074b72; color: white;">Soil
+                        Fertility Status
+                    </div>
+                    <div class="panel-body" style="margin-bottom: 1%;">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label">Select Soil Parameter <span
+                                        style="color: red">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    <select class="form-control" ng-model="ddlSoilNutrient"
+                                        ng-options="i.SoilNutrientID as i.SoilNutrientName for i in soilNutrients">
+                                        <option value="" disabled>Select Soil Parameter</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label">Select Soil Type <span style="color: red">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    <select class="form-control" ng-model="ddlSoilType"
+                                        ng-options="i.SoilTypeID as i.SoilTypeName for i in soilTypes">
+                                        <option value="" disabled>Select Soil Type</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label">Select District <span style="color: red">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    <select class="form-control" ng-model="ddlDistrict"
+                                        ng-options="i.DistrictCode as i.DistrictName for i in districts">
+                                        <option value="" disabled>Select District</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer" style="display: flex;">
+                        <input type="button" class="btn btn-success"
+                            style="background-color:#074b72; color:white; margin-left: 3%;"
+                            value="View Soil Fertility Map" ng-click="checkSoilFertilityMaps()" />
+                        <p ng-show="notFound != ''" style="color: red; margin: 8px; padding-left: 63%;"><b>{{notFound}}</b></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer.ejs') -%>

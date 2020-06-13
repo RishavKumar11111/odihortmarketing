@@ -156,3 +156,33 @@ exports.getDDHDetails = function () {
         console.log('An error occurred...', err);
     });
 };
+
+exports.getSoilNutrients = function () {
+    return sequelize.query('select SoilNutrientID, SoilNutrientName from SoilNutrient', {
+        type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getSoilTypes = function () {
+    return sequelize.query('select SoilTypeID, SoilTypeName from SoilType', {
+        type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getDistrictsByDistrictCodes = function (districtCodes) {
+    return sequelize.query('select DistrictCode, DistrictName from LGDDistrict where DistrictCode in (:district_codes)', {
+        replacements: { district_codes: districtCodes }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};

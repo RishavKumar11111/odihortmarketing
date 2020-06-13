@@ -17,6 +17,7 @@ const myCache = new nodeCache({ stdTTL: 24 * 60 * 60, checkperiod: 24 * 60 * 60 
 var request = require('request');
 var soap = require('soap');
 var svgCaptcha = require('svg-captcha');
+var fse = require('fs-extra');
 
 var overrideConfig = {
   'maxAge': 2000,
