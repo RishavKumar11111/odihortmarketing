@@ -51,7 +51,7 @@ app.controller('mySoilFertilityStatusCtrl', function ($scope, $http, $filter) {
             });
         }
         else {
-            alert('Please select Soil Nutrient, Soil Type and District.');
+            alert('Please select Soil Parameter, Soil Type and District.');
         }
     };
 
