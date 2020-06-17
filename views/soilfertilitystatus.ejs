@@ -2,7 +2,7 @@
 <script type="text/javascript" src="../public/controllers/mySoilFertilityStatusCtrl.js"></script>
 <link type="text/css" rel=stylesheet href="../public/stylesheets/bootstrap.min.css" />
 <div class="content-outer" id="COntentDiv" ng-app="myApp" ng-controller="mySoilFertilityStatusCtrl" ng-cloak
-    ng-init="getSoilNutrients(); getSoilTypes(); getDistrictsByDistrictCodes();" style="margin-bottom: 2.2%;">
+    ng-init="getSoilTypes(); getDistrictsByDistrictCodes();" style="margin-bottom: 2.2%;">
     <div class="content">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -13,6 +13,16 @@
                     <div class="panel-body" style="margin-bottom: 1%;">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label">Select Soil Type <span style="color: red">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    <select class="form-control" ng-model="ddlSoilType"
+                                        ng-options="i.SoilTypeID as i.SoilTypeName for i in soilTypes" ng-change="getSoilNutrients()">
+                                        <option value="" disabled>Select Soil Type</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-xs-12">
                                 <label class="control-label">Select Soil Parameter <span
                                         style="color: red">*</span></label>
                                 <div class="input-group">
@@ -20,16 +30,6 @@
                                     <select class="form-control" ng-model="ddlSoilNutrient"
                                         ng-options="i.SoilNutrientID as i.SoilNutrientName for i in soilNutrients">
                                         <option value="" disabled>Select Soil Parameter</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12">
-                                <label class="control-label">Select Soil Type <span style="color: red">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                                    <select class="form-control" ng-model="ddlSoilType"
-                                        ng-options="i.SoilTypeID as i.SoilTypeName for i in soilTypes">
-                                        <option value="" disabled>Select Soil Type</option>
                                     </select>
                                 </div>
                             </div>

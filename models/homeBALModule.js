@@ -157,8 +157,8 @@ exports.getDDHDetails = function () {
     });
 };
 
-exports.getSoilNutrients = function () {
-    return sequelize.query('select SoilNutrientID, SoilNutrientName from SoilNutrient', {
+exports.getSoilTypes = function () {
+    return sequelize.query('select SoilTypeID, SoilTypeName from SoilType', {
         type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
@@ -167,9 +167,9 @@ exports.getSoilNutrients = function () {
     });
 };
 
-exports.getSoilTypes = function () {
-    return sequelize.query('select SoilTypeID, SoilTypeName from SoilType', {
-        type: sequelize.QueryTypes.SELECT
+exports.getSoilNutrients = function (soilNutrientName) {
+    return sequelize.query('select SoilNutrientID, SoilNutrientName from SoilNutrient where SoilNutrientName in (:soil_nutrient_name)', {
+        replacements: { soil_nutrient_name: soilNutrientName }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
     }).catch(function error(err) {

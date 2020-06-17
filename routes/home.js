@@ -481,9 +481,9 @@ router.get('/getDDHDetails', function (req, res, next) {
   });
 });
 
-router.get('/getSoilNutrients', function (req, res, next) {
+router.get('/getSoilTypes', function (req, res, next) {
   res.get('X-Frame-Options');
-  balModule.getSoilNutrients().then(function success(response) {
+  balModule.getSoilTypes().then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);
@@ -492,9 +492,16 @@ router.get('/getSoilNutrients', function (req, res, next) {
   });
 });
 
-router.get('/getSoilTypes', function (req, res, next) {
+router.get('/getSoilNutrients', function (req, res, next) {
   res.get('X-Frame-Options');
-  balModule.getSoilTypes().then(function success(response) {
+  var soilType = req.query.soilType;
+  var soilNutrientName = [];
+  fse.readdirSync(documentsFolder).forEach(file => {
+    if (!soilNutrientName.includes(file.split(' - ')[1]) && file.split(' - ')[2] == soilType + '.pdf') {
+      soilNutrientName.push(file.split(' - ')[1]);
+    }
+  })
+  balModule.getSoilNutrients(soilNutrientName).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);
@@ -509,13 +516,8 @@ router.get('/getDistrictsByDistrictCodes', function (req, res, next) {
   var type = req.query.type;
   if (type == 'fertilityStatus') {
     fse.readdirSync(documentsFolder).forEach(file => {
-      if (districtCodes.length == 0) {
+      if (!districtCodes.includes(file.substr(0, 3))) {
         districtCodes.push(file.substr(0, 3));
-      }
-      else {
-        if (!districtCodes.includes(file.substr(0, 3))) {
-          districtCodes.push(file.substr(0, 3));
-        }
       }
     })
   }

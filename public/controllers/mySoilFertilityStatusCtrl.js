@@ -3,7 +3,8 @@ var app = angular.module('myApp', []);
 app.controller('mySoilFertilityStatusCtrl', function ($scope, $http, $filter) {
 
     $scope.getSoilNutrients = function () {
-        $http.get('http://localhost:3000/getSoilNutrients').then(function success(response) {
+        $scope.soilTypeName = $filter('filter')($scope.soilTypes, { SoilTypeID: $scope.ddlSoilType }, true)[0].SoilTypeName;
+        $http.get('http://localhost:3000/getSoilNutrients?soilType=' + $scope.soilTypeName).then(function success(response) {
             $scope.soilNutrients = response.data;
         }, function error(response) {
             console.log(response.status);
