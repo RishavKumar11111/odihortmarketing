@@ -329,6 +329,7 @@ app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
                     stockInQuantitiesNos.push(i.Quantity);
                     stockOutQuantitiesNos.push(i.SaleQuantity);
                 })
+                var maxStockIn = Math.max.apply(null, stockInQuantitiesQtls) >= Math.max.apply(null, stockInQuantitiesNos) ? Math.max.apply(null, stockInQuantitiesQtls) : Math.max.apply(null, stockInQuantitiesNos);
                 var optionsSAQ = {
                     series: [{
                         name: 'Available Quantity (in Lakh Nos.)',
@@ -375,7 +376,9 @@ app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
                         title: {
                             text: 'Available Quantity',
                         },
-                        min: 0
+                        min: 0,
+                        tickAmount: 5,
+                        max: maxStockIn
                     },
                     tooltip: {
                         shared: true,
@@ -424,7 +427,10 @@ app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
                     yaxis: {
                         title: {
                             text: 'Stock In Quantity'
-                        }
+                        },
+                        min: 0,
+                        tickAmount: 5,
+                        max: maxStockIn
                     },
                     fill: {
                         opacity: 1
@@ -471,7 +477,10 @@ app.controller('myAdminDashboardCtrl', function ($scope, $http, $filter) {
                     yaxis: {
                         title: {
                             text: 'Stock Out Quantity'
-                        }
+                        },
+                        min: 0,
+                        tickAmount: 5,
+                        max: maxStockIn
                     },
                     fill: {
                         opacity: 1
