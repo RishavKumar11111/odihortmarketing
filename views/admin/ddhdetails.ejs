@@ -1,0 +1,201 @@
+<div class="content-wrapper" ng-controller="myAdminDDHDetailsCtrl" ng-init="getDDHDetails();">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h1><%= title %></h1>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active"><%= title %></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">DDH Details</h3><br>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <form name="ddhForm" class="form-horizontal" role="form" autocomplete="off" novalidate>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Serial No.</th>
+                                            <th>DDH User ID</th>
+                                            <th>District</th>
+                                            <th>Name</th>
+                                            <th>Mobile No.</th>
+                                            <th>Email ID</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="i in ddhDetails">
+                                            <td>{{$index + 1}}</td>
+                                            <td>{{i.DDHUserID}}</td>
+                                            <td>{{i.DistrictName}}</td>
+                                            <td ng-show="i.DDHName != null && i.Status != null"
+                                                style="vertical-align: middle">{{i.DDHName}}</td>
+                                            <td ng-show="i.Status == null" style="vertical-align: middle">
+                                                <input type="text" class="form-control" name="ddhName[{{$index}}]"
+                                                    name-only placeholder="Enter Name" ng-model="i.DDHName"
+                                                    maxlength="50" required />
+                                                <span style="color:red"
+                                                    ng-show="ddhForm['ddhName[' + $index + ']'].$touched && ddhForm['ddhName[' + $index + ']'].$error.required">This
+                                                    is a
+                                                    required
+                                                    field</span>
+                                            </td>
+                                            <td ng-show="i.DDHMobileNo != null && i.Status != null"
+                                                style="vertical-align: middle">{{i.DDHMobileNo}}</td>
+                                            <td ng-show="i.Status == null" style="vertical-align: middle">
+                                                <input type="text" class="form-control" mobile-no-only numbers-only
+                                                    ng-model="i.DDHMobileNo" name="ddhMobileNo[{{$index}}]"
+                                                    placeholder="Enter Mobile No." minlength="10" maxlength="10"
+                                                    required />
+                                                <span style="color:red"
+                                                    ng-show="ddhForm['ddhMobileNo[' + $index + ']'].$touched && ddhForm['ddhMobileNo[' + $index + ']'].$error.required">This
+                                                    is a
+                                                    required
+                                                    field</span>
+                                            </td>
+                                            <td ng-show="i.Status != null"
+                                                style="vertical-align: middle">{{i.DDHEmailID == null ? 'NA' : i.DDHEmailID}}</td>
+                                            <td ng-show="i.Status == null" style="vertical-align: middle">
+                                                <input type="text" class="form-control" ng-pattern="emailRegex"
+                                                    ng-model="i.DDHEmailID" name="ddhEmailID[{{$index}}]"
+                                                    placeholder="Enter Email ID" maxlength="30" />
+                                                <span style="color:red"
+                                                    ng-show="ddhForm['ddhEmailID[' + $index + ']'].$dirty && ddhForm['ddhEmailID[' + $index + ']'].$error.pattern">Please
+                                                    enter valid Email ID</span>
+                                            </td>
+                                            <td style="vertical-align: middle">
+                                                <input ng-show="i.Status == null" id="btnSubmit{{$index}}" type="button"
+                                                    class="btn btn-primary btn-sm" value="Submit"
+                                                    ng-click="submitDDHDetails(i)" />
+                                                <input ng-show="i.Status != null" type="button"
+                                                    class="btn btn-warning btn-sm" id="btnModify{{$index}}"
+                                                    value="Modify" data-toggle="modal" data-target="#modifyModal"
+                                                    id="btnModifyModal" ng-click="getDDHData(i)" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                        <div class="card-footer clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modifyModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form class="form-horizontal" name="ddhFrm" role="form"
+                            ng-submit="updateDDHDetails(ddhFrm.$valid); ddhFrm.$setPristine();" autocomplete="off"
+                            novalidate>
+                            <div class="modal-header">
+                                <h4>Modify DDH Details</h4>
+                                <button type="button" class="close" id="closeModifyModal" data-dismiss="modal"
+                                    ng-click="ddhFrm.$setPristine();">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>District Name:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>{{distn | capitalize}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>DDH User ID:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>{{duid}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label style="margin-top: 2.8%;">DDH Name:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <input type="text" class="form-control" name="ddhname" name-only
+                                                placeholder="Enter Name" ng-model="ddhn" maxlength="50" required />
+                                        </div>
+                                        <div class="has-error text-right"
+                                            ng-show="ddhFrm.$submitted || ddhFrm.ddhname.$touched" style="color:red">
+                                            <span ng-show="ddhFrm.ddhname.$error.required">This is a required
+                                                field</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label style="margin-top: 2.8%;">DDH Mobile No.:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <input type="text" class="form-control" name="ddhmobno" mobile-no-only
+                                                numbers-only ng-model="ddhmn" placeholder="Enter Mobile No."
+                                                minlength="10" maxlength="10" required />
+                                        </div>
+                                        <div class="has-error text-right"
+                                            ng-show="ddhFrm.$submitted || ddhFrm.ddhmobno.$touched" style="color:red">
+                                            <span ng-show="ddhFrm.ddhmobno.$error.required">This is a required
+                                                field</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label style="margin-top: 2.8%;">DDH Email ID:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <input type="text" class="form-control" name="ddhe" ng-pattern="emailRegex"
+                                                ng-model="ddheid" placeholder="Enter Email ID" maxlength="30" />
+                                        </div>
+                                        <div class="has-error text-right"
+                                            ng-show="ddhFrm.$submitted || ddhFrm.ddhe.$touched" style="color:red">
+                                            <span ng-show="ddhFrm.ddhe.$dirty && ddhFrm.ddhe.$error.pattern">Please
+                                                enter valid Email ID</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary"
+                                    ng-disabled="ddhFrm.$invalid || ddhFrm.$pristine">Update DDH Details</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                    ng-click="ddhFrm.$setPristine();">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

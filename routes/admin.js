@@ -134,6 +134,11 @@ router.get('/unavailableItemsList', csrfProtection, permit.permission('ADMIN'), 
   res.render('admin/unavailableitemslist', { title: 'Unavailable Items List', csrfToken: req.csrfToken() });
 });
 
+router.get('/ddhDetails', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('admin/ddhdetails', { title: 'DDH Details', csrfToken: req.csrfToken() });
+});
+
 router.get('/changePassword', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
@@ -401,6 +406,38 @@ router.get('/getUnavailableItems', permit.permission('ADMIN'), function (req, re
     console.log(response.status);
   }).catch(function err(error) {
     console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getDDHDetails', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getDDHDetails().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.post('/submitDDHDetails', parseForm, csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitDDHDetails', 'UPDATE', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var obj = req.body.data;
+  obj.Status = 1;
+  obj.IPAddress = req.connection.remoteAddress;
+  obj.FinancialYear = getFinancialYear();
+  balModule.submitDDHDetails(obj, function success(response1) {
+    for (var propName in response1[0][0]) {
+      if (response1[0][0].hasOwnProperty(propName)) {
+        res.send(response1[0][0][propName] == 1 ? true : false);
+      }
+    }
+  }, function error(response) {
+    console.log(response.status);
   });
 });
 

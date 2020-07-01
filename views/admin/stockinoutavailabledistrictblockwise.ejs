@@ -67,11 +67,11 @@
             <div class="row"
                 ng-show="stockInOutAvailableDistrictBlockWise[0].length > 0 && stockInOutAvailableDistrictBlockWise[1].length > 0">
                 <div id="divIDQ" class="col-md-6 col-sm-6 col-xs-12" ng-show="totalStockInQtls != 0">
-                    <div class="card">
+                    <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Stock In, Stock Out and Available Quantity District-wise</h3><br>
                             <!-- <div class="card-tools" style="display: inline-flex">
-                                <p style="margin-bottom: -3px;"><b>No. of Records</b>&nbsp;</p>
+                                <p style="margin-bottom: -3px;">No. of Records&nbsp;</p>
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="number" ng-model="pageSize" min="1" max="10000000"
                                         class="form-control float-right" placeholder="No. of Records">
@@ -89,17 +89,16 @@
                                     </div>
                                 </div>
                             </div> -->
-                            <p style="margin-bottom: 0;"><b ng-show="totalStockInQtls.toFixed(2) != 0.00">Total Stock
-                                    In: {{totalStockInQtls.toFixed(2)}} Qtls.</b> <b
+                            <p style="margin-bottom: 0;"><span ng-show="totalStockInQtls.toFixed(2) != 0.00">Total Stock
+                                    In: {{totalStockInQtls.toFixed(2)}} Qtls.</span> <span
                                     ng-show="totalStockOutQtls.toFixed(2) != 0.00">, Total Stock Out:
-                                    {{totalStockOutQtls.toFixed(2)}} Qtls.</b> <b
+                                    {{totalStockOutQtls.toFixed(2)}} Qtls.</span> <span
                                     ng-show="totalStockAvailableQtls.toFixed(2) != 0.00">& Total Available:
-                                    {{totalStockAvailableQtls.toFixed(2)}} Qtls.</b></p>
-                            <p ng-show="ddlDistricts != 0" style="margin-bottom: 0;"><b>District:
-                                    {{districtName | capitalize}}</b></p>
-                            <p ng-show="ddlCategories != 0" style="margin-bottom: 0;"><b>Category: {{categoryName | capitalize}}</b>
-                            <p ng-show="ddlItems != 0" style="margin-bottom: 0;"><b>Item: {{itemName | capitalize}}</b>
-                            </p>
+                                    {{totalStockAvailableQtls.toFixed(2)}} Qtls.</span></p>
+                            <p ng-show="ddlDistricts != 0" style="margin-bottom: 0;">District:
+                                    {{districtName | capitalize}}</p>
+                            <p ng-show="ddlCategories != 0" style="margin-bottom: 0;">Category: {{categoryName | capitalize}}</p>
+                            <p ng-show="ddlItems != 0" style="margin-bottom: 0;">Item: {{itemName | capitalize}}</p>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-wrap">
@@ -158,11 +157,11 @@
                     </div>
                 </div>
                 <div id="divIDN" class="col-md-6 col-sm-6 col-xs-12" ng-show="totalStockInNos != 0">
-                    <div class="card">
+                    <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Stock In, Stock Out and Available Quantity District-wise</h3><br>
                             <!-- <div class="card-tools" style="display: inline-flex">
-                                <p style="margin-bottom: -3px;"><b>No. of Records</b>&nbsp;</p>
+                                <p style="margin-bottom: -3px;">No. of Records&nbsp;</p>
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="number" ng-model="pageSize" min="1" max="10000000"
                                         class="form-control float-right" placeholder="No. of Records">
@@ -180,17 +179,16 @@
                                     </div>
                                 </div>
                             </div> -->
-                            <p style="margin-bottom: 0;"><b ng-show="totalStockInNos.toFixed(2) != 0.00">Total Stock In:
-                                    {{totalStockInNos.toFixed(2)}} Lakh Nos.</b> <b
+                            <p style="margin-bottom: 0;"><span ng-show="totalStockInNos.toFixed(2) != 0.00">Total Stock In:
+                                    {{totalStockInNos.toFixed(2)}} Lakh Nos.</span> <span
                                     ng-show="totalStockOutNos.toFixed(2) != 0.00">, Total Stock Out:
-                                    {{totalStockOutNos.toFixed(2)}} Lakh Nos.</b> <b
+                                    {{totalStockOutNos.toFixed(2)}} Lakh Nos.</span> <span
                                     ng-show="totalStockAvailableNos.toFixed(2) != 0.00">& Total Available:
-                                    {{totalStockAvailableNos.toFixed(2)}} Lakh Nos.</b></p>
-                            <p ng-show="ddlDistricts != 0" style="margin-bottom: 0;"><b>District:
-                                    {{districtName | capitalize}}</b></p>
-                            <p ng-show="ddlCategories != 0" style="margin-bottom: 0;"><b>Category: {{categoryName | capitalize}}</b>
-                            <p ng-show="ddlItems != 0" style="margin-bottom: 0;"><b>Item: {{itemName | capitalize}}</b>
-                            </p>
+                                    {{totalStockAvailableNos.toFixed(2)}} Lakh Nos.</span></p>
+                            <p ng-show="ddlDistricts != 0" style="margin-bottom: 0;">District:
+                                    {{districtName | capitalize}}</p>
+                            <p ng-show="ddlCategories != 0" style="margin-bottom: 0;">Category: {{categoryName | capitalize}}</p>
+                            <p ng-show="ddlItems != 0" style="margin-bottom: 0;">Item: {{itemName | capitalize}}</p>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-wrap">

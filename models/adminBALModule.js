@@ -267,3 +267,37 @@ exports.getUnavailableItems = function () {
         console.log('An error occurred...', err);
     });
 };
+
+exports.getDDHDetails = function () {
+    return sequelize.query('select DDHUserID, DistrictName, DDHName, DDHMobileNo, DDHEmailID, Status from DDHDistrictMapping a inner join LGDDistrict b on a.DistrictCode = b.DistrictCode order by DDHUserID, DistrictName, DDHName, DDHMobileNo, DDHEmailID', {
+        type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.submitDDHDetails = function (obj, callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const request = new sql.Request(con);
+        request.input('DDHName', obj.DDHName);
+        request.input('DDHMobileNo', obj.DDHMobileNo);
+        request.input('DDHEmailID', obj.DDHEmailID);
+        request.input('DDHUserID', obj.DDHUserID);
+        request.input('IPAddress', obj.IPAddress);
+        request.input('FinancialYear', obj.FinancialYear);
+        request.execute('spSubmitDDHDetails', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.recordsets);
+            }
+            con.close();
+        });
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};

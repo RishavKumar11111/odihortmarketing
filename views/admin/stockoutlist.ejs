@@ -79,18 +79,18 @@
             </div>
             <div class="row" ng-show="stockOutDetails.length > 0">
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
+                    <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Stock Out Details</h3><br>
                             <div class="card-tools" style="display: inline-flex">
-                                <p style="margin-bottom: -3px;"><b>No. of Records</b>&nbsp;</p>
+                                <p style="margin-bottom: -3px;">No. of Records&nbsp;</p>
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="number" ng-model="pageSize" min="1" max="10000000"
                                         class="form-control float-right" placeholder="No. of Records">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-default"><i
                                                 class="fas fa-edit"></i></button>
-                                    </div>
+                                    </div>&nbsp;
                                 </div>
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="table_search" ng-model="search"
@@ -101,11 +101,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <p style="margin-bottom: 0;"><b ng-show="totalQuintal.toFixed(2) != 0.00">Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</b> <b ng-show="totalNo.toFixed(2) != 0.00">& {{totalNo.toFixed(2)}} Lakh Nos.</b></p>
-                            <p ng-show="ddlDistricts != 0" style="margin-bottom: 0;"><b>District: {{districtName | capitalize}}</b></p>
-                            <p ng-show="ddlCategories != 0" style="margin-bottom: 0;"><b>Category: {{categoryName | capitalize}}</b>
-                            <p ng-show="ddlItems != 0" style="margin-bottom: 0;"><b>Item: {{itemName | capitalize}}</b></p>
-                            <p ng-show="displayDate != ''" style="margin-bottom: 0;"><b>Date Range: {{displayDate}}</b></p>
+                            <p style="margin-bottom: 0;"><span ng-show="totalQuintal.toFixed(2) != 0.00">Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</span> <span ng-show="totalQuintal.toFixed(2) != 0.00 && totalNo.toFixed(2) != 0.00">&</span> <span ng-show="totalNo.toFixed(2) != 0.00">Total Quantity: {{totalNo.toFixed(2)}} Lakh Nos.</span></p>
+                            <p ng-show="ddlDistricts != 0" style="margin-bottom: 0;">District: {{districtName | capitalize}}</p>
+                            <p ng-show="ddlCategories != 0" style="margin-bottom: 0;">Category: {{categoryName | capitalize}}</p>
+                            <p ng-show="ddlItems != 0" style="margin-bottom: 0;">Item: {{itemName | capitalize}}</p>
+                            <p ng-show="displayDate != ''" style="margin-bottom: 0;">Date Range: {{displayDate}}</p>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-wrap">

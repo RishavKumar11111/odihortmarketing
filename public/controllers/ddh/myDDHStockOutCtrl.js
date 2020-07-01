@@ -161,6 +161,18 @@ app.controller('myDDHStockOutCtrl', function ($scope, $http, $filter) {
         }
     };
 
+    $scope.resetStockDetails = function () {
+        $scope.isAllSelected = false;
+        $scope.stockArray = [];
+        angular.forEach($scope.stockDetails, function (i) {
+            i.selected = false;
+            if (i.hasOwnProperty('SaleQuantity')) {
+                i.SaleQuantity = null;
+                delete i.SaleQuantity;
+            }
+        });
+    };
+
     $scope.optionToggled = function (selected, stockID, obj) {
         $scope.isAllSelected = $scope.stockDetails.every(function (item) {
             return item.selected;
