@@ -38,9 +38,9 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="i in ddhDetails">
-                                            <td>{{$index + 1}}</td>
-                                            <td>{{i.DDHUserID}}</td>
-                                            <td>{{i.DistrictName}}</td>
+                                            <td style="vertical-align: middle">{{$index + 1}}</td>
+                                            <td style="vertical-align: middle">{{i.DDHUserID}}</td>
+                                            <td style="vertical-align: middle">{{i.DistrictName}}</td>
                                             <td ng-show="i.DDHName != null && i.Status != null"
                                                 style="vertical-align: middle">{{i.DDHName}}</td>
                                             <td ng-show="i.Status == null" style="vertical-align: middle">

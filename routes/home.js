@@ -193,6 +193,11 @@ router.get('/ddhList', csrfProtection, cache.overrideCacheHeaders(overrideConfig
   res.render('ddhlist', { title: 'DDH List', csrfToken: req.csrfToken() });
 });
 
+router.get('/tradersList', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('traderslist', { title: 'Traders List', csrfToken: req.csrfToken() });
+});
+
 router.get('/soilFertilityStatus', csrfProtection, cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   res.render('soilfertilitystatus', { title: 'Soil Fertility Status', csrfToken: req.csrfToken(), message: '' });
@@ -260,6 +265,12 @@ router.post('/plogin', parseForm, csrfProtection, cache.overrideCacheHeaders(ove
                       break;
                     case 'SUPERADMIN':
                       res.redirect('superAdmin');
+                      break;
+                    case 'AHO':
+                      res.redirect('aho');
+                      break;
+                    case 'ADH':
+                      res.redirect('adh');
                       break;
                   }
                 });
@@ -575,6 +586,29 @@ router.get('/getSoilProperties', function (req, res, next) {
   res.get('X-Frame-Options');
   var districtCode = req.query.districtCode;
   res.sendFile(process.cwd() + './public/documents/soil_properties'.replace('.', '') + '/' + districtCode.toString() + ' Soil Properties.pdf')
+});
+
+router.get('/getDistricts', function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getDistricts().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getTradersList', function (req, res, next) {
+  res.get('X-Frame-Options');
+  var districtCode = req.query.districtCode;
+  balModule.getTradersList(districtCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
 });
 
 module.exports = router;

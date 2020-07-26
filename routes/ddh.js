@@ -83,6 +83,18 @@ var getURL = function (req) {
   return fullURL;
 };
 
+function SendSMS(mobileNo, sms, callback) {
+  var encodeSMS = encodeURI(sms);
+  request('http://www.apicol.nic.in/Registration/EPestSMS?mobileNo=' + mobileNo + '&sms=' + encodeSMS, { json: true }, (err, res, body) => {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      callback();
+    }
+  });
+};
+
 /* GET home page. */
 router.get('/', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
@@ -127,6 +139,11 @@ router.get('/stockOutList', csrfProtection, permit.permission('DDH'), cache.over
 router.get('/tradersList', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   res.render('ddh/traderslist', { title: 'Traders List', csrfToken: req.csrfToken() });
+});
+
+router.get('/adhDetails', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('ddh/adhdetails', { title: 'ADH Details', csrfToken: req.csrfToken() });
 });
 
 router.get('/changePassword', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
@@ -439,6 +456,39 @@ router.get('/getAvailabilityDetails', permit.permission('DDH'), function (req, r
     console.log(response.status);
   }).catch(function err(error) {
     console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getADHDetails', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var userID = req.session.username;
+  balModule.getADHDetails(userID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.post('/submitADHDetails', parseForm, csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitADHDetails', 'UPDATE', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var obj = req.body.data;
+  obj.Status = 1;
+  obj.IPAddress = req.connection.remoteAddress;
+  obj.FinancialYear = getFinancialYear();
+  balModule.submitADHDetails(obj, function success(response1) {
+    for (var propName in response1[0][0]) {
+      if (response1[0][0].hasOwnProperty(propName)) {
+        res.send(response1[0][0][propName] == 1 ? true : false);
+      }
+    }
+  }, function error(response) {
+    console.log(response.status);
   });
 });
 

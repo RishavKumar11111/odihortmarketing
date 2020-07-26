@@ -83,6 +83,18 @@ var getURL = function (req) {
   return fullURL;
 };
 
+function SendSMS(mobileNo, sms, callback) {
+  var encodeSMS = encodeURI(sms);
+  request('http://www.apicol.nic.in/Registration/EPestSMS?mobileNo=' + mobileNo + '&sms=' + encodeSMS, { json: true }, (err, res, body) => {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      callback();
+    }
+  });
+};
+
 /* GET home page. */
 router.get('/', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');

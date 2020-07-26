@@ -15,6 +15,8 @@ var homeRouter = require('./routes/home');
 var ddhRouter = require('./routes/ddh');
 var adminRouter = require('./routes/admin');
 var superAdminRouter = require('./routes/superAdmin');
+var adhRouter = require('./routes/adh');
+var ahoRouter = require('./routes/aho');
 var changePasswordRouter = require('./routes/changePassword');
 var graphRouter = require('./routes/graph');
 
@@ -62,6 +64,8 @@ app.use('/', homeRouter);
 app.use('/ddh', ddhRouter);
 app.use('/admin', adminRouter);
 app.use('/superAdmin', superAdminRouter);
+app.use('/adh', adhRouter);
+app.use('/aho', ahoRouter);
 app.use('/changePassword', changePasswordRouter);
 app.use('/graph', graphRouter);
 

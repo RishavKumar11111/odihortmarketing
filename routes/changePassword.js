@@ -83,13 +83,13 @@ var getURL = function (req) {
   return fullURL;
 };
 
-router.get('/', csrfProtection, permit.permission('DDH', 'ADMIN', 'SUPERADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+router.get('/', csrfProtection, permit.permission('DDH', 'ADMIN', 'SUPERADMIN', 'AHO', 'ADH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
   res.render('changepassword', { title: 'Change Password', csrfToken: req.csrfToken(), randomNo: req.session.RandomNo });
 });
 
-router.post('/', parseForm, csrfProtection, permit.permission('DDH', 'ADMIN', 'SUPERADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+router.post('/', parseForm, csrfProtection, permit.permission('DDH', 'ADMIN', 'SUPERADMIN', 'AHO', 'ADH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   balModule.getUserDetails(req.session.username).then(function success(response) {
     if (response.length === 0) {

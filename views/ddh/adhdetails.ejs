@@ -1,0 +1,201 @@
+<div class="content-wrapper" ng-controller="myDDHADHDetailsCtrl" ng-init="getADHDetails();">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h1><%= title %></h1>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active"><%= title %></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ADH Details</h3><br>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <form name="adhForm" class="form-horizontal" role="form" autocomplete="off" novalidate>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Serial No.</th>
+                                            <th>ADH User ID</th>
+                                            <th>Sub-Division</th>
+                                            <th>Name</th>
+                                            <th>Mobile No.</th>
+                                            <th>Email ID</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="i in adhDetails">
+                                            <td style="vertical-align: middle">{{$index + 1}}</td>
+                                            <td style="vertical-align: middle">{{i.ADHUserID}}</td>
+                                            <td style="vertical-align: middle">{{i.SubDivisionName}}</td>
+                                            <td ng-show="i.ADHName != null && i.Status != null"
+                                                style="vertical-align: middle">{{i.ADHName}}</td>
+                                            <td ng-show="i.Status == null" style="vertical-align: middle">
+                                                <input type="text" class="form-control" name="adhName[{{$index}}]"
+                                                    name-only placeholder="Enter Name" ng-model="i.ADHName"
+                                                    maxlength="50" required />
+                                                <span style="color:red"
+                                                    ng-show="adhForm['adhName[' + $index + ']'].$touched && adhForm['adhName[' + $index + ']'].$error.required">This
+                                                    is a
+                                                    required
+                                                    field</span>
+                                            </td>
+                                            <td ng-show="i.ADHMobileNo != null && i.Status != null"
+                                                style="vertical-align: middle">{{i.ADHMobileNo}}</td>
+                                            <td ng-show="i.Status == null" style="vertical-align: middle">
+                                                <input type="text" class="form-control" mobile-no-only numbers-only
+                                                    ng-model="i.ADHMobileNo" name="adhMobileNo[{{$index}}]"
+                                                    placeholder="Enter Mobile No." minlength="10" maxlength="10"
+                                                    required />
+                                                <span style="color:red"
+                                                    ng-show="adhForm['adhMobileNo[' + $index + ']'].$touched && adhForm['adhMobileNo[' + $index + ']'].$error.required">This
+                                                    is a
+                                                    required
+                                                    field</span>
+                                            </td>
+                                            <td ng-show="i.Status != null"
+                                                style="vertical-align: middle">{{i.ADHEmailID == null ? 'NA' : i.ADHEmailID}}</td>
+                                            <td ng-show="i.Status == null" style="vertical-align: middle">
+                                                <input type="text" class="form-control" ng-pattern="emailRegex"
+                                                    ng-model="i.ADHEmailID" name="adhEmailID[{{$index}}]"
+                                                    placeholder="Enter Email ID" maxlength="30" />
+                                                <span style="color:red"
+                                                    ng-show="adhForm['adhEmailID[' + $index + ']'].$dirty && adhForm['adhEmailID[' + $index + ']'].$error.pattern">Please
+                                                    enter valid Email ID</span>
+                                            </td>
+                                            <td style="vertical-align: middle">
+                                                <input ng-show="i.Status == null" id="btnSubmit{{$index}}" type="button"
+                                                    class="btn btn-primary btn-sm" value="Submit"
+                                                    ng-click="submitADHDetails(i)" />
+                                                <input ng-show="i.Status != null" type="button"
+                                                    class="btn btn-warning btn-sm" id="btnModify{{$index}}"
+                                                    value="Modify" data-toggle="modal" data-target="#modifyModal"
+                                                    id="btnModifyModal" ng-click="getADHData(i)" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                        <div class="card-footer clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modifyModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form class="form-horizontal" name="adhFrm" role="form"
+                            ng-submit="updateADHDetails(adhFrm.$valid); adhFrm.$setPristine();" autocomplete="off"
+                            novalidate>
+                            <div class="modal-header">
+                                <h4>Modify ADH Details</h4>
+                                <button type="button" class="close" id="closeModifyModal" data-dismiss="modal"
+                                    ng-click="adhFrm.$setPristine();">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>District Name:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>{{distn | capitalize}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>ADH User ID:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>{{duid}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label style="margin-top: 2.8%;">ADH Name:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <input type="text" class="form-control" name="adhname" name-only
+                                                placeholder="Enter Name" ng-model="adhn" maxlength="50" required />
+                                        </div>
+                                        <div class="has-error text-right"
+                                            ng-show="adhFrm.$submitted || adhFrm.adhname.$touched" style="color:red">
+                                            <span ng-show="adhFrm.adhname.$error.required">This is a required
+                                                field</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label style="margin-top: 2.8%;">ADH Mobile No.:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <input type="text" class="form-control" name="adhmobno" mobile-no-only
+                                                numbers-only ng-model="adhmn" placeholder="Enter Mobile No."
+                                                minlength="10" maxlength="10" required />
+                                        </div>
+                                        <div class="has-error text-right"
+                                            ng-show="adhFrm.$submitted || adhFrm.adhmobno.$touched" style="color:red">
+                                            <span ng-show="adhFrm.adhmobno.$error.required">This is a required
+                                                field</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label style="margin-top: 2.8%;">ADH Email ID:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <input type="text" class="form-control" name="adhe" ng-pattern="emailRegex"
+                                                ng-model="adheid" placeholder="Enter Email ID" maxlength="30" />
+                                        </div>
+                                        <div class="has-error text-right"
+                                            ng-show="adhFrm.$submitted || adhFrm.adhe.$touched" style="color:red">
+                                            <span ng-show="adhFrm.adhe.$dirty && adhFrm.adhe.$error.pattern">Please
+                                                enter valid Email ID</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary"
+                                    ng-disabled="adhFrm.$invalid || adhFrm.$pristine">Update ADH Details</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                    ng-click="adhFrm.$setPristine();">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

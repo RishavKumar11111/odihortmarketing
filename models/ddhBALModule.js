@@ -290,3 +290,37 @@ exports.getAvailabilityDetails = function (districtCode, blockCode, categoryID, 
         console.log('An error occurred...', err);
     });
 };
+
+exports.getADHDetails = function (userID) {
+    return sequelize.query('select ADHUserID, SubDivisionName, ADHName, ADHMobileNo, ADHEmailID, Status from ADHSubDivisionMapping a inner join LGDSubDivision b on a.SubDivisionCode = b.SubDivisionCode where DistrictCode = substring(:user_id, 5, 3) order by ADHUserID, SubDivisionName, ADHName, ADHMobileNo, ADHEmailID', {
+        replacements: { user_id: userID }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.submitADHDetails = function (obj, callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const request = new sql.Request(con);
+        request.input('ADHName', obj.ADHName);
+        request.input('ADHMobileNo', obj.ADHMobileNo);
+        request.input('ADHEmailID', obj.ADHEmailID);
+        request.input('ADHUserID', obj.ADHUserID);
+        request.input('IPAddress', obj.IPAddress);
+        request.input('FinancialYear', obj.FinancialYear);
+        request.execute('spSubmitADHDetails', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.recordsets);
+            }
+            con.close();
+        });
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};

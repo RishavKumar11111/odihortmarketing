@@ -186,3 +186,23 @@ exports.getDistrictsByDistrictCodes = function (districtCodes) {
         console.log('An error occurred...', err);
     });
 };
+
+exports.getDistricts = function () {
+    return sequelize.query('select DistrictCode, DistrictName from LGDDistrict order by DistrictName', {
+        type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getTradersList = function (districtCode) {
+    return sequelize.query('select ID, DistrictName, TraderName, Commodity from TraderDetails a inner join LGDDistrict b on a.DistrictCode = b.DistrictCode where (a.DistrictCode = :district_code or :district_code = 0) order by ID, DistrictName, TraderName, Commodity', {
+        replacements: { district_code: districtCode }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};

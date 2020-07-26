@@ -1,0 +1,195 @@
+<div class="content-wrapper" ng-controller="myADHAHODetailsCtrl" ng-init="getBlockULBs(); getRegisteredAHOs()">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h1><%= title %></h1>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active"><%= title %></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Select Blocks and their related ULBs</h3><br>
+                        </div>
+                        <div class="card-body">
+                            <h5>List of Blocks and their related ULBs <small>(ULBs are mentioned inside the
+                                    parentheses.)</small></h5>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group clearfix"
+                                        style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                        <div class="icheck-success d-inline" ng-repeat="i in blockULBs">
+                                            <input type="checkbox" ng-model="i.selected" id="checkbox{{$index}}"
+                                                value="{{i.BlockCode}}" ng-change="getValue()">
+                                            <label for="checkbox{{$index}}">
+                                                {{i.BlockName | capitalize}} <span
+                                                    ng-show="i.ULBName !== null">({{i.ULBName | capitalize}})</span>
+                                            </label>
+                                        </div>
+                                        <div ng-show="blockULBs.length == 0">
+                                            <label style="color: darkred; text-align: justify" class="control-label">All
+                                                Blocks and their related ULBs are occupied.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">AHO Registration</h3><br>
+                    </div>
+                    <form class="form-horizontal" role="form" name="ahoForm" ng-submit="registerAHO(ahoForm.$valid)"
+                        autocomplete="off" novalidate>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div ng-show="populateBlockULBs.length > 0" class="table-responsive p-0">
+                                        <table class="table table-hover text-wrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>Serial No.</th>
+                                                    <th>Blocks & their related ULBs</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="i in populateBlockULBs">
+                                                    <td>{{$index + 1}}</td>
+                                                    <td>{{i.BlockName | capitalize}} <span
+                                                            ng-show="i.ULBName !== null">({{i.ULBName | capitalize}})</span>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-xs btn-danger"
+                                                            ng-click="removeData($index, i.BlockCode)">Delete <i
+                                                                class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div ng-show="populateBlockULBs.length == 0">
+                                        <label style="color: darkred; text-align: justify" class="control-label">Select
+                                            Block(s) for registering AHOs.</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="ahoName" name-only
+                                            placeholder="Enter Name" name="ahoName" ng-model="txtAHOName" maxlength="50"
+                                            required />
+                                        <div class="has-error" ng-show="ahoForm.$submitted || ahoForm.ahoName.$touched"
+                                            style="color:red">
+                                            <span ng-show="ahoForm.ahoName.$error.required">This is a required
+                                                field</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" mobile-no-only numbers-only
+                                            ng-model="txtAHOMobileNo" name="ahoMobileNo" placeholder="Enter Mobile No."
+                                            minlength="10" maxlength="10" required />
+                                        <div class="has-error"
+                                            ng-show="ahoForm.$submitted || ahoForm.ahoMobileNo.$touched"
+                                            style="color:red">
+                                            <span ng-show="ahoForm.ahoMobileNo.$error.required">This is a required
+                                                field</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" ng-pattern="emailRegex"
+                                            ng-model="txtAHOEmailID" name="ahoEmailID" placeholder="Enter Email ID"
+                                            maxlength="30" />
+                                        <div class="has-error" ng-show="ahoForm.ahoEmailID.$dirty" style="color:red">
+                                            <span ng-show="ahoForm.ahoEmailID.$error.pattern">Please
+                                                enter valid Email ID</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button type="submit" class="btn btn-success">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Registered AHOs</h3><br>
+                        </div>
+                        <div class="card-body">
+                            <div ng-show="registeredAHOs.length > 0" class="table-responsive p-0">
+                                <table class="table table-hover text-wrap text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>Serial No.</th>
+                                            <th>AHO Name</th>
+                                            <th>AHO Mobile No.</th>
+                                            <th>AHO Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="(key, value) in registeredAHOs | groupBy: 'AHOMobileNo'">
+                                            <td style="vertical-align: middle;">{{$index + 1}}</td>
+                                            <td style="vertical-align: middle;">{{value[0].AHOName | capitalize}}</td>
+                                            <td style="vertical-align: middle;">{{key}}</td>
+                                            <td>
+                                                <table class="table table-hover text-wrap">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Serial No.</th>
+                                                            <th>User ID</th>
+                                                            <th>Block & their respective ULBs</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="i in value">
+                                                            <td>{{$index + 1}}</td>
+                                                            <td>{{i.AHOUserID}}</td>
+                                                            <td>{{i.BlockName | capitalize}} <span
+                                                                    ng-show="i.ULBName !== null">({{i.ULBName | capitalize}})</span>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-xs btn-danger"
+                                                                    ng-click="removeAHO(i)">Remove <i
+                                                                        class="fas fa-trash"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div ng-show="registeredAHOs.length == 0">
+                                <label style="color: darkred; text-align: justify" class="control-label">None of the
+                                    AHOs are allotted to their respective Blocks.</label>
+                            </div>
+                        </div>
+                        <div class="card-footer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
