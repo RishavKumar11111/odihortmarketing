@@ -234,7 +234,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" ng-show="stockInOutAvailableDistrictBlockWise.length > 0">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card card-primary">
                         <div class="card-header border-0">
@@ -253,11 +253,12 @@
                                         {{itemName | capitalize}}</b>
                                 </p>
                             </div>
-                            <div class="d-block">
-                                <p style="margin-bottom: 0;"><b
-                                        ng-show="totalStockAvailableQtls.toFixed(2) != 0.00">Total Available:
-                                        {{totalStockAvailableQtls.toFixed(2)}} Qtls.</b> <b
-                                        ng-show="totalStockAvailableNos.toFixed(2) != 0.00">&
+                            <div class="d-block" ng-show="stockInOutAvailableDistrictBlockWise.length > 0">
+                                <p style="margin-bottom: 0;"><b>Total Available:</b><b
+                                        ng-show="totalStockAvailableQtls.toFixed(2) != 0.00">
+                                        {{totalStockAvailableQtls.toFixed(2)}} Qtls.</b><b
+                                        ng-show="totalStockAvailableQtls.toFixed(2) != 0.00 && totalStockAvailableNos.toFixed(2) != 0.00"> & </b><b
+                                        ng-show="totalStockAvailableNos.toFixed(2) != 0.00">
                                         {{totalStockAvailableNos.toFixed(2)}} Lakh Nos.</b></p>
                                 <!-- <p class="d-flex flex-column">
                                     <span class="text-bold text-lg">820</span>
@@ -271,26 +272,30 @@
                                 </p> -->
                             </div>
                             <div class="position-relative mb-4">
-                                <div ng-show="totalStockAvailableQtls != 0 || totalStockAvailableNos != 0" id="chartSAQ"></div>
-                                <div ng-show="totalStockAvailableQtls == 0 && totalStockAvailableNos == 0 && stockInOutAvailableDistrictBlockWise.length > 0">
+                                <div ng-show="totalStockAvailableQtls != 0 || totalStockAvailableNos != 0"
+                                    id="chartSAQ"></div>
+                                <div
+                                    ng-show="totalStockAvailableQtls == 0 && totalStockAvailableNos == 0 && stockInOutAvailableDistrictBlockWise.length > 0">
                                     <p style="color: red; text-align: center;"><b>This item is not available.</b></p>
                                 </div>
                             </div>
                             <div class="d-block">
-                                <p style="margin-bottom: 0;"><b
-                                        ng-show="totalStockInQtls.toFixed(2) != 0.00">Total Stock In:
-                                        {{totalStockInQtls.toFixed(2)}} Qtls.</b> <b
-                                        ng-show="totalStockInNos.toFixed(2) != 0.00">&
+                                <p style="margin-bottom: 0;"><b>Total Stock In:</b><b
+                                        ng-show="totalStockInQtls.toFixed(2) != 0.00">
+                                        {{totalStockInQtls.toFixed(2)}} Qtls.</b><b
+                                        ng-show="totalStockAvailableQtls.toFixed(2) != 0.00 && totalStockAvailableNos.toFixed(2) != 0.00"> & </b><b
+                                        ng-show="totalStockInNos.toFixed(2) != 0.00">
                                         {{totalStockInNos.toFixed(2)}} Lakh Nos.</b></p>
                             </div>
                             <div class="position-relative mb-4">
                                 <div ng-show="totalStockInQtls != 0 || totalStockInNos != 0" id="chartSIQ"></div>
                             </div>
                             <div class="d-block">
-                                <p style="margin-bottom: 0;"><b
-                                        ng-show="totalStockOutQtls.toFixed(2) != 0.00">Total Stock Out:
-                                        {{totalStockOutQtls.toFixed(2)}} Qtls.</b> <b
-                                        ng-show="totalStockOutNos.toFixed(2) != 0.00">&
+                                <p style="margin-bottom: 0;"><b>Total Stock Out:</b><b
+                                        ng-show="totalStockOutQtls.toFixed(2) != 0.00">
+                                        {{totalStockOutQtls.toFixed(2)}} Qtls.</b><b
+                                        ng-show="totalStockAvailableQtls.toFixed(2) != 0.00 && totalStockAvailableNos.toFixed(2) != 0.00"> & </b><b
+                                        ng-show="totalStockOutNos.toFixed(2) != 0.00">
                                         {{totalStockOutNos.toFixed(2)}} Lakh Nos.</b></p>
                             </div>
                             <div class="position-relative mb-4">

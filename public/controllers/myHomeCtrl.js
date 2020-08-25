@@ -54,12 +54,12 @@ app.controller('myHomeCtrl', function ($scope, $http) {
 
     $scope.getItemDetailsDistrictWise = function (itemID) {
         $scope.itemDetailsBGVWise = [];
-        $scope.totalQuantityBGVWise = 0;
+        $scope.totalBalanceBGVWise = 0;
         $http.get('http://localhost:3000/getItemDetailsDistrictWise?itemID=' + itemID).then(function success(response) {
             $scope.itemDetailsDistrictWise = response.data;
-            $scope.totalQuantityDistrictWise = 0;
+            $scope.totalBalanceDistrictWise = 0;
             angular.forEach($scope.itemDetailsDistrictWise, function (i) {
-                $scope.totalQuantityDistrictWise += i.Quantity;
+                $scope.totalBalanceDistrictWise += i.Balance;
             });
         }, function error(response) {
             console.log(response.status);
@@ -72,9 +72,9 @@ app.controller('myHomeCtrl', function ($scope, $http) {
     $scope.getItemDetailsBGVWise = function (districtCode, itemID) {
         $http.get('http://localhost:3000/getItemDetailsBGVWise?districtCode=' + districtCode + '&itemID=' + itemID).then(function success(response) {
             $scope.itemDetailsBGVWise = response.data;
-            $scope.totalQuantityBGVWise = 0;
+            $scope.totalBalanceBGVWise = 0;
             angular.forEach($scope.itemDetailsBGVWise, function (i) {
-                $scope.totalQuantityBGVWise += i.Quantity;
+                $scope.totalBalanceBGVWise += i.Balance;
             });
         }, function error(response) {
             console.log(response.status);

@@ -1,0 +1,203 @@
+<div class="content-wrapper" ng-controller="myAHOStockOutCtrl" ng-init="getCategories(); getBlockGPs();">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h1><%= title %></h1>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active"><%= title %></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <form class="form-horizontal" role="form" name="stockOutForm"
+                ng-submit="submitStockOut(stockOutForm.$valid)" autocomplete="off" novalidate>
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Stock Out Form</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                    class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5>Item Details</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Categories</label>
+                                    <select class="form-control select2" name="categories" ng-model="ddlCategories"
+                                        ng-options="i.CategoryID as i.CategoryName for i in categories"
+                                        ng-change="getItemsByCategory(ddlCategories); stockDetails = [];">
+                                        <option value="" disabled>Select Category</option>
+                                    </select>
+                                    <div class="has-error"
+                                        ng-show="stockOutForm.$submitted || stockOutForm.categories.$touched"
+                                        style="color:red">
+                                        <span ng-show="stockOutForm.categories.$error.required">This is a required
+                                            field</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Items</label>
+                                    <select class="form-control select2" name="items" ng-model="ddlItems"
+                                        ng-options="i.ItemID as i.ItemName for i in items"
+                                        ng-change="stockDetails = [];" required>
+                                        <option value="" disabled>Select Item</option>
+                                    </select>
+                                    <div class="has-error"
+                                        ng-show="stockOutForm.$submitted || stockOutForm.items.$touched"
+                                        style="color:red">
+                                        <span ng-show="stockOutForm.items.$error.required">This is a required
+                                            field</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h5>Area Details</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label class="control-label">Area</label>
+                                <div class="form-group clearfix" style="margin-top: 8px;">
+                                    <div class="icheck-success d-inline">
+                                        <input type="radio" name="areaType" ng-model="rbAreaType" value="Rural"
+                                            id="radioRural" ng-change="getBlockGPs()" required>
+                                        <label for="radioRural">
+                                            Rural
+                                        </label>
+                                    </div>
+                                    <div class="icheck-success d-inline">
+                                        <input type="radio" name="areaType" ng-model="rbAreaType" value="Urban"
+                                            id="radioUrban" ng-change="getBlockGPs()" required>
+                                        <label for="radioUrban">
+                                            Urban
+                                        </label>
+                                    </div>
+                                    <div class="has-error"
+                                        ng-show="stockInForm.$submitted || stockInForm.areaType.$touched"
+                                        style="color:red">
+                                        <span ng-show="stockInForm.areaType.$error.required">This is a required
+                                            field</span>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-show="rbAreaType == 'Rural'" style="margin-top: 22px;">
+                                    <label class="control-label">GPs</label>
+                                    <select class="form-control select2" name="gps" ng-model="ddlGPs"
+                                        ng-options="i.GPCode as i.GPName for i in gps" ng-change="getVillagesByGP()">
+                                        <option value="" disabled>Select GP</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Blocks</label>
+                                    <select class="form-control select2" name="blocks"
+                                        ng-disabled="rbAreaType == 'Rural'" ng-model="ddlBlocks"
+                                        ng-options="i.ULBCode as i.ULBName for i in blocks">
+                                        <option value="" disabled>Select Block</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" ng-show="rbAreaType == 'Rural'">
+                                    <label class="control-label">Villages</label>
+                                    <select class="form-control select2" name="villages" ng-model="ddlVillages"
+                                        ng-options="i.VillageCode as i.VillageName for i in villages">
+                                        <option value="" disabled>Select Village</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-info" ng-click="getStockDetails('')">Search</button>
+                    </div>
+                </div>
+                <div class="row" ng-show="stockDetails.length > 0">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Stock Details</h3>
+                            </div>
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover" style="text-align: center;">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <div class="icheck-success d-inline">
+                                                    <input type="checkbox" ng-click="toggleAll()"
+                                                        ng-model="isAllSelected" id="checkboxSelectAll">
+                                                    <label for="checkboxSelectAll">
+                                                        Select All
+                                                    </label>
+                                                </div>
+                                            </th>
+                                            <th>Reference No.</th>
+                                            <th>Farmer ID</th>
+                                            <th>Farmer Name</th>
+                                            <th>Farmer Mobile No.</th>
+                                            <th>Item</th>
+                                            <th>Quantity</th>
+                                            <th>Sale Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="i in stockDetails | orderBy: '-Count'">
+                                            <td style="vertical-align: middle;">
+                                                <div class="icheck-success d-inline">
+                                                    <input type="checkbox" ng-model="i.selected"
+                                                        ng-change="optionToggled(i.selected, i)"
+                                                        id="checkboxSelect{{$index}}">
+                                                    <label for="checkboxSelect{{$index}}"></label>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align: middle;">{{i.ReferenceNo}}</td>
+                                            <td style="vertical-align: middle;">{{i.FarmerID}}</td>
+                                            <td style="vertical-align: middle;">{{i.FarmerName | capitalize}}</td>
+                                            <td style="vertical-align: middle;">{{i.FarmerMobileNo}}</td>
+                                            <td style="vertical-align: middle;">{{i.ItemName | capitalize}}</td>
+                                            <td style="vertical-align: middle;">{{i.Balance}}
+                                                {{(i.Unit == 'Q') ? '(in Quintal)' : '(in Numbers)'}}</td>
+                                            <td>
+                                                <input type="text"
+                                                    ng-disabled="i.selected == false || i.selected == undefined"
+                                                    class="form-control" valid-number-upto-two-decimal
+                                                    ng-model="i.SaleQuantity" placeholder="0.00" minlength="1"
+                                                    maxlength="10">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer text-right">
+                                <button type="button" class="btn btn-warning"
+                                    ng-click="resetStockDetails()">Reset</button>
+                            </div>
+                            <div class="card-header">
+                                <h3 class="card-title">Remarks</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group"></div>
+                                <textarea class="form-control" rows="3" ng-model="txtRemarks"
+                                    placeholder="Please enter remarks (if required)" ng-trim="false"
+                                    maxlength="300"></textarea>
+                                <p style="text-align: right">{{300 - txtRemarks.length + ' characters remaining'}}</p>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>

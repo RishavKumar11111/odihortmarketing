@@ -106,6 +106,21 @@ router.get('/dashboard', csrfProtection, permit.permission('AHO'), cache.overrid
   res.render('aho/dashboard', { title: 'Dashboard', csrfToken: req.csrfToken() });
 });
 
+router.get('/stockIn', csrfProtection, permit.permission('AHO'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('aho/stockin', { title: 'Stock In', csrfToken: req.csrfToken() });
+});
+
+router.get('/stockInModify', csrfProtection, permit.permission('AHO'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('aho/stockinmodify', { title: 'View & Modify Stock In Details', csrfToken: req.csrfToken() });
+});
+
+router.get('/stockOut', csrfProtection, permit.permission('AHO'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('aho/stockout', { title: 'Stock Out', csrfToken: req.csrfToken() });
+});
+
 router.get('/changePassword', csrfProtection, permit.permission('AHO'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
@@ -193,6 +208,210 @@ router.get('/getAHODetails', permit.permission('AHO'), function (req, res, next)
     console.log(response.status);
   }).catch(function err(error) {
     console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getDistrictName', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var blockCode = req.session.username.substr(4, 4);
+  balModule.getDistrictName(blockCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getLocationDetails', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var villageCode = req.query.villageCode;
+  balModule.getLocationDetails(villageCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getGPs', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var blockCode = req.session.username.substr(4, 4);
+  balModule.getGPs(blockCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getULBs', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var blockCode = req.session.username.substr(4, 4);
+  balModule.getULBs(blockCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getVillagesByGP', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var gpCode = req.query.gpCode;
+  balModule.getVillagesByGP(gpCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getCategories', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getCategories().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getItemsByCategory', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var categoryID = req.query.categoryID;
+  balModule.getItemsByCategory(categoryID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.post('/submitStockIn', parseForm, csrfProtection, permit.permission('AHO'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var obj = req.body.data.obj;
+  var array = req.body.data.array;
+  if (obj.BlockCode == null) {
+    obj.BlockCode = req.session.username.substr(4, 4);
+  }
+  if (obj.Photo != null) {
+    obj.Photo = Buffer.from(obj.Photo, 'base64');
+  }
+  obj.UserID = req.session.username;
+  obj.IPAddress = req.connection.remoteAddress;
+  obj.FinancialYear = getFinancialYear();
+  obj.Status = null;
+  balModule.submitStockIn(obj, array, function success(response1) {
+    res.send((response1 == array.length) ? true : false);
+  }, function error(response) {
+    console.log(response.status);
+  });
+});
+
+router.get('/getStockInDetails', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var userID = req.session.username;
+  var categoryID = req.query.categoryID;
+  var itemID = req.query.itemID;
+  var dateFrom = req.query.dateFrom;
+  var dateTill = req.query.dateTill;
+  balModule.getStockInDetails(userID, categoryID, itemID, dateFrom, dateTill).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getStockInLocationItemDetails', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var referenceNo = req.query.referenceNo;
+  var farmerID = req.query.farmerID;
+  var itemID = req.query.itemID;
+  var blockCode = req.session.username.substr(4, 4);
+  var farmerName = req.query.farmerName;
+  var farmerMobileNo = req.query.farmerMobileNo;
+  balModule.getStockInLocationItemDetails(referenceNo, farmerID, itemID, blockCode, farmerName, farmerMobileNo).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.post('/updateStockInDetails', parseForm, csrfProtection, permit.permission('AHO'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/updateStockInDetails', 'UPDATE', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var obj = req.body.data;
+  obj.UserID = req.session.username
+  obj.IPAddress = req.connection.remoteAddress;
+  obj.FinancialYear = getFinancialYear();
+  obj.Status = 0;
+  balModule.updateStockInDetails(obj, function success(response1) {
+    for (var propName in response1[0][0]) {
+      if (response1[0][0].hasOwnProperty(propName)) {
+        res.send(response1[0][0][propName] == 1 ? true : false);
+      }
+    }
+  }, function error(response) {
+    console.log(response.status);
+  });
+});
+
+router.get('/getStockDetails', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var obj = {};
+  obj.userID = req.session.username;
+  obj.categoryID = req.query.categoryID;
+  obj.itemID = req.query.itemID;
+  if (req.query.hasOwnProperty('gpCode') && req.query.hasOwnProperty('villageCode')) {
+    obj.gpCode = req.query.gpCode;
+    obj.villageCode = req.query.villageCode;
+  }
+  else {
+    obj.blockCode = req.query.blockCode;
+  }
+  balModule.getStockDetails(obj).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.post('/submitStockOut', parseForm, csrfProtection, permit.permission('AHO'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockOut', 'INSERT', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var stockArray = req.body.data.array;
+  var obj = req.body.data.obj;
+  obj.UserID = req.session.username;
+  obj.IPAddress = req.connection.remoteAddress;
+  obj.FinancialYear = getFinancialYear();
+  obj.Status = null;
+  balModule.submitStockOut(stockArray, obj, function success(response1) {
+    res.send((response1 == stockArray.length) ? true : false);
+  }, function error(response) {
+    console.log(response.status);
   });
 });
 

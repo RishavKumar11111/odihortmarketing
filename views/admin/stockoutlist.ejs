@@ -66,8 +66,7 @@
                                             <i class="far fa-calendar-alt"></i>
                                         </span>
                                     </div>
-                                    <input type="text" class="form-control float-right" id="dateRange"
-                                        required>
+                                    <input type="text" class="form-control float-right" id="dateRange" required>
                                 </div>
                             </div>
                         </div>
@@ -101,9 +100,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <p style="margin-bottom: 0;"><span ng-show="totalQuintal.toFixed(2) != 0.00">Total Quantity: {{totalQuintal.toFixed(2)}} Qtls.</span> <span ng-show="totalQuintal.toFixed(2) != 0.00 && totalNo.toFixed(2) != 0.00">&</span> <span ng-show="totalNo.toFixed(2) != 0.00">Total Quantity: {{totalNo.toFixed(2)}} Lakh Nos.</span></p>
-                            <p ng-show="ddlDistricts != 0" style="margin-bottom: 0;">District: {{districtName | capitalize}}</p>
-                            <p ng-show="ddlCategories != 0" style="margin-bottom: 0;">Category: {{categoryName | capitalize}}</p>
+                            <p style="margin-bottom: 0;"><span ng-show="totalQuintal.toFixed(2) != 0.00">Total Quantity:
+                                    {{totalQuintal.toFixed(2)}} Qtls.</span> <span
+                                    ng-show="totalQuintal.toFixed(2) != 0.00 && totalNo.toFixed(2) != 0.00">&</span>
+                                <span ng-show="totalNo.toFixed(2) != 0.00">Total Quantity: {{totalNo.toFixed(2)}} Lakh
+                                    Nos.</span></p>
+                            <p ng-show="ddlDistricts != 0" style="margin-bottom: 0;">District:
+                                {{districtName | capitalize}}</p>
+                            <p ng-show="ddlCategories != 0" style="margin-bottom: 0;">Category:
+                                {{categoryName | capitalize}}</p>
                             <p ng-show="ddlItems != 0" style="margin-bottom: 0;">Item: {{itemName | capitalize}}</p>
                             <p ng-show="displayDate != ''" style="margin-bottom: 0;">Date Range: {{displayDate}}</p>
                         </div>
@@ -111,9 +116,20 @@
                             <table class="table table-hover text-wrap">
                                 <thead>
                                     <tr>
-                                        <th ng-click="sort('DistrictName')" style="cursor: pointer;" ng-show="ddlDistricts == 0">
+                                        <th ng-click="sort('DistrictName')" style="cursor: pointer;"
+                                            ng-show="ddlDistricts == 0">
                                             District
                                             <span class="fa fa-sort" ng-show="sortKey=='DistrictName'"
+                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
+                                        </th>
+                                        <th ng-click="sort('Count')" style="cursor: pointer;">
+                                            ReferenceNo
+                                            <span class="fa fa-sort" ng-show="sortKey=='Count'"
+                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
+                                        </th>
+                                        <th ng-click="sort('FarmerID')" style="cursor: pointer;">
+                                            Farmer ID
+                                            <span class="fa fa-sort" ng-show="sortKey=='FarmerID'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
                                         <th ng-click="sort('FarmerName')" style="cursor: pointer;">
@@ -126,7 +142,8 @@
                                             <span class="fa fa-sort" ng-show="sortKey=='FarmerMobileNo'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('ItemName')" style="cursor: pointer;" ng-show="ddlItems == 0">
+                                        <th ng-click="sort('ItemName')" style="cursor: pointer;"
+                                            ng-show="ddlItems == 0">
                                             Items
                                             <span class="fa fa-sort" ng-show="sortKey=='ItemName'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
@@ -136,22 +153,24 @@
                                             <span class="fa fa-sort" ng-show="sortKey=='SaleQuantity'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('SaleDate')" style="cursor: pointer;">
-                                            Sale Date
-                                            <span class="fa fa-sort" ng-show="sortKey=='SaleDate'"
-                                                ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
-                                        </th>
+                                        <th>Location & Item Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr
-                                        dir-paginate="i in stockOutDetails | orderBy: sortKey: reverse | filter: search | itemsPerPage: pageSize">
+                                        dir-paginate="i in stockOutDetails | orderBy: 'Count': !reverse | filter: search | itemsPerPage: pageSize">
                                         <td ng-show="ddlDistricts == 0">{{i.DistrictName | capitalize}}</td>
+                                        <td>{{(i.ReferenceNo == null) ? 'NA' : i.ReferenceNo}}</td>
+                                        <td>{{(i.FarmerID == null) ? 'NA' : i.FarmerID}}</td>
                                         <td>{{i.FarmerName | capitalize}}</td>
                                         <td>{{i.FarmerMobileNo}}</td>
                                         <td ng-show="ddlItems == 0">{{i.ItemName | capitalize}}</td>
                                         <td>{{i.SaleQuantity}} {{(i.Unit == 'Q') ? 'Qtls.' : 'Lakh Nos.'}}</td>
-                                        <td>{{i.Date}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
+                                                data-target="#viewModal" id="btnViewModal"
+                                                ng-click="getStockOutLocationItemDetails(i)">View</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -159,6 +178,70 @@
                                 <dir-pagination-controls max-size="10" direction-links="true" boundary-links="true">
                                 </dir-pagination-controls>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="viewModal">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Location & Item Details</h4>
+                            <button type="button" class="close" id="closeViewModal"
+                                data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 col-xs-12" ng-show="refNo !== null">
+                                    <div class="form-group" style="margin: 1rem 0 0">
+                                        <label>Reference No.:</label>
+                                        <label>{{refNo}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12" ng-show="refNo !== null">
+                                    <div class="form-group" style="margin: 1rem 0 0">
+                                        <label>Farmer ID:</label>
+                                        <label>{{fID}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group" style="margin: 1rem 0 0">
+                                        <label>Item:</label>
+                                        <label>{{iNm | capitalize}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover text-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Sub-Division</th>
+                                            <th>Area Type</th>
+                                            <th>Block</th>
+                                            <th>GP</th>
+                                            <th>Village</th>
+                                            <th>Sale Quantity (in {{(ut == 'Q') ? 'Qtls.' : 'Lakh Nos.'}})</th>
+                                            <th>Sale Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="i in stockOutlocationItemDetails">
+                                            <td style="vertical-align: middle">{{i.SubDivisionName}}</td>
+                                            <td style="vertical-align: middle">{{i.AreaType}}</td>
+                                            <td style="vertical-align: middle">{{i.BlockName}}</td>
+                                            <td style="vertical-align: middle">
+                                                {{(i.GPName == null) ? 'NA' : i.GPName}}</td>
+                                            <td style="vertical-align: middle">
+                                                {{(i.VillageName == null) ? 'NA' : i.VillageName}}</td>
+                                            <td>{{i.SaleQuantity}}</td>
+                                            <td>{{(i.Date == '01 Jan 2200') ? '25 Apr 2020' : i.Date}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>

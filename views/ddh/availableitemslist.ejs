@@ -29,6 +29,7 @@
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <tr>
+                                        <th>Sub-Division</th>
                                         <th>Block</th>
                                         <th>GP</th>
                                         <th>Village</th>
@@ -41,19 +42,20 @@
                                         <th>Available From</th>
                                     </tr>
                                     <tr ng-repeat="i in itemDetailsBGVWise">
+                                        <td>{{i.SubDivisionName | capitalize}}</td>
                                         <td>{{i.BlockName | capitalize}}</td>
                                         <td>{{i.GPName | capitalize}}</td>
                                         <td>{{i.VillageName | capitalize}}</td>
                                         <td>{{i.FarmerName | capitalize}}</td>
                                         <td>{{i.FarmerMobileNo}}</td>
-                                        <td>{{i.Quantity}}</td>
+                                        <td>{{i.Balance}}</td>
                                         <td>{{(i.AvailableDate == '01 Jan 2200') ? '25 Apr 2020' : i.AvailableDate}}</td>
                                     </tr>
                                 </table>
                             </div>
                             <div style="text-align: right;">
                                 <h4>
-                                    Total: {{totalQuantityBGVWise.toFixed(2)}}
+                                    Total: {{totalBalanceBGVWise.toFixed(2)}}
                                     <span ng-show="itemDetailsBGVWise[0].Unit == 'Q'">Qtls.</span>
                                     <span ng-show="itemDetailsBGVWise[0].Unit == 'No'">Lakh Nos.</span>
                                 </h4>
@@ -86,7 +88,7 @@
                                         <td><a href="" data-toggle="tooltip" data-placement="top"
                                                 title="Click to view details">{{i.ItemName | capitalize}}</a></td>
                                         <td><a href="" data-toggle="tooltip" data-placement="top"
-                                                title="Click to view details">{{i.Quantity}}&nbsp;&nbsp;&nbsp;<img src="../../public/images/icons/binocular.png" alt="binocular" style="height: 9px;"></a></td>
+                                                title="Click to view details">{{i.Balance}}&nbsp;&nbsp;&nbsp;<img src="../../public/images/icons/binocular.png" alt="binocular" style="height: 9px;"></a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -115,7 +117,7 @@
                                         <td><a href="" data-toggle="tooltip" data-placement="top"
                                                 title="Click to view details">{{i.ItemName | capitalize}}</a></td>
                                         <td><a href="" data-toggle="tooltip" data-placement="top"
-                                                title="Click to view details">{{i.Quantity}}&nbsp;&nbsp;&nbsp;<img src="../../public/images/icons/binocular.png" alt="binocular" style="height: 9px;"></a></td>
+                                                title="Click to view details">{{i.Balance}}&nbsp;&nbsp;&nbsp;<img src="../../public/images/icons/binocular.png" alt="binocular" style="height: 9px;"></a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -146,7 +148,7 @@
                                         <td><a href="" data-toggle="tooltip" data-placement="top"
                                                 title="Click to view details">{{i.ItemName | capitalize}}</a></td>
                                         <td><a href="" data-toggle="tooltip" data-placement="top"
-                                                title="Click to view details">{{i.Quantity}}&nbsp;&nbsp;&nbsp;<img src="../../public/images/icons/binocular.png" alt="binocular" style="height: 9px;"></a></td>
+                                                title="Click to view details">{{i.Balance}}&nbsp;&nbsp;&nbsp;<img src="../../public/images/icons/binocular.png" alt="binocular" style="height: 9px;"></a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -175,7 +177,7 @@
                                         <td><a href="" data-toggle="tooltip" data-placement="top"
                                                 title="Click to view details">{{i.ItemName | capitalize}}</a></td>
                                         <td><a href="" data-toggle="tooltip" data-placement="top"
-                                                title="Click to view details">{{i.Quantity}}&nbsp;&nbsp;&nbsp;<img src="../../public/images/icons/binocular.png" alt="binocular" style="height: 9px;"></a></td>
+                                                title="Click to view details">{{i.Balance}}  {{(i.Unit == 'Q') ? 'Qtls' : 'Lakh nos.'}}&nbsp;&nbsp;&nbsp;<img src="../../public/images/icons/binocular.png" alt="binocular" style="height: 9px;"></a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -207,7 +209,7 @@
                                         <td><a href="" data-toggle="tooltip" data-placement="top"
                                                 title="Click to view details">{{i.ItemName | capitalize}}</a></td>
                                         <td><a href="" data-toggle="tooltip" data-placement="top"
-                                                title="Click to view details">{{i.Quantity}}&nbsp;&nbsp;&nbsp;<img src="../../public/images/icons/binocular.png" alt="binocular" style="height: 9px;"></a></td>
+                                                title="Click to view details">{{i.Balance}} {{(i.Unit == 'Q') ? 'Qtls' : 'Lakh nos.'}}&nbsp;&nbsp;&nbsp;<img src="../../public/images/icons/binocular.png" alt="binocular" style="height: 9px;"></a></td>
                                     </tr>
                                 </tbody>
                             </table>

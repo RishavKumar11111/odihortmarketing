@@ -1,0 +1,280 @@
+<div class="content-wrapper" ng-controller="myADHStockInApproveRejectCtrl" ng-init="getCategories(); getBlocks();">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h1><%= title %></h1>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active"><%= title %></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Select Category, Item and Date</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label">Categories</label>
+                                <select class="form-control select2" ng-model="ddlCategories"
+                                    ng-options="i.CategoryID as i.CategoryName for i in categories"
+                                    ng-change="getItemsByCategory(ddlCategories); stockInDetails = [];">
+                                    <option value="" disabled>Select Category</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label">Items</label>
+                                <select class="form-control select2" ng-model="ddlItems"
+                                    ng-options="i.ItemID as i.ItemName for i in items" ng-change="stockInDetails = [];">
+                                    <option value="" disabled>Select Item</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12" style="text-align: center;">
+                            <label class="control-label">Area</label>
+                            <div class="form-group clearfix" style="margin-top: 8px;">
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="areaType" ng-model="rbAreaType" value="Rural"
+                                        id="radioRural" ng-change="getBlocks();">
+                                    <label for="radioRural">
+                                        Rural
+                                    </label>
+                                </div>
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="areaType" ng-model="rbAreaType" value="Urban"
+                                        id="radioUrban" ng-change="getBlocks();">
+                                    <label for="radioUrban">
+                                        Urban
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label">Blocks</label>
+                                <select ng-show="rbAreaType == 'Rural'" class="form-control select2"
+                                    ng-model="ddlBlocks" ng-options="i.BlockCode as i.BlockName for i in blocks"
+                                    ng-change="stockInDetails = [];">
+                                    <option value="" disabled>Select Blocks</option>
+                                </select>
+                                <select ng-show="rbAreaType == 'Urban'" class="form-control select2"
+                                    ng-model="ddlBlocks" ng-options="i.ULBCode as i.ULBName for i in blocks"
+                                    ng-change="stockInDetails = [];">
+                                    <option value="" disabled>Select Blocks</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary" ng-click="getStockInDetails()">View Stock In
+                        Details</button>
+                </div>
+            </div>
+            <div class="row" ng-show="stockInDetails.length > 0">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Stock In Details</h3><br>
+                            <p style="margin-bottom: 0;"><span ng-show="totalQuintal.toFixed(2) != 0.00">Total Quantity:
+                                    {{totalQuintal.toFixed(2)}} Qtls.</span> <span
+                                    ng-show="totalQuintal.toFixed(2) != 0.00 && totalNo.toFixed(2) != 0.00">&</span>
+                                <span ng-show="totalNo.toFixed(2) != 0.00">Total Quantity: {{totalNo.toFixed(2)}} Lakh
+                                    Nos.</span></p>
+                            <p ng-show="ddlBlocks != 0" style="margin-bottom: 0;">Block: {{blockName | capitalize}}</p>
+                            <p ng-show="ddlCategories != 0" style="margin-bottom: 0;">Category:
+                                {{categoryName | capitalize}}</p>
+                            <p ng-show="ddlItems != 0" style="margin-bottom: 0;">Item: {{itemName | capitalize}}</p>
+                        </div>
+                        <div class="card-body">
+                            <div class=" table-responsive p-0">
+                                <table class="table table-hover text-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <div class="icheck-success d-inline">
+                                                    <input type="checkbox" ng-click="toggleAll()"
+                                                        ng-model="isAllSelected" id="checkboxSelectAll">
+                                                    <label for="checkboxSelectAll">
+                                                        Select All
+                                                    </label>
+                                                </div>
+                                            </th>
+                                            <th>Reference No.</th>
+                                            <th>Farmer ID</th>
+                                            <th>Farmer Name</th>
+                                            <th>Farmer Mobile No.</th>
+                                            <th ng-show="ddlItems == 0">Item</th>
+                                            <th>Quantity</th>
+                                            <th>Cultivation Area (in Ha.)</th>
+                                            <th>Location & Item Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="i in stockInDetails | orderBy: '-Count'">
+                                            <td style="vertical-align: middle;">
+                                                <div class="icheck-success d-inline">
+                                                    <input type="checkbox" ng-model="i.selected"
+                                                        ng-change="optionToggled(i.selected, i)"
+                                                        id="checkboxSelect{{$index}}">
+                                                    <label for="checkboxSelect{{$index}}"></label>
+                                                </div>
+                                            </td>
+                                            <td>{{(i.ReferenceNo == null) ? 'NA' : i.ReferenceNo}}</td>
+                                            <td>{{(i.FarmerID == null) ? 'NA' : i.FarmerID}}</td>
+                                            <td>{{i.FarmerName | capitalize}}</td>
+                                            <td>{{i.FarmerMobileNo}}</td>
+                                            <td ng-show="ddlItems == 0">{{i.ItemName | capitalize}}</td>
+                                            <td>{{i.Quantity}} {{(i.Unit == 'Q') ? 'Qtls.' : 'Lakh Nos.'}}</td>
+                                            <td>{{i.CultivationArea}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
+                                                    data-target="#modifyModal" id="btnModifyModal"
+                                                    ng-click="getLocationItemDetails(i)">View / Modify</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" ng-model="txtRemarks"
+                                    placeholder="Please enter remarks (if required)" ng-trim="false"
+                                    maxlength="300"></textarea>
+                                <p style="text-align: right">{{300 - txtRemarks.length + ' characters remaining'}}</p>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button type="button" class="btn btn-success" ng-click="finalizeStockIn(1)">Approve</button>
+                            <button type="button" class="btn btn-danger" ng-click="finalizeStockIn(2)">Reject</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modifyModal">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <form class="form-horizontal" name="simForm" role="form" autocomplete="off" novalidate>
+                            <div class="modal-header">
+                                <h4>Modify Stock In Details</h4>
+                                <button type="button" class="close" id="closeModifyModal" data-dismiss="modal"
+                                    ng-click="simForm.$setPristine(); SIHL = false; SLHI = true;">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>Reference No.:</label>
+                                            <label>{{refNo}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>Farmer ID:</label>
+                                            <label>{{fID}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div class="form-group" style="margin: 1rem 0 0">
+                                            <label>Item:</label>
+                                            <label>{{iNm | capitalize}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-hover text-wrap">
+                                        <thead>
+                                            <tr>
+                                                <th>Area Type</th>
+                                                <th>Block</th>
+                                                <th>GP</th>
+                                                <th>Village</th>
+                                                <th>Available Date Range</th>
+                                                <th>Quantity (in {{(ut == 'Q') ? 'Qtls.' : 'Lakh Nos.'}})</th>
+                                                <th>Cultivation Area (in Ha.)</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="i in locationItemDetails">
+                                                <td style="vertical-align: middle">{{i.AreaType}}</td>
+                                                <td style="vertical-align: middle">{{i.BlockName}}</td>
+                                                <td style="vertical-align: middle">
+                                                    {{(i.GPName == null) ? 'NA' : i.GPName}}</td>
+                                                <td style="vertical-align: middle">
+                                                    {{(i.VillageName == null) ? 'NA' : i.VillageName}}</td>
+                                                <td style="vertical-align: middle">
+                                                    {{(i.AvailableFrom == '01-01-2200') ? '25-04-2020' : i.AvailableFrom | date: 'dd-MM-y'}}
+                                                    -
+                                                    {{(i.AvailableTill == '01-01-2200') ? '25-04-2020' : i.AvailableTill | date: 'dd-MM-y'}}
+                                                </td>
+                                                <td ng-show="SLHI" style="vertical-align: middle">{{i.Quantity}}</td>
+                                                <td ng-show="SIHL" style="vertical-align: middle">
+                                                    <input type="text" class="form-control" name="quantity[{{$index}}]"
+                                                        valid-number-upto-two-decimal ng-model="i.Quantity"
+                                                        placeholder="Enter Quantity" minlength="1" maxlength="10"
+                                                        required>
+                                                    <span style="color:red"
+                                                        ng-show="simForm['quantity[' + $index + ']'].$touched && simForm['quantity[' + $index + ']'].$error.required">This
+                                                        is a
+                                                        required
+                                                        field</span>
+                                                </td>
+                                                <td ng-show="SLHI" style="vertical-align: middle">{{i.CultivationArea}}
+                                                </td>
+                                                <td ng-show="SIHL" style="vertical-align: middle">
+                                                    <input type="text" class="form-control"
+                                                        name="cultivationArea[{{$index}}]" valid-number-upto-two-decimal
+                                                        ng-model="i.CultivationArea"
+                                                        placeholder="Enter Cultivation Area" minlength="1"
+                                                        maxlength="10" required>
+                                                    <span style="color:red"
+                                                        ng-show="simForm['cultivationArea[' + $index + ']'].$touched && simForm['cultivationArea[' + $index + ']'].$error.required">This
+                                                        is a
+                                                        required
+                                                        field</span>
+                                                </td>
+                                                <td style="vertical-align: middle; display: grid; border: none;">
+                                                    <input ng-show="i.UpdateStatus == 'Can be updated' && SLHI"
+                                                        id="btnSwap{{$index}}" type="button"
+                                                        class="btn btn-warning btn-sm" value="Modify"
+                                                        ng-click="SIHL = true; SLHI = false;" />
+                                                    <label class="text-danger" ng-show="i.UpdateStatus == 'Cannot be updated'">Values cannot
+                                                        be modified.</label>
+                                                    <input ng-show="SIHL" id="btnUpdate{{$index}}" type="button"
+                                                        class="btn btn-success btn-sm" value="Update"
+                                                        ng-click="updateStockInDetails(i)" />
+                                                    <input ng-show="SIHL" id="btnCancel{{$index}}" type="button"
+                                                        class="btn btn-danger btn-sm" value="Cancel"
+                                                        ng-click="SIHL = false; SLHI = true;" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                    ng-click="simForm.$setPristine(); SIHL = false; SLHI = true;">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

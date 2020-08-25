@@ -111,6 +111,11 @@ router.get('/ahoDetails', csrfProtection, permit.permission('ADH'), cache.overri
   res.render('adh/ahodetails', { title: 'AHO Details', csrfToken: req.csrfToken() });
 });
 
+router.get('/stockInApproveReject', csrfProtection, permit.permission('ADH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('adh/stockinapprovereject', { title: 'Approve / Reject Stock In Details', csrfToken: req.csrfToken() });
+});
+
 router.get('/changePassword', csrfProtection, permit.permission('ADH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
@@ -284,6 +289,121 @@ router.post('/removeAHO', parseForm, csrfProtection, permit.permission('ADH'), c
     });
   }, function error(response1) {
     console.log(response1.status);
+  });
+});
+
+router.get('/getCategories', permit.permission('ADH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.getCategories().then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getItemsByCategory', permit.permission('ADH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var categoryID = req.query.categoryID;
+  balModule.getItemsByCategory(categoryID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getBlocks', permit.permission('ADH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var subDivisionCode = req.session.username.substr(4, 7);
+  balModule.getBlocks(subDivisionCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getULBs', permit.permission('ADH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var subDivisionCode = req.session.username.substr(4, 7);
+  balModule.getULBs(subDivisionCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getStockInDetails', permit.permission('ADH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var subDivisionCode = req.session.username.substr(4, 7);
+  var categoryID = req.query.categoryID;
+  var itemID = req.query.itemID;
+  var areaType = req.query.areaType;
+  var blockCode = req.query.blockCode;
+  balModule.getStockInDetails(subDivisionCode, blockCode, categoryID, areaType, itemID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getLocationItemDetails', permit.permission('ADH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var referenceNo = req.query.referenceNo;
+  var farmerID = req.query.farmerID;
+  var itemID = req.query.itemID;
+  balModule.getLocationItemDetails(referenceNo, farmerID, itemID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.post('/updateStockInDetails', parseForm, csrfProtection, permit.permission('ADH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/updateStockInDetails', 'UPDATE', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var obj = req.body.data;
+  obj.UserID = req.session.username
+  obj.IPAddress = req.connection.remoteAddress;
+  obj.FinancialYear = getFinancialYear();
+  obj.Status = 0;
+  balModule.updateStockInDetails(obj, function success(response1) {
+    for (var propName in response1[0][0]) {
+      if (response1[0][0].hasOwnProperty(propName)) {
+        res.send(response1[0][0][propName] == 1 ? true : false);
+      }
+    }
+  }, function error(response) {
+    console.log(response.status);
+  });
+});
+
+router.post('/finalizeStockIn', parseForm, csrfProtection, permit.permission('ADH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/finalizeStockIn', 'UPDATE', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var array = req.body.data.array;
+  var obj = req.body.data.obj;
+  obj.UserID = req.session.username;
+  balModule.finalizeStockIn(array, obj, function success(response1) {
+    res.send((response1 == array.length) ? true : false);
+  }, function error(response) {
+    console.log(response.status);
   });
 });
 

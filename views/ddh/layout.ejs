@@ -186,7 +186,7 @@
                                 </p>
                             </a>
                         </li> -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="#!stockIn" class="nav-link">
                                 <i class="nav-icon fas fa-edit"></i>
                                 <p>
@@ -201,7 +201,7 @@
                                     Stock Out
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a href="#!adhDetails" class="nav-link">
                                 <i class="nav-icon fas fa-edit"></i>
@@ -326,14 +326,11 @@
                 // .when("/stockIn", {
                 //     templateUrl: "ddh/stockIn",
                 //     controller: 'myDDHStockInCtrl'
+                // }).when("/stockOut", {
+                //     templateUrl: "ddh/stockOut",
+                //     controller: 'myDDHStockOutCtrl'
                 // })
                 .when("/", {
-                    templateUrl: "ddh/stockIn",
-                    controller: 'myDDHStockInCtrl'
-                }).when("/stockOut", {
-                    templateUrl: "ddh/stockOut",
-                    controller: 'myDDHStockOutCtrl'
-                }).when("/adhDetails", {
                     templateUrl: "ddh/adhDetails",
                     controller: 'myDDHADHDetailsCtrl'
                 }).when("/availableItemsList", {
@@ -505,8 +502,8 @@
         });
     </script>
     <script src="../../public/controllers/ddh/myDDHDashboardCtrl.js"></script>
-    <script src="../../public/controllers/ddh/myDDHStockInCtrl.js"></script>
-    <script src="../../public/controllers/ddh/myDDHStockOutCtrl.js"></script>
+    <!-- <script src="../../public/controllers/ddh/myDDHStockInCtrl.js"></script>
+    <script src="../../public/controllers/ddh/myDDHStockOutCtrl.js"></script> -->
     <script src="../../public/controllers/ddh/myDDHADHDetailsCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHAvailableItemsListCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHItemsAvailableBlockWiseCtrl.js"></script>

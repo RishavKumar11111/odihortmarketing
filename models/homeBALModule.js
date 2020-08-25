@@ -107,7 +107,7 @@ exports.changePasssword = function (obj, callback) {
 };
 
 exports.getItemDetails = function () {
-    return sequelize.query('select a.ItemID, ItemName, CategoryName, sum(Quantity) - isnull(sum(SaleQuantity), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemId = c.ItemId left join (select StockID, isnull(sum(SaleQuantity), 0) SaleQuantity from StockOut group by StockID) b on a.StockId = b.StockId inner join Category d on c.CategoryID = d.CategoryID group by a.ItemID, ItemName, CategoryName, Unit having sum(Quantity) - isnull(sum(SaleQuantity) ,0) > 0 order by ItemName, CategoryName', {
+    return sequelize.query('select a.ItemID, ItemName, CategoryName, isnull(sum(Balance), 0) Balance, Unit from StockInItems a inner join Items b on a.ItemID = b.ItemID inner join Category c on b.CategoryID = c.CategoryId inner join StockIn d on a.StockID = d.StockID where ((datediff(d, d.DateTime, getdate()) >= 1 and (Status is null or Status = 0 or Status = 1)) or (datediff(d, d.DateTime, getdate()) = 0 and Status = 1)) group by a.ItemID, ItemName, CategoryName, Unit having sum(Balance) > 0 order by ItemName', {
         type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;
@@ -117,7 +117,7 @@ exports.getItemDetails = function () {
 };
 
 exports.getItemDetailsDistrictWise = function (itemID) {
-    return sequelize.query('select d.DistrictCode, DistrictName, DDHName, DDHMobileNo, a.ItemID, ItemName, sum(Quantity) - isnull(sum(SaleQuantity), 0) Quantity, Unit from StockIn a inner join Items c on a.ItemID = c.ItemID and a.ItemId = :item_id inner join LGDDistrict d on d.DistrictCode = substring(a.UserID, 5, 3) inner join DDHDistrictMapping e on substring(e.DDHUserID, 5, 3) = d.DistrictCode left join (select StockID, isnull(sum(SaleQuantity), 0) SaleQuantity from StockOut group by StockID) b on a.StockID = b.StockID group by d.DistrictCode, DistrictName, DDHName, DDHMobileNo, a.ItemID, ItemName, Unit having sum(Quantity) - isnull(sum(SaleQuantity), 0) > 0 order by DistrictName, DDHName, ItemName', {
+    return sequelize.query('select d.DistrictCode, DistrictName, DDHName, DDHMobileNo, a.ItemID, ItemName, isnull(sum(Balance), 0) Balance, Unit from StockInItems a inner join StockIn b on a.StockID = b.StockID inner join Items c on a.ItemID = c.ItemID inner join LGDBlock d on substring(b.UserID, 5, 4) = d.BlockCode inner join LGDDistrict e on d.DistrictCode = e.DistrictCode inner join DDHDistrictMapping f on e.DistrictCode = f.DistrictCode where ((datediff(d, b.DateTime, getdate()) >= 1 and (a.Status is null or a.Status = 0 or a.Status = 1)) or (datediff(d, b.DateTime, getdate()) = 0 and a.Status = 1)) and a.ItemID = :item_id group by d.DistrictCode, DistrictName, DDHName, DDHMobileNo, a.ItemID, ItemName, Unit having sum(Balance) > 0 order by DistrictName, DDHName', {
         replacements: { item_id: itemID }, type: sequelize.QueryTypes.SELECT
     }).then(function success(data) {
         return data;

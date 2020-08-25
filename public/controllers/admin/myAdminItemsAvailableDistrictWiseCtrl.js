@@ -56,10 +56,10 @@ app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http,
                 $scope.totalNo = 0;
                 angular.forEach($scope.itemsAvailable, function (i) {
                     if (i.Unit == 'Q') {
-                        $scope.totalQuintal += i.Quantity;
+                        $scope.totalQuintal += i.Balance;
                     }
                     else {
-                        $scope.totalNo += i.Quantity;
+                        $scope.totalNo += i.Balance;
                     }
                 })
                 $scope.pageSize = 50;
@@ -78,6 +78,18 @@ app.controller('myAdminItemsAvailableDistrictWiseCtrl', function ($scope, $http,
     $scope.sort = function (keyname) {
         $scope.sortKey = keyname;
         $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.getLocationDetails = function (i) {
+        $scope.iNm = i.ItemName;
+        $scope.ut = i.Unit;
+        $scope.refNo = i.ReferenceNo;
+        $scope.fID = i.FarmerID;
+        $scope.sdNm = i.SubDivisionName;
+        $scope.at = i.AreaType;
+        $scope.bNm = i.BlockName;
+        $scope.gNm = i.GPName;
+        $scope.vNm = i.VillageName;
     };
 
 });

@@ -187,6 +187,30 @@
                             </a>
                         </li> -->
                         <li class="nav-item">
+                            <a href="#!stockIn" class="nav-link">
+                                <i class="nav-icon fas fa-edit"></i>
+                                <p>
+                                    Stock In
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#!stockInModify" class="nav-link">
+                                <i class="nav-icon fas fa-edit"></i>
+                                <p>
+                                    View & Modify Stock In Details
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#!stockOut" class="nav-link">
+                                <i class="nav-icon fas fa-edit"></i>
+                                <p>
+                                    Stock Out
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="#!changePassword" class="nav-link">
                                 <i class="nav-icon fas fa-key"></i>
                                 <p>
@@ -258,7 +282,20 @@
                 //     templateUrl: "aho/dashboard",
                 //     controller: 'myAHODashboardCtrl'
                 // })
+                // .when("/stockIn", {
+                //     templateUrl: "aho/stockIn",
+                //     controller: 'myAHOStockInCtrl'
+                // })
                 .when("/", {
+                    templateUrl: "aho/stockIn",
+                    controller: 'myAHOStockInCtrl'
+                }).when("/stockInModify", {
+                    templateUrl: "aho/stockInModify",
+                    controller: 'myAHOStockInModifyCtrl'
+                }).when("/stockOut", {
+                    templateUrl: "aho/stockOut",
+                    controller: 'myAHOStockOutCtrl'
+                }).when("/changePassword", {
                     templateUrl: "aho/changePassword",
                     controller: 'myAHOChangePasswordCtrl'
                 }).otherwise({
@@ -412,6 +449,9 @@
         });
     </script>
     <script src="../../public/controllers/aho/myAHODashboardCtrl.js"></script>
+    <script src="../../public/controllers/aho/myAHOStockInCtrl.js"></script>
+    <script src="../../public/controllers/aho/myAHOStockInModifyCtrl.js"></script>
+    <script src="../../public/controllers/aho/myAHOStockOutCtrl.js"></script>
     <script src="../../public/controllers/aho/myAHOChangePasswordCtrl.js"></script>
     <!-- jQuery -->
     <script src="../../AdminLTE/plugins/jquery/jquery.min.js"></script>

@@ -313,6 +313,23 @@ router.get('/getStockInDetails', permit.permission('ADMIN'), function (req, res,
   });
 });
 
+router.get('/getStockInLocationItemDetails', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var referenceNo = req.query.referenceNo;
+  var farmerID = req.query.farmerID;
+  var itemID = req.query.itemID;
+  var districtCode = req.query.districtCode;
+  var farmerName = req.query.farmerName;
+  var farmerMobileNo = req.query.farmerMobileNo;
+  balModule.getStockInLocationItemDetails(referenceNo, farmerID, itemID, districtCode, farmerName, farmerMobileNo).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
 router.get('/getStockOutDetails', permit.permission('ADMIN'), function (req, res, next) {
   res.get('X-Frame-Options');
   var districtCode = req.query.districtCode
@@ -321,6 +338,23 @@ router.get('/getStockOutDetails', permit.permission('ADMIN'), function (req, res
   var dateFrom = req.query.dateFrom;
   var dateTill = req.query.dateTill;
   balModule.getStockOutDetails(districtCode, categoryID, itemID, dateFrom, dateTill).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getStockOutLocationItemDetails', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var referenceNo = req.query.referenceNo;
+  var farmerID = req.query.farmerID;
+  var itemID = req.query.itemID;
+  var districtCode = req.query.districtCode;
+  var farmerName = req.query.farmerName;
+  var farmerMobileNo = req.query.farmerMobileNo;
+  balModule.getStockOutLocationItemDetails(referenceNo, farmerID, itemID, districtCode, farmerName, farmerMobileNo).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);

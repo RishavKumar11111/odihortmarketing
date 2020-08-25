@@ -150,51 +150,51 @@ app.controller('myDDHStockInCtrl', function ($scope, $http, $filter) {
         }
     };
 
-    $scope.submitStockIn = function (isValid) {
-        if ($scope.txtFarmerMobileNo != undefined) {
-            if (isValid) {
-                if (($scope.rbAreaType == 'Rural' && $scope.ddlGPs !== undefined && $scope.ddlGPs !== null && $scope.ddlGPs !== '' && $scope.ddlVillages !== undefined && $scope.ddlVillages !== null && $scope.ddlVillages !== '') || ($scope.rbAreaType == 'Urban' && ($scope.ddlGPs == undefined || $scope.ddlGPs == null || $scope.ddlGPs == '') && ($scope.ddlVillages == undefined || $scope.ddlVillages == null || $scope.ddlVillages == ''))) {
-                    var availableDate = document.getElementById("availabilityRange").value;
-                    if (availableDate !== undefined && availableDate !== null && availableDate !== '') {
-                        var message = confirm('Do you really want to submit the form?');
-                        if (message) {
-                            var imageData = (document.getElementById("uploadedImage")) ? document.getElementById("uploadedImage").src.replace('data:image/jpeg;base64,', '') : null;;
-                            var availableFrom = availableDate.split(' - ')[0].split("-").reverse().join("-");
-                            var availableTill = availableDate.split(' - ')[1].split("-").reverse().join("-");
-                            var myData = { BlockCode: $scope.ddlBlocks, GPCode: $scope.ddlGPs, VillageCode: $scope.ddlVillages, AreaType: $scope.rbAreaType, ItemID: $scope.ddlItems, FarmerName: $scope.txtFarmerName, FarmerMobileNo: $scope.txtFarmerMobileNo, Quantity: $scope.txtQuantity, Photo: imageData, AvailableFrom: availableFrom, AvailableTill: availableTill };
-                            $http.post('http://localhost:3000/ddh/submitStockIn', { data: myData }, { credentials: 'same-origin', headers: { 'CSRF-Token': token } }).then(function success(response) {
-                                var result = response.data;
-                                if (result == true) {
-                                    alert('The Stock In details are submitted successfully.');
-                                    $scope.ddlBlocks = null; $scope.gps = []; $scope.villages = []; $scope.ddlGPs = null; $scope.ddlVillages = null; $scope.ddlItems = null; $scope.items = []; $scope.txtFarmerName = null; $scope.txtFarmerMobileNo = null; $scope.txtQuantity = null; document.getElementById('thumbnail').innerHTML = ''; document.getElementById('imageFile').value = '';
-                                    var cbs = document.getElementsByName('categories');
-                                    for (var i = 0; i < cbs.length; i++)
-                                        cbs[i].checked = false;
-                                }
-                                else {
-                                    alert('An error occurred... Please contact the administrator.');
-                                }
-                            }).catch(function error(err) {
-                                console.log('An error occurred...', err);
-                            });
-                        }
-                    }
-                    else {
-                        alert('Please select the Availability Date Range.');
-                    }
-                }
-                else {
-                    alert('Please select GP and Village for the Rural Area Type.');
-                }
-            }
-            else {
-                alert('Please fill all the fields.');
-            }
-        }
-        else {
-            alert('Please enter a valid Mobile No.');
-        }
-    };
+    // $scope.submitStockIn = function (isValid) {
+    //     if ($scope.txtFarmerMobileNo != undefined) {
+    //         if (isValid) {
+    //             if (($scope.rbAreaType == 'Rural' && $scope.ddlGPs !== undefined && $scope.ddlGPs !== null && $scope.ddlGPs !== '' && $scope.ddlVillages !== undefined && $scope.ddlVillages !== null && $scope.ddlVillages !== '') || ($scope.rbAreaType == 'Urban' && ($scope.ddlGPs == undefined || $scope.ddlGPs == null || $scope.ddlGPs == '') && ($scope.ddlVillages == undefined || $scope.ddlVillages == null || $scope.ddlVillages == ''))) {
+    //                 var availableDate = document.getElementById("availabilityRange").value;
+    //                 if (availableDate !== undefined && availableDate !== null && availableDate !== '') {
+    //                     var message = confirm('Do you really want to submit the form?');
+    //                     if (message) {
+    //                         var imageData = (document.getElementById("uploadedImage")) ? document.getElementById("uploadedImage").src.replace('data:image/jpeg;base64,', '') : null;;
+    //                         var availableFrom = availableDate.split(' - ')[0].split("-").reverse().join("-");
+    //                         var availableTill = availableDate.split(' - ')[1].split("-").reverse().join("-");
+    //                         var myData = { BlockCode: $scope.ddlBlocks, GPCode: $scope.ddlGPs, VillageCode: $scope.ddlVillages, AreaType: $scope.rbAreaType, ItemID: $scope.ddlItems, FarmerName: $scope.txtFarmerName, FarmerMobileNo: $scope.txtFarmerMobileNo, Quantity: $scope.txtQuantity, Photo: imageData, AvailableFrom: availableFrom, AvailableTill: availableTill };
+    //                         $http.post('http://localhost:3000/ddh/submitStockIn', { data: myData }, { credentials: 'same-origin', headers: { 'CSRF-Token': token } }).then(function success(response) {
+    //                             var result = response.data;
+    //                             if (result == true) {
+    //                                 alert('The Stock In details are submitted successfully.');
+    //                                 $scope.ddlBlocks = null; $scope.gps = []; $scope.villages = []; $scope.ddlGPs = null; $scope.ddlVillages = null; $scope.ddlItems = null; $scope.items = []; $scope.txtFarmerName = null; $scope.txtFarmerMobileNo = null; $scope.txtQuantity = null; document.getElementById('thumbnail').innerHTML = ''; document.getElementById('imageFile').value = '';
+    //                                 var cbs = document.getElementsByName('categories');
+    //                                 for (var i = 0; i < cbs.length; i++)
+    //                                     cbs[i].checked = false;
+    //                             }
+    //                             else {
+    //                                 alert('An error occurred... Please contact the administrator.');
+    //                             }
+    //                         }).catch(function error(err) {
+    //                             console.log('An error occurred...', err);
+    //                         });
+    //                     }
+    //                 }
+    //                 else {
+    //                     alert('Please select the Availability Date Range.');
+    //                 }
+    //             }
+    //             else {
+    //                 alert('Please select GP and Village for the Rural Area Type.');
+    //             }
+    //         }
+    //         else {
+    //             alert('Please fill all the fields.');
+    //         }
+    //     }
+    //     else {
+    //         alert('Please enter a valid Mobile No.');
+    //     }
+    // };
 
     // var compressImage = function (file, reader, fileName, callback) {
     //     var width = 500;

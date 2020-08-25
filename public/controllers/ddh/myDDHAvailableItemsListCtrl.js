@@ -39,9 +39,9 @@ app.controller('myDDHAvailableItemsListCtrl', function ($scope, $http, $filter) 
     $scope.getItemDetailsBGVWise = function (itemID) {
         $http.get('http://localhost:3000/ddh/getItemDetailsBGVWise?itemID=' + itemID).then(function success(response) {
             $scope.itemDetailsBGVWise = response.data;
-            $scope.totalQuantityBGVWise = 0;
+            $scope.totalBalanceBGVWise = 0;
             angular.forEach($scope.itemDetailsBGVWise, function (i) {
-                $scope.totalQuantityBGVWise += i.Quantity;
+                $scope.totalBalanceBGVWise += i.Balance;
             });
         }, function error(response) {
             console.log(response.status);

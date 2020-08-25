@@ -356,7 +356,7 @@
                             <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/APC.jpg"
                                 alt="Card image">
                             <div class="card-body">
-                                <h4 class="card-title">Shri Suresh Chandra Mahapatra, IAS</h4>
+                                <h4 class="card-title">Shri Raj Kumar Sharma, IAS</h4>
                                 <p class="card-text po" style="font-size: 14px; height: 40px;">Agriculture Production
                                     Commissioner</p>
                             </div>
@@ -372,17 +372,17 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="colo">
+                    <div class="colo">
                         <div class="card cardBorder">
                             <img class="card-img-top cardImage" src="../gigw/nielit.gov.in/sites/default/files/HD.jpg"
                                 alt="Card image">
                             <div class="card-body">
-                                <h4 class="card-title"></h4>
+                                <h4 class="card-title">Sri Rohit Kumar Lenka, IFS</h4>
                                 <p class="card-text po" style="font-size: 14px; height: 40px;">Director, Horticulture
                                 </p>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
                 <!--<div style="margin-bottom: 20px" class="message_boxmain">
                     <div class="boxmain">
@@ -491,7 +491,7 @@
                                     <td>{{i.DDHName | capitalize}}</td>
                                     <td>{{i.DDHMobileNo}}</td>
                                     <td ng-click="getItemDetailsBGVWise(i.DistrictCode, i.ItemID)"><a href=""
-                                            class="tooltip" style="color: black">{{i.Quantity}} <img
+                                            class="tooltip" style="color: black">{{i.Balance}} <img
                                                 src="../public/images/icons/binocular.png" alt="binocular"
                                                 style="height: 9px;"></i><span class="tooltiptext">Click to view
                                                 details</span></a>
@@ -500,6 +500,7 @@
                             </table>
                             <table ng-show="itemDetailsBGVWise.length > 0">
                                 <tr>
+                                    <th>Sub-Division</th>
                                     <th>Block</th>
                                     <th>GP</th>
                                     <th>Village</th>
@@ -511,11 +512,12 @@
                                     <th>Available From</th>
                                 </tr>
                                 <tr ng-repeat="i in itemDetailsBGVWise">
+                                    <td>{{i.SubDivisionName | capitalize}}</td>
                                     <td>{{i.BlockName | capitalize}}</td>
-                                    <td>{{i.GPName | capitalize}}</td>
-                                    <td>{{i.VillageName | capitalize}}</td>
+                                    <td>{{i.GPName == null ? 'NA' : i.GPName | capitalize}}</td>
+                                    <td>{{i.VillageName == null ? 'NA' : i.VillageName | capitalize}}</td>
                                     <td>{{i.FarmerName | capitalize}}</td>
-                                    <td>{{i.Quantity}}</td>
+                                    <td>{{i.Balance}}</td>
                                     <td>{{(i.AvailableDate == '01 Jan 2200') ? '25 Apr 2020' : i.AvailableDate}}</td>
                                 </tr>
                             </table>
@@ -524,18 +526,18 @@
                             <div style="display: inline-flex;">
                                 <h2 ng-show="itemDetailsBGVWise.length == 0 && itemDetailsDistrictWise.length > 0"
                                     style="color: black; text-align: right;">
-                                    Total: {{totalQuantityDistrictWise.toFixed(2)}}
+                                    Total: {{totalBalanceDistrictWise.toFixed(2)}}
                                     <span ng-show="itemDetailsDistrictWise[0].Unit == 'Q'">Qtls.</span>
                                     <span ng-show="itemDetailsDistrictWise[0].Unit == 'No'">Lakh Nos.</span>
                                 </h2>
                                 <h2 ng-show="itemDetailsBGVWise.length > 0"
                                     style="color: black; text-align: right; margin: 10px 30px 5px 0;">
-                                    Total: {{totalQuantityBGVWise.toFixed(2)}}
+                                    Total: {{totalBalanceBGVWise.toFixed(2)}}
                                     <span ng-show="itemDetailsBGVWise[0].Unit == 'Q'">Qtls.</span>
                                     <span ng-show="itemDetailsBGVWise[0].Unit == 'No'">Lakh Nos.</span>
                                 </h2>
                                 <button ng-show="itemDetailsBGVWise.length > 0" class="buttonh"
-                                    ng-click="itemDetailsBGVWise = []; totalQuantityBGVWise = 0"><span>Back</span></button>
+                                    ng-click="itemDetailsBGVWise = []; totalBalanceBGVWise = 0"><span>Back</span></button>
                             </div>
                         </div>
                     </div>
@@ -555,7 +557,7 @@
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Fruits' }">
                                             <td><a href="" class="tooltip openModal">{{i.ItemName | capitalize}}<span
                                                         class="tooltiptext">Click to view details</span></a></td>
-                                            <td><a href="" class="tooltip openModal">{{i.Quantity}}<span
+                                            <td><a href="" class="tooltip openModal">{{i.Balance}}<span
                                                         class="tooltiptext">Click to view details</span></a></td>
                                         </tr>
                                     </table>
@@ -632,7 +634,7 @@
                                             <td><a href="" class="tooltip openModal">{{i.ItemName | capitalize}}<span
                                                         class="tooltiptext">Click
                                                         to view details</span></a></td>
-                                            <td><a href="" class="tooltip openModal">{{i.Quantity}}<span
+                                            <td><a href="" class="tooltip openModal">{{i.Balance}}<span
                                                         class="tooltiptext">Click
                                                         to view details</span></a></td>
                                         </tr>
@@ -711,7 +713,7 @@
                                             <td><a href="" class="tooltip openModal">{{i.ItemName | capitalize}}<span
                                                         class="tooltiptext">Click
                                                         to view details</span></a></td>
-                                            <td><a href="" class="tooltip openModal">{{i.Quantity}}<span
+                                            <td><a href="" class="tooltip openModal">{{i.Balance}}<span
                                                         class="tooltiptext">Click
                                                         to view details</span></a></td>
                                         </tr>
@@ -896,7 +898,7 @@
                                             <td><a href="" class="tooltip openModal">{{i.ItemName | capitalize}}<span
                                                         class="tooltiptext">Click
                                                         to view details</span></a></td>
-                                            <td><a href="" class="tooltip openModal">{{i.Quantity}}
+                                            <td><a href="" class="tooltip openModal">{{i.Balance}}
                                                     {{(i.Unit == 'Q') ? 'Qtls' : 'Lakh nos.'}}<span
                                                         class="tooltiptext">Click to view details</span></a>
                                             </td>
@@ -975,7 +977,7 @@
                                             ng-repeat="i in itemDetails | filter : { 'CategoryName': 'Spices' }">
                                             <td><a href="" class="tooltip openModal">{{i.ItemName | capitalize}}<span
                                                         class="tooltiptext">Click to view details</span></a></td>
-                                            <td><a href="" class="tooltip openModal">{{i.Quantity}}
+                                            <td><a href="" class="tooltip openModal">{{i.Balance}}
                                                     {{(i.Unit == 'Q') ? 'Qtls' : 'Lakh nos.'}}<span
                                                         class="tooltiptext">Click to view details</span></a>
                                             </td>

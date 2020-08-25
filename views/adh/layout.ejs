@@ -195,6 +195,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="#!stockInApproveReject" class="nav-link">
+                                <i class="nav-icon fas fa-edit"></i>
+                                <p>
+                                    Approve / Reject Stock In Details
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="#!changePassword" class="nav-link">
                                 <i class="nav-icon fas fa-key"></i>
                                 <p>
@@ -269,6 +277,9 @@
                 .when("/", {
                     templateUrl: "adh/ahoDetails",
                     controller: 'myADHAHODetailsCtrl'
+                }).when("/stockInApproveReject", {
+                    templateUrl: "adh/stockInApproveReject",
+                    controller: 'myADHStockInApproveRejectCtrl'
                 }).when("/changePassword", {
                     templateUrl: "adh/changePassword",
                     controller: 'myADHChangePasswordCtrl'
@@ -424,6 +435,7 @@
     </script>
     <script src="../../public/controllers/adh/myADHDashboardCtrl.js"></script>
     <script src="../../public/controllers/adh/myADHAHODetailsCtrl.js"></script>
+    <script src="../../public/controllers/adh/myADHStockInApproveRejectCtrl.js"></script>
     <script src="../../public/controllers/adh/myADHChangePasswordCtrl.js"></script>
     <!-- jQuery -->
     <script src="../../AdminLTE/plugins/jquery/jquery.min.js"></script>

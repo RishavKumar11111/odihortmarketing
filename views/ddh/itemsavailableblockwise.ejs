@@ -120,19 +120,19 @@
                             <table class="table table-hover text-wrap">
                                 <thead>
                                     <tr>
-                                        <th ng-click="sort('BlockName')" style="cursor: pointer;" ng-show="ddlBlocks == 0">
-                                            Block
-                                            <span class="fa fa-sort" ng-show="sortKey=='BlockName'"
+                                        <th ng-click="sort('SubDivisionName')" style="cursor: pointer;">
+                                            Sub-Division
+                                            <span class="fa fa-sort" ng-show="sortKey=='SubDivisionName'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('GPName')" style="cursor: pointer;">
-                                            GP
-                                            <span class="fa fa-sort" ng-show="sortKey=='GPName'"
+                                        <th ng-click="sort('Count')" style="cursor: pointer;">
+                                            Reference No.
+                                            <span class="fa fa-sort" ng-show="sortKey=='Count'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('VillageName')" style="cursor: pointer;">
-                                            Village
-                                            <span class="fa fa-sort" ng-show="sortKey=='VillageName'"
+                                        <th ng-click="sort('FarmerID')" style="cursor: pointer;">
+                                            Farmer ID
+                                            <span class="fa fa-sort" ng-show="sortKey=='FarmerID'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
                                         <th ng-click="sort('FarmerName')" style="cursor: pointer;">
@@ -145,14 +145,15 @@
                                             <span class="fa fa-sort" ng-show="sortKey=='FarmerMobileNo'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('ItemName')" style="cursor: pointer;" ng-show="ddlItems == 0">
+                                        <th ng-click="sort('ItemName')" style="cursor: pointer;"
+                                            ng-show="ddlItems == 0">
                                             Items
                                             <span class="fa fa-sort" ng-show="sortKey=='ItemName'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
-                                        <th ng-click="sort('Quantity')" style="cursor: pointer;">
+                                        <th ng-click="sort('Balance')" style="cursor: pointer;">
                                             Quantity
-                                            <span class="fa fa-sort" ng-show="sortKey=='Quantity'"
+                                            <span class="fa fa-sort" ng-show="sortKey=='Balance'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
                                         <th ng-click="sort('AvailableDate')" style="cursor: pointer;">
@@ -160,19 +161,25 @@
                                             <span class="fa fa-sort" ng-show="sortKey=='AvailableDate'"
                                                 ng-class="{'fa fa-sort-down': reverse, 'fa fa-sort-up': !reverse}"></span>
                                         </th>
+                                        <th>Location Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr
-                                        dir-paginate="i in itemsAvailable | orderBy: sortKey: reverse | filter: search | itemsPerPage: pageSize">
-                                        <td ng-show="ddlBlocks == 0">{{i.BlockName | capitalize}}</td>
-                                        <td>{{i.GPName | capitalize}}</td>
-                                        <td>{{i.VillageName | capitalize}}</td>
+                                        dir-paginate="i in itemsAvailable | orderBy: 'Count': !reverse | filter: search | itemsPerPage: pageSize">
+                                        <td>{{i.SubDivisionName | capitalize}}</td>
+                                        <td>{{(i.ReferenceNo == null) ? 'NA' : i.ReferenceNo}}</td>
+                                        <td>{{(i.FarmerID == null) ? 'NA' : i.FarmerID}}</td>
                                         <td>{{i.FarmerName | capitalize}}</td>
                                         <td>{{i.FarmerMobileNo}}</td>
                                         <td ng-show="ddlItems == 0">{{i.ItemName | capitalize}}</td>
-                                        <td>{{i.Quantity}} {{(i.Unit == 'Q') ? 'Qtls.' : 'Lakh Nos.'}}</td>
+                                        <td>{{i.Balance}} {{(i.Unit == 'Q') ? 'Qtls.' : 'Lakh Nos.'}}</td>
                                         <td>{{(i.AvailableDate == '01 Jan 2200') ? '25 Apr 2020' : i.AvailableDate}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
+                                                data-target="#viewModal" id="btnViewModal"
+                                                ng-click="getLocationDetails(i)">View</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -180,6 +187,64 @@
                                 <dir-pagination-controls max-size="10" direction-links="true" boundary-links="true">
                                 </dir-pagination-controls>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="viewModal">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Location Details</h4>
+                            <button type="button" class="close" id="closeViewModal"
+                                data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 col-xs-12" ng-show="refNo !== null">
+                                    <div class="form-group" style="margin: 1rem 0 0">
+                                        <label>Reference No.:</label>
+                                        <label>{{refNo}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12" ng-show="refNo !== null">
+                                    <div class="form-group" style="margin: 1rem 0 0">
+                                        <label>Farmer ID:</label>
+                                        <label>{{fID}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group" style="margin: 1rem 0 0">
+                                        <label>Item:</label>
+                                        <label>{{iNm | capitalize}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover text-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Area Type</th>
+                                            <th>Block</th>
+                                            <th>GP</th>
+                                            <th>Village</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="vertical-align: middle">{{at}}</td>
+                                            <td style="vertical-align: middle">{{bNm}}</td>
+                                            <td style="vertical-align: middle">
+                                                {{(gNm == null) ? 'NA' : gNm}}</td>
+                                            <td style="vertical-align: middle">
+                                                {{(vNm == null) ? 'NA' : vNm}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>

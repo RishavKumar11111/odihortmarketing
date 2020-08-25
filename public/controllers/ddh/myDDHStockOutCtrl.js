@@ -191,70 +191,70 @@ app.controller('myDDHStockOutCtrl', function ($scope, $http, $filter) {
         }
     };
 
-    $scope.submitStockOut = function (isValid) {
-        if (isValid) {
-            if ($scope.stockArray.length > 0) {
-                var count = 0;
-                angular.forEach($scope.stockDetails, function (i) {
-                    if (i.hasOwnProperty('SaleQuantity')) {
-                        if (i.SaleQuantity == 0 || i.SaleQuantity == '0' || i.SaleQuantity == '' || i.SaleQuantity == null || i.SaleQuantity == undefined) {}
-                        else {
-                            count++;
-                        }
-                    }
-                });
-                if (count !== $scope.stockArray.length) {
-                    alert('Please enter the Sale quantity for all the selected Stock records. Sale Quantity value must be greater than 0.');
-                }
-                else {
-                    var counter = 0;
-                    angular.forEach($scope.stockDetails, function (i) {
-                        if (i.hasOwnProperty('SaleQuantity') && i.SaleQuantity <= i.Quantity) {
-                            counter++;
-                        }
-                    });
-                    if (counter !== $scope.stockArray.length) {
-                        alert('The Sale quantity must be less than or equal to the total Quantity available.');
-                    }
-                    else {
-                        var message = confirm('Do you really want to submit the form?');
-                        if (message) {
-                            angular.forEach($scope.stockDetails, function (i) {
-                                angular.forEach($scope.stockArray, function (j) {
-                                    if (j.StockID == i.StockID) {
-                                        j.SaleQuantity = i.SaleQuantity;
-                                    }
-                                });
-                            });
-                            var myData = {};
-                            myData.Remarks = ($scope.txtRemarks !== null && $scope.txtRemarks !== undefined && $scope.txtRemarks !== '') ? $scope.txtRemarks : null;
-                            $http.post('http://localhost:3000/ddh/submitStockOut', { data: { array: $scope.stockArray, obj: myData } }, { credentials: 'same-origin', headers: { 'CSRF-Token': token } }).then(function success(response) {
-                                var result = response.data;
-                                if (result == true) {
-                                    alert('The Stock Out details are submitted successfully.');
-                                    $scope.getStockDetails('successfully');
-                                    $scope.txtRemarks = null;
-                                    $scope.isAllSelected = false;
-                                    $scope.stockDetails = [];
-                                    $scope.stockArray = [];
-                                }
-                                else {
-                                    alert('An error occurred... Please contact the administrator.');
-                                }
-                            }).catch(function error(err) {
-                                console.log('An error occurred...', err);
-                            });
-                        }
-                    }
-                }
-            }
-            else {
-                alert('Please select a stock record.');
-            }
-        }
-        else {
-            alert('Please fill all the fields.');
-        }
-    };
+    // $scope.submitStockOut = function (isValid) {
+    //     if (isValid) {
+    //         if ($scope.stockArray.length > 0) {
+    //             var count = 0;
+    //             angular.forEach($scope.stockDetails, function (i) {
+    //                 if (i.hasOwnProperty('SaleQuantity')) {
+    //                     if (i.SaleQuantity == 0 || i.SaleQuantity == '0' || i.SaleQuantity == '' || i.SaleQuantity == null || i.SaleQuantity == undefined) {}
+    //                     else {
+    //                         count++;
+    //                     }
+    //                 }
+    //             });
+    //             if (count !== $scope.stockArray.length) {
+    //                 alert('Please enter the Sale quantity for all the selected Stock records. Sale Quantity value must be greater than 0.');
+    //             }
+    //             else {
+    //                 var counter = 0;
+    //                 angular.forEach($scope.stockDetails, function (i) {
+    //                     if (i.hasOwnProperty('SaleQuantity') && i.SaleQuantity <= i.Quantity) {
+    //                         counter++;
+    //                     }
+    //                 });
+    //                 if (counter !== $scope.stockArray.length) {
+    //                     alert('The Sale quantity must be less than or equal to the total Quantity available.');
+    //                 }
+    //                 else {
+    //                     var message = confirm('Do you really want to submit the form?');
+    //                     if (message) {
+    //                         angular.forEach($scope.stockDetails, function (i) {
+    //                             angular.forEach($scope.stockArray, function (j) {
+    //                                 if (j.StockID == i.StockID) {
+    //                                     j.SaleQuantity = i.SaleQuantity;
+    //                                 }
+    //                             });
+    //                         });
+    //                         var myData = {};
+    //                         myData.Remarks = ($scope.txtRemarks !== null && $scope.txtRemarks !== undefined && $scope.txtRemarks !== '') ? $scope.txtRemarks : null;
+    //                         $http.post('http://localhost:3000/ddh/submitStockOut', { data: { array: $scope.stockArray, obj: myData } }, { credentials: 'same-origin', headers: { 'CSRF-Token': token } }).then(function success(response) {
+    //                             var result = response.data;
+    //                             if (result == true) {
+    //                                 alert('The Stock Out details are submitted successfully.');
+    //                                 $scope.getStockDetails('successfully');
+    //                                 $scope.txtRemarks = null;
+    //                                 $scope.isAllSelected = false;
+    //                                 $scope.stockDetails = [];
+    //                                 $scope.stockArray = [];
+    //                             }
+    //                             else {
+    //                                 alert('An error occurred... Please contact the administrator.');
+    //                             }
+    //                         }).catch(function error(err) {
+    //                             console.log('An error occurred...', err);
+    //                         });
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         else {
+    //             alert('Please select a stock record.');
+    //         }
+    //     }
+    //     else {
+    //         alert('Please fill all the fields.');
+    //     }
+    // };
 
 });

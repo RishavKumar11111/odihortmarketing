@@ -90,4 +90,18 @@ app.controller('myAdminStockOutListCtrl', function ($scope, $http, $filter) {
         $scope.reverse = !$scope.reverse;
     };
 
+    $scope.getStockOutLocationItemDetails = function (i) {
+        $scope.iNm = i.ItemName;
+        $scope.ut = i.Unit;
+        $scope.refNo = i.ReferenceNo;
+        $scope.fID = i.FarmerID;
+        $http.get('http://localhost:3000/admin/getStockOutLocationItemDetails?referenceNo=' + i.ReferenceNo + '&farmerID=' + i.FarmerID + '&itemID=' + i.ItemID + '&districtCode=' + i.DistrictCode + '&farmerName=' + i.FarmerName + '&farmerMobileNo=' + i.FarmerMobileNo).then(function success(response) {
+            $scope.stockOutlocationItemDetails = response.data;
+        }, function error(response) {
+            console.log(response.status);
+        }).catch(function err(error) {
+            console.log('An error occurred...', error);
+        });
+    };
+
 });

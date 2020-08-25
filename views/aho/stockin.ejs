@@ -1,0 +1,326 @@
+<div class="content-wrapper" ng-controller="myAHOStockInCtrl" ng-init="getDistrictName(); getCategories();">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h1><%= title %></h1>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active"><%= title %></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <form class="form-horizontal" role="form" name="stockInForm" ng-submit="submitStockIn(stockInForm.$valid)"
+                autocomplete="off" novalidate>
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Stock In Form</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                    class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5>Enter Farmer ID or Aadhaar No. <small>(Enter Aadhaar No. only if the Farmer ID is not
+                                known.)</small></h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5 col-xs-12">
+                                <div class="form-group">
+                                    <label>Farmer ID</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><b>{{districtName}}/</b></span>
+                                        </div>
+                                        <input type="text" name="farmerID" class="form-control" numbers-only
+                                            ng-model="txtFarmerID" ng-disabled="dataAvailable"
+                                            placeholder="Enter Farmer ID" maxlength="10" required>
+                                    </div>
+                                    <div class="has-error"
+                                        ng-show="stockInForm.$submitted || stockInForm.farmerID.$touched"
+                                        style="color:red">
+                                        <span ng-show="stockInForm.farmerID.$error.required">This is a required
+                                            field</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-sm-5 col-xs-12">
+                                <div class="form-group">
+                                    <label>Aadhaar No.</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-edit"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" numbers-only ng-model="txtAadhaarNo"
+                                            placeholder="{{txtANPH}}" ng-disabled="dataAvailable" minlength="12"
+                                            maxlength="12">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div class="form-group">
+                                    <button ng-show="dataAvailable == false" type="button" class="btn btn-info"
+                                        ng-click="getFarmerDetails()" style="margin-top: 20%;">Get Farmer
+                                        Details</button>
+                                    <button ng-show="dataAvailable == true" type="button" class="btn btn-warning"
+                                        ng-click="clearData()" style="margin-top: 20%;">Reset Inputs</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="dataAvailable == true">
+                            <h5>Farmer's Personal and Location Details</h5>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>Farmer's Name</label>
+                                        <input type="text" name="farmerName" class="form-control" name-only
+                                            placeholder="{{txtFNPH}}" ng-model="txtFarmerName" minlength="1"
+                                            maxlength="50"
+                                            ng-disabled="txtFNPH == '' || txtFNPH !== 'Enter Farmer Name'" required>
+                                        <div class="has-error"
+                                            ng-show="stockInForm.$submitted || stockInForm.farmerName.$touched"
+                                            style="color:red">
+                                            <span ng-show="stockInForm.farmerName.$error.required">This is a required
+                                                field</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>Farmer's Mobile No.</label>
+                                        <input type="text" name="farmerMobileNo" class="form-control" mobile-no-only
+                                            numbers-only placeholder="{{txtFMNPH}}" ng-model="txtFarmerMobileNo"
+                                            minlength="10" maxlength="10"
+                                            ng-disabled="txtFMNPH == '' || txtFMNPH !== 'Enter Farmer Mobile No.'"
+                                            disabled required>
+                                        <div class="has-error"
+                                            ng-show="stockInForm.$submitted || stockInForm.farmerMobileNo.$touched"
+                                            style="color:red">
+                                            <span ng-show="stockInForm.farmerMobileNo.$error.required">This is a
+                                                required
+                                                field</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="control-label">Area</label>
+                                    <div class="form-group clearfix" style="margin-top: 8px;">
+                                        <div class="icheck-success d-inline">
+                                            <input type="radio" name="areaType" ng-model="rbAreaType" value="Rural"
+                                                id="radioRural" ng-change="getBlockGPs()" ng-disabled="lgdVC !== null" required>
+                                            <label for="radioRural">
+                                                Rural
+                                            </label>
+                                        </div>
+                                        <div class="icheck-success d-inline">
+                                            <input type="radio" name="areaType" ng-model="rbAreaType" value="Urban"
+                                                id="radioUrban" ng-change="getBlockGPs()" ng-disabled="lgdVC !== null" required>
+                                            <label for="radioUrban">
+                                                Urban
+                                            </label>
+                                        </div>
+                                        <div class="has-error"
+                                            ng-show="stockInForm.$submitted || stockInForm.areaType.$touched"
+                                            style="color:red">
+                                            <span ng-show="stockInForm.areaType.$error.required">This is a required
+                                                field</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-show="rbAreaType == 'Rural'" style="margin-top: 22px;">
+                                        <label class="control-label">GPs</label>
+                                        <select class="form-control select2" name="gps" ng-model="ddlGPs"
+                                            ng-options="i.GPCode as i.GPName for i in gps"
+                                            ng-change="getVillagesByGP()">
+                                            <option value="" disabled>Select GP</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Blocks</label>
+                                        <select class="form-control select2" name="blocks"
+                                            ng-disabled="lgdVC !== null || rbAreaType == 'Rural'" ng-model="ddlBlocks"
+                                            ng-options="i.ULBCode as i.ULBName for i in blocks">
+                                            <option value="" disabled>Select Block</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" ng-show="rbAreaType == 'Rural'">
+                                        <label class="control-label">Villages</label>
+                                        <select class="form-control select2" name="villages" ng-model="ddlVillages"
+                                            ng-options="i.VillageCode as i.VillageName for i in villages">
+                                            <option value="" disabled>Select Village</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h5>Item Details</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label">Categories</label>
+                                <div class="form-group clearfix"
+                                    style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
+                                    <div class="icheck-success d-inline" ng-repeat="i in categories">
+                                        <input type="radio" name="categories" ng-model="$parent.selected"
+                                            id="radio{{$index}}" value="{{i.CategoryID}}"
+                                            ng-change="getItemsByCategory($parent.selected)">
+                                        <label for="radio{{$index}}">
+                                            {{i.CategoryName}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Items</label>
+                                    <select class="form-control select2" ng-model="ddlItems"
+                                        ng-options="i.ItemID as i.ItemName for i in items" ng-change="getUnitByItem()">
+                                        <option value="" disabled>Select Item</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div class="form-group">
+                                    <label>Quantity
+                                        <small>{{(unit == 'Q') ? '(in Qtls.)' : (unit == 'No') ? '(in Lakh Nos.)' : ''}}</small></label>
+                                    <input type="text" class="form-control"
+                                        valid-number-upto-two-decimal ng-model="txtQuantity"
+                                        placeholder="Enter Quantity" minlength="1" maxlength="10">
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    <label>Availability Date Range</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control float-right" id="availabilityRange">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div class="form-group">
+                                    <label>Cultivation Area
+                                        <small>(in Ha.)</small></label>
+                                    <input type="text" class="form-control"
+                                        valid-number-upto-two-decimal ng-model="txtCultivationArea"
+                                        placeholder="Enter Cultivation Area" minlength="1" maxlength="10">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-success" ng-click="addItem()"
+                                        style="margin-top: 20%;">Add Item <i class="fa fa-plus-square"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-show="itemsArray.length > 0">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Entered Items and their details</h3>
+                                    </div>
+                                    <div class="card-body table-responsive p-0">
+                                        <table class="table table-hover text-nowrap" style="text-align: center;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Serial No.</th>
+                                                    <th>Item</th>
+                                                    <th>Quantity</th>
+                                                    <th>Availability Date Range</th>
+                                                    <th>Cultivation Area (in Ha.)</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="i in itemsArray">
+                                                    <td>{{$index + 1}}</td>
+                                                    <td>{{i.ItemName | capitalize}}</td>
+                                                    <td>{{i.Quantity}}
+                                                        {{(i.Unit == 'Q') ? '(in Qtls.)' : '(in Lakh Nos.)'}}</td>
+                                                    <td>{{i.AvailableDate}}</td>
+                                                    <td>{{i.CultivationArea}}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-xs btn-danger"
+                                                            ng-click="removeItem($index)">Remove Item <i
+                                                                class="fa fa-minus-square"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h5>Image Upload</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group form-inline">
+                                    <input type="file" id="imageFile" class="form-control" name="fileImage"
+                                        accept="image/*" onchange="angular.element(this).scope().readFile(this)"
+                                        style="width: 100%;">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div id="thumbnail"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    if (dd < 10) { dd = '0' + dd }
+    if (mm < 10) { mm = '0' + mm }
+    var today = dd + '/' + mm + '/' + yyyy;
+    $('#availabilityRange').daterangepicker({
+        autoUpdateInput: false,
+        showDropdowns: true,
+        showWeekNumbers: true,
+        // autoApply: true,
+        minDate: today,
+        alwaysShowCalendars: true,
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        locale: {
+            format: 'DD-MM-YYYY',
+            cancelLabel: 'Clear'
+        }
+    });
+    $('#availabilityRange').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+    });
+    $('#availabilityRange').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
+</script>

@@ -106,15 +106,15 @@ router.get('/dashboard', csrfProtection, permit.permission('DDH'), cache.overrid
   res.render('ddh/dashboard', { title: 'Dashboard', csrfToken: req.csrfToken() });
 });
 
-router.get('/stockIn', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
-  res.get('X-Frame-Options');
-  res.render('ddh/stockin', { title: 'Stock In', csrfToken: req.csrfToken() });
-});
+// router.get('/stockIn', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+//   res.get('X-Frame-Options');
+//   res.render('ddh/stockin', { title: 'Stock In', csrfToken: req.csrfToken() });
+// });
 
-router.get('/stockOut', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
-  res.get('X-Frame-Options');
-  res.render('ddh/stockout', { title: 'Stock Out', csrfToken: req.csrfToken() });
-});
+// router.get('/stockOut', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+//   res.get('X-Frame-Options');
+//   res.render('ddh/stockout', { title: 'Stock Out', csrfToken: req.csrfToken() });
+// });
 
 router.get('/availableItemsList', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
@@ -259,29 +259,29 @@ router.get('/getBlocks', permit.permission('DDH'), function (req, res, next) {
   });
 });
 
-router.get('/getGPsByBlock', permit.permission('DDH'), function (req, res, next) {
-  res.get('X-Frame-Options');
-  var blockCode = req.query.blockCode;
-  balModule.getGPsByBlock(blockCode).then(function success(response) {
-    res.send(response);
-  }, function error(response) {
-    console.log(response.status);
-  }).catch(function err(error) {
-    console.log('An error occurred...', error);
-  });
-});
+// router.get('/getGPsByBlock', permit.permission('DDH'), function (req, res, next) {
+//   res.get('X-Frame-Options');
+//   var blockCode = req.query.blockCode;
+//   balModule.getGPsByBlock(blockCode).then(function success(response) {
+//     res.send(response);
+//   }, function error(response) {
+//     console.log(response.status);
+//   }).catch(function err(error) {
+//     console.log('An error occurred...', error);
+//   });
+// });
 
-router.get('/getVillagesByGP', permit.permission('DDH'), function (req, res, next) {
-  res.get('X-Frame-Options');
-  var gpCode = req.query.gpCode;
-  balModule.getVillagesByGP(gpCode).then(function success(response) {
-    res.send(response);
-  }, function error(response) {
-    console.log(response.status);
-  }).catch(function err(error) {
-    console.log('An error occurred...', error);
-  });
-});
+// router.get('/getVillagesByGP', permit.permission('DDH'), function (req, res, next) {
+//   res.get('X-Frame-Options');
+//   var gpCode = req.query.gpCode;
+//   balModule.getVillagesByGP(gpCode).then(function success(response) {
+//     res.send(response);
+//   }, function error(response) {
+//     console.log(response.status);
+//   }).catch(function err(error) {
+//     console.log('An error occurred...', error);
+//   });
+// });
 
 router.get('/getULBs', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
@@ -295,75 +295,75 @@ router.get('/getULBs', permit.permission('DDH'), function (req, res, next) {
   });
 });
 
-router.post('/submitStockIn', parseForm, csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
-  res.get('X-Frame-Options');
-  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
-  }, function error(response) {
-    console.log(response.status);
-  });
-  var obj = req.body.data;
-  if (obj.Photo != null) {
-    obj.Photo = Buffer.from(obj.Photo, 'base64');
-  }
-  obj.UserID = req.session.username;
-  obj.IPAddress = req.connection.remoteAddress;
-  obj.FinancialYear = getFinancialYear();
-  obj.Status = null;
-  balModule.submitStockIn(obj).then(function success(response1) {
-    for (var propName in response1[0][0]) {
-      if (response1[0][0].hasOwnProperty(propName)) {
-        res.send(response1[0][0][propName] == 1 ? true : false);
-      }
-    }
-  }, function error(response) {
-    console.log(response.status);
-  }).catch(function err(error) {
-    console.log('An error occurred...', error);
-  });
-});
+// router.post('/submitStockIn', parseForm, csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+//   res.get('X-Frame-Options');
+//   balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
+//   }, function error(response) {
+//     console.log(response.status);
+//   });
+//   var obj = req.body.data;
+//   if (obj.Photo != null) {
+//     obj.Photo = Buffer.from(obj.Photo, 'base64');
+//   }
+//   obj.UserID = req.session.username;
+//   obj.IPAddress = req.connection.remoteAddress;
+//   obj.FinancialYear = getFinancialYear();
+//   obj.Status = null;
+//   balModule.submitStockIn(obj).then(function success(response1) {
+//     for (var propName in response1[0][0]) {
+//       if (response1[0][0].hasOwnProperty(propName)) {
+//         res.send(response1[0][0][propName] == 1 ? true : false);
+//       }
+//     }
+//   }, function error(response) {
+//     console.log(response.status);
+//   }).catch(function err(error) {
+//     console.log('An error occurred...', error);
+//   });
+// });
 
-router.get('/getStockDetails', permit.permission('DDH'), function (req, res, next) {
-  res.get('X-Frame-Options');
-  var obj = {};
-  obj.itemID = req.query.itemID;
-  obj.districtCode = req.session.username.substr(4, 3);
-  obj.blockCode = req.query.blockCode;
-  if (req.query.hasOwnProperty('gpCode') && req.query.hasOwnProperty('villageCode')) {
-    obj.gpCode = req.query.gpCode;
-    obj.villageCode = req.query.villageCode;
-  }
-  balModule.getStockDetails(obj).then(function success(response) {
-    res.send(response);
-  }, function error(response) {
-    console.log(response.status);
-  }).catch(function err(error) {
-    console.log('An error occurred...', error);
-  });
-});
+// router.get('/getStockDetails', permit.permission('DDH'), function (req, res, next) {
+//   res.get('X-Frame-Options');
+//   var obj = {};
+//   obj.itemID = req.query.itemID;
+//   obj.districtCode = req.session.username.substr(4, 3);
+//   obj.blockCode = req.query.blockCode;
+//   if (req.query.hasOwnProperty('gpCode') && req.query.hasOwnProperty('villageCode')) {
+//     obj.gpCode = req.query.gpCode;
+//     obj.villageCode = req.query.villageCode;
+//   }
+//   balModule.getStockDetails(obj).then(function success(response) {
+//     res.send(response);
+//   }, function error(response) {
+//     console.log(response.status);
+//   }).catch(function err(error) {
+//     console.log('An error occurred...', error);
+//   });
+// });
 
-router.post('/submitStockOut', parseForm, csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
-  res.get('X-Frame-Options');
-  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
-  }, function error(response) {
-    console.log(response.status);
-  });
-  var stockArray = req.body.data.array;
-  var obj = req.body.data.obj;
-  obj.UserID = req.session.username;
-  obj.IPAddress = req.connection.remoteAddress;
-  obj.FinancialYear = getFinancialYear();
-  obj.Status = null;
-  balModule.submitStockOut(stockArray, obj, function success(response1) {
-    res.send((response1 == stockArray.length) ? true : false);
-  }, function error(response) {
-    console.log(response.status);
-  });
-});
+// router.post('/submitStockOut', parseForm, csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+//   res.get('X-Frame-Options');
+//   balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitStockIn', 'INSERT', 'POST', function success(response) {
+//   }, function error(response) {
+//     console.log(response.status);
+//   });
+//   var stockArray = req.body.data.array;
+//   var obj = req.body.data.obj;
+//   obj.UserID = req.session.username;
+//   obj.IPAddress = req.connection.remoteAddress;
+//   obj.FinancialYear = getFinancialYear();
+//   obj.Status = null;
+//   balModule.submitStockOut(stockArray, obj, function success(response1) {
+//     res.send((response1 == stockArray.length) ? true : false);
+//   }, function error(response) {
+//     console.log(response.status);
+//   });
+// });
 
 router.get('/getItemDetails', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
-  var userID = req.session.username
-  balModule.getItemDetails(userID).then(function success(response) {
+  var districtCode = req.session.username.substr(4, 3);
+  balModule.getItemDetails(districtCode).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);
@@ -414,6 +414,23 @@ router.get('/getStockInDetails', permit.permission('DDH'), function (req, res, n
   });
 });
 
+router.get('/getStockInLocationItemDetails', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var referenceNo = req.query.referenceNo;
+  var farmerID = req.query.farmerID;
+  var itemID = req.query.itemID;
+  var subDivisionCode = req.query.subDivisionCode;
+  var farmerName = req.query.farmerName;
+  var farmerMobileNo = req.query.farmerMobileNo;
+  balModule.getStockInLocationItemDetails(referenceNo, farmerID, itemID, subDivisionCode, farmerName, farmerMobileNo).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
 router.get('/getStockOutDetails', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
   var districtCode = req.session.username.substr(4, 3);
@@ -432,10 +449,15 @@ router.get('/getStockOutDetails', permit.permission('DDH'), function (req, res, 
   });
 });
 
-router.get('/getDDHDetails', permit.permission('DDH'), function (req, res, next) {
+router.get('/getStockOutLocationItemDetails', permit.permission('DDH'), function (req, res, next) {
   res.get('X-Frame-Options');
-  var userID = req.session.username;
-  balModule.getDDHDetails(userID).then(function success(response) {
+  var referenceNo = req.query.referenceNo;
+  var farmerID = req.query.farmerID;
+  var itemID = req.query.itemID;
+  var subDivisionCode = req.query.subDivisionCode;
+  var farmerName = req.query.farmerName;
+  var farmerMobileNo = req.query.farmerMobileNo;
+  balModule.getStockOutLocationItemDetails(referenceNo, farmerID, itemID, subDivisionCode, farmerName, farmerMobileNo).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);
@@ -450,7 +472,20 @@ router.get('/getAvailabilityDetails', permit.permission('DDH'), function (req, r
   var blockCode = req.query.blockCode;
   var categoryID = req.query.categoryID;
   var areaType = req.query.areaType;
-  balModule.getAvailabilityDetails(districtCode, blockCode, categoryID, areaType).then(function success(response) {
+  var itemID = req.query.itemID;
+  balModule.getAvailabilityDetails(districtCode, blockCode, categoryID, areaType, itemID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getDDHDetails', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var userID = req.session.username;
+  balModule.getDDHDetails(userID).then(function success(response) {
     res.send(response);
   }, function error(response) {
     console.log(response.status);

@@ -35,6 +35,8 @@ app.controller('myDDHItemsAvailableBlockWiseCtrl', function ($scope, $http, $fil
     };
 
     $scope.getBlocks = function () {
+        $scope.blocks = [];
+        $scope.ddlBlocks = null;
         if ($scope.rbAreaType == 'Rural') {
             $http.get('http://localhost:3000/ddh/getBlocks').then(function success(response) {
                 $scope.blocks = response.data;
@@ -64,7 +66,7 @@ app.controller('myDDHItemsAvailableBlockWiseCtrl', function ($scope, $http, $fil
     };
 
     $scope.getAvailabilityDetails = function () {
-        $http.get('http://localhost:3000/ddh/getAvailabilityDetails?blockCode=' + $scope.ddlBlocks + '&categoryID=' + $scope.ddlCategories + '&areaType=' + $scope.rbAreaType).then(function success(response) {
+        $http.get('http://localhost:3000/ddh/getAvailabilityDetails?blockCode=' + $scope.ddlBlocks + '&categoryID=' + $scope.ddlCategories + '&areaType=' + $scope.rbAreaType + '&itemID=' + $scope.ddlItems).then(function success(response) {
             $scope.itemsAvailable = response.data;
             if ($scope.itemsAvailable.length > 0) {
                 var k = $filter('filter')($scope.blocks, { BlockCode: $scope.ddlBlocks }, true)[0];
@@ -80,10 +82,10 @@ app.controller('myDDHItemsAvailableBlockWiseCtrl', function ($scope, $http, $fil
                 $scope.totalNo = 0;
                 angular.forEach($scope.itemsAvailable, function (i) {
                     if (i.Unit == 'Q') {
-                        $scope.totalQuintal += i.Quantity;
+                        $scope.totalQuintal += i.Balance;
                     }
                     else {
-                        $scope.totalNo += i.Quantity;
+                        $scope.totalNo += i.Balance;
                     }
                 })
                 $scope.pageSize = 50;
@@ -102,6 +104,17 @@ app.controller('myDDHItemsAvailableBlockWiseCtrl', function ($scope, $http, $fil
     $scope.sort = function (keyname) {
         $scope.sortKey = keyname;
         $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.getLocationDetails = function (i) {
+        $scope.iNm = i.ItemName;
+        $scope.ut = i.Unit;
+        $scope.refNo = i.ReferenceNo;
+        $scope.fID = i.FarmerID;
+        $scope.at = i.AreaType;
+        $scope.bNm = i.BlockName;
+        $scope.gNm = i.GPName;
+        $scope.vNm = i.VillageName;
     };
 
 });

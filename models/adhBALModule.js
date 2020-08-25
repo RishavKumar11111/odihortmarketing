@@ -146,3 +146,130 @@ exports.removeAHO = function (ahoUserID, callback) {
         console.log('An error occurred...', err);
     });
 };
+
+exports.getCategories = function () {
+    return sequelize.query('select CategoryID, CategoryName from Category order by CategoryName', {
+        type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getItemsByCategory = function (categoryID) {
+    return sequelize.query('select ItemID, ItemName, Unit from Items where CategoryID = :category_id order by ItemName', {
+        replacements: { category_id: categoryID }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getBlocks = function (subDivisionCode) {
+    return sequelize.query('select BlockCode, BlockName from LGDBlock where SubDivisionCode = :sub_division_code order by BlockName', {
+        replacements: { sub_division_code: subDivisionCode }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getULBs = function (subDivisionCode) {
+    return sequelize.query('select ULBCode, ULBName from LGDULB where SubDivisionCode = :sub_division_code order by ULBName', {
+        replacements: { sub_division_code: subDivisionCode }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getStockInDetails = function (subDivisionCode, blockCode, categoryID, areaType, itemID) {
+    if (blockCode == 0) {
+        return sequelize.query("select ReferenceNo, FarmerID, FarmerName, FarmerMobileNo, b.ItemID, ItemName, sum(Quantity) Quantity, Unit, sum(CultivationArea) CultivationArea, cast(reverse(left(reverse(ReferenceNo), charindex('/', reverse(ReferenceNo)) - 1)) as int) Count from StockIn a inner join StockInItems b on a.StockID = b.StockID inner join Items c on b.ItemID = c.ItemID inner join Category d on c.CategoryID = d.CategoryId inner join (select BlockCode, BlockName, SubDivisionCode from LGDBlock union all select ULBCode, ULBName, SubDivisionCode from LGDULB) e on a.BlockCode = e.BlockCode where SubDivisionCode = :sub_division_code and (:category_id = 0 or c.CategoryID = :category_id) and (:item_id = 0 or b.ItemID = :item_id) and datediff(d, a.DateTime, getdate()) = 0 and (Status is null or Status = 0) group by ReferenceNo, FarmerID, FarmerName, FarmerMobileNo, b.ItemID, ItemName, Unit", {
+            replacements: { sub_division_code: subDivisionCode, block_code: blockCode, category_id: categoryID, item_id: itemID }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+    else {
+        return sequelize.query("select ReferenceNo, FarmerID, FarmerName, FarmerMobileNo, b.ItemID, ItemName, sum(Quantity) Quantity, Unit, sum(CultivationArea) CultivationArea, cast(reverse(left(reverse(ReferenceNo), charindex('/', reverse(ReferenceNo)) - 1)) as int) Count from StockIn a inner join StockInItems b on a.StockID = b.StockID inner join Items c on b.ItemID = c.ItemID inner join Category d on c.CategoryID = d.CategoryId inner join (select BlockCode, BlockName, SubDivisionCode from LGDBlock union all select ULBCode, ULBName, SubDivisionCode from LGDULB) e on a.BlockCode = e.BlockCode where SubDivisionCode = :sub_division_code and (:area_type is null or AreaType = :area_type) and (:category_id = 0 or c.CategoryID = :category_id) and (:item_id = 0 or b.ItemID = :item_id) and datediff(d, a.DateTime, getdate()) = 0 and (Status is null or Status = 0) group by ReferenceNo, FarmerID, FarmerName, FarmerMobileNo, b.ItemID, ItemName, Unit", {
+            replacements: { sub_division_code: subDivisionCode, block_code: blockCode, category_id: categoryID, item_id: itemID, area_type: areaType }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+};
+
+exports.getLocationItemDetails = function (referenceNo, farmerID, itemID) {
+    return sequelize.query("select a.StockID, AreaType, BlockName, GPName, VillageName, case when Photo is not null then 'A' else 'NA' end PhotoAvailability, ItemID, Quantity, convert(varchar(30), convert(date, AvailableFrom), 105) AvailableFrom, convert(varchar(30), convert(date, AvailableTill), 105) AvailableTill, CultivationArea, case when (Status is null or Status = 0) and datediff(d, b.DateTime, getdate()) = 0 then 'Can be updated' else 'Cannot be updated' end UpdateStatus from StockIn a inner join StockInItems b on a.StockID = b.StockID inner join (select BlockCode, BlockName from LGDBlock union all select ULBCode, ULBName from LGDULB) c on a.BlockCode = c.BlockCode left join LGDGP d on a.GPCode = d.GPCode left join LGDVillage e on a.VillageCode = e.VillageCode where ReferenceNo = :reference_no and FarmerID = :farmer_id and ItemID = :item_id", {
+        replacements: { reference_no: referenceNo, farmer_id: farmerID, item_id: itemID }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.updateStockInDetails = function (obj, callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const request = new sql.Request(con);
+        request.input('StockID', obj.StockID);
+        request.input('ItemID', obj.ItemID);
+        request.input('Quantity', obj.Quantity);
+        request.input('CultivationArea', obj.CultivationArea);
+        request.input('UserID', obj.UserID);
+        request.input('IPAddress', obj.IPAddress);
+        request.input('FinancialYear', obj.FinancialYear);
+        request.input('Status', obj.Status);
+        request.execute('spUpdateStockInDetails', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.recordsets);
+            }
+            con.close();
+        });
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.finalizeStockIn = function (array, obj, callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const tableFinalStockIn = new sql.Table();
+        tableFinalStockIn.create = true;
+        tableFinalStockIn.columns.add('ReferenceNo', sql.VarChar(30), { nullable: false });
+        tableFinalStockIn.columns.add('FarmerID', sql.VarChar(30), { nullable: false });
+        tableFinalStockIn.columns.add('ItemID', sql.Int, { nullable: false });
+        for (var i = 0; i < array.length; i++) {
+            tableFinalStockIn.rows.add(array[i].ReferenceNo, array[i].FarmerID, array[i].ItemID);
+        }
+        const request = new sql.Request(con);
+        request.input('Remarks', obj.Remarks);
+        request.input('Status', obj.Status);
+        request.input('UserID', obj.UserID);
+        request.input('tableFinalStockIn', tableFinalStockIn);
+        request.execute('spFinalizeStockIn', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.returnValue);
+            }
+            con.close();
+        });
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};

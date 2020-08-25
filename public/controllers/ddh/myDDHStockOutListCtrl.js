@@ -35,6 +35,8 @@ app.controller('myDDHStockOutListCtrl', function ($scope, $http, $filter) {
     };
 
     $scope.getBlocks = function () {
+        $scope.blocks = [];
+        $scope.ddlBlocks = null;
         if ($scope.rbAreaType == 'Rural') {
             $http.get('http://localhost:3000/ddh/getBlocks').then(function success(response) {
                 $scope.blocks = response.data;
@@ -112,6 +114,20 @@ app.controller('myDDHStockOutListCtrl', function ($scope, $http, $filter) {
     $scope.sort = function (keyname) {
         $scope.sortKey = keyname;
         $scope.reverse = !$scope.reverse;
+    };
+
+    $scope.getStockOutLocationItemDetails = function (i) {
+        $scope.iNm = i.ItemName;
+        $scope.ut = i.Unit;
+        $scope.refNo = i.ReferenceNo;
+        $scope.fID = i.FarmerID;
+        $http.get('http://localhost:3000/ddh/getStockOutLocationItemDetails?referenceNo=' + i.ReferenceNo + '&farmerID=' + i.FarmerID + '&itemID=' + i.ItemID + '&subDivisionCode=' + i.SubDivisionCode + '&farmerName=' + i.FarmerName + '&farmerMobileNo=' + i.FarmerMobileNo).then(function success(response) {
+            $scope.stockOutlocationItemDetails = response.data;
+        }, function error(response) {
+            console.log(response.status);
+        }).catch(function err(error) {
+            console.log('An error occurred...', error);
+        });
     };
 
 });
