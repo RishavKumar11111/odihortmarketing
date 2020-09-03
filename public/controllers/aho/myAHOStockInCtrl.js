@@ -20,7 +20,7 @@ app.controller('myAHOStockInCtrl', function ($scope, $http, $filter) {
     $scope.dataAvailable = false;
     $scope.getFarmerDetails = function () {
         if ($scope.txtFarmerID !== null && $scope.txtFarmerID !== '' && $scope.txtFarmerID !== undefined) {
-            $http.get('http://apicol.nic.in/api/FarmerData?farmerID=' + $scope.districtName + '/' + $scope.txtFarmerID).then(function success(res) {
+            $http.get('https://apicol.nic.in/api/FarmerData?farmerID=' + $scope.districtName + '/' + $scope.txtFarmerID).then(function success(res) {
                 if (res.data.ErrorMessage == null) {
                     $scope.dataAvailable = true;
                     $scope.txtFarmerName = res.data.VCHFARMERNAME;
@@ -48,7 +48,7 @@ app.controller('myAHOStockInCtrl', function ($scope, $http, $filter) {
             });
         }
         else if ($scope.txtAadhaarNo !== null && $scope.txtAadhaarNo !== '' && $scope.txtAadhaarNo !== undefined) {
-            $http.get('http://apicol.nic.in/api/FarmerData/GetFarmerDetails?aadhaarNo=' + $scope.txtAadhaarNo).then(function success(res) {
+            $http.get('https://apicol.nic.in/api/FarmerData/GetFarmerDetails?aadhaarNo=' + $scope.txtAadhaarNo).then(function success(res) {
                 if (res.data.ErrorMessage == null) {
                     $scope.dataAvailable = true;
                     $scope.txtFarmerID = res.data.NICFARMERID.substr(4,);
