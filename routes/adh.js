@@ -116,6 +116,11 @@ router.get('/stockInApproveReject', csrfProtection, permit.permission('ADH'), ca
   res.render('adh/stockinapprovereject', { title: 'Approve / Reject Stock In Details', csrfToken: req.csrfToken() });
 });
 
+router.get('/areaProduction', csrfProtection, permit.permission('ADH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('adh/areaProduction', { title: 'Area & Production of Crops', csrfToken: req.csrfToken() });
+});
+
 router.get('/changePassword', csrfProtection, permit.permission('ADH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
@@ -404,6 +409,56 @@ router.post('/finalizeStockIn', parseForm, csrfProtection, permit.permission('AD
     res.send((response1 == array.length) ? true : false);
   }, function error(response) {
     console.log(response.status);
+  });
+});
+
+router.get('/getCropDetails', permit.permission('ADH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var categoryID = req.query.categoryID;
+  var estimate = req.query.estimate;
+  var financialYear = req.query.financialYear;
+  var blockCode = req.query.blockCode;
+  var subDivisionCode = req.session.username.substr(4, 7);
+  balModule.getCropDetails(categoryID, estimate, financialYear, blockCode, subDivisionCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.post('/approveAreaProduction', parseForm, csrfProtection, permit.permission('ADH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/approveAreaProduction', 'UPDATE', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var arr = req.body.data.arr;
+  var obj = req.body.data.obj;
+  obj.UserID = req.session.username;
+  obj.IPAddress = req.connection.remoteAddress;
+  balModule.approveAreaProduction(arr, obj, function success(response1) {
+    res.send((response1 == arr.length) ? true : false);
+  }, function error(response) {
+    console.log(response.status);
+  });
+});
+
+router.get('/getReport', permit.permission('ADH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var categoryID = req.query.categoryID;
+  var estimate = req.query.estimate;
+  var financialYear = req.query.financialYear;
+  var blockCode = req.query.blockCode;
+  var subDivisionCode = req.session.username.substr(4, 7);
+  var ItemID = req.query.itemID;
+  balModule.getReport(categoryID, estimate, financialYear, blockCode, subDivisionCode, ItemID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
   });
 });
 

@@ -310,3 +310,68 @@ exports.submitStockOut = function (stockArray, obj, callback) {
         console.log('An error occurred...', err);
     });
 };
+
+exports.getCropDetails = function (categoryID, estimate, financialYear, userID) {
+    if (estimate !== 'All') {
+        return sequelize.query("select a.ItemID, ItemName, TotalArea, FruitsBearingArea, Production, case when Unit = 'Q' then 'MT.' else 'Lakh Nos.' end Unit, Status, 1 FS from AreaProduction a inner join Items b on a.ItemID = b.ItemID where CategoryID = :category_id and FinancialYear = :financial_year and Estimate = :estimate and AHOUserID = :user_id order by ItemName", {
+            replacements: { category_id: categoryID, estimate: estimate, financial_year: financialYear, user_id: userID }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            if (data.length > 0) {
+                return data;
+            }
+            else {
+                return sequelize.query("select ItemID, ItemName, case when Unit = 'Q' then 'MT.' else 'Lakh Nos.' end Unit, null Status, 0 FS from Items where CategoryID = :category_id order by ItemName", {
+                    replacements: { category_id: categoryID }, type: sequelize.QueryTypes.SELECT
+                }).then(function success(data1) {
+                    return data1;
+                }).catch(function error(err) {
+                    console.log('An error occurred...', err);
+                });
+            }
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+    else {
+        return sequelize.query("select a.ItemID, ItemName, sum(TotalArea) TotalArea, sum(isnull(FruitsBearingArea, 0)) FruitsBearingArea, sum(Production) Production, case when Unit = 'Q' then 'MT.' else 'Lakh Nos.' end Unit, Status, 0 FS from AreaProduction a inner join Items b on a.ItemID = b.ItemID where CategoryID = :category_id and FinancialYear = :financial_year and AHOUserID = :user_id and Status is not null group by a.ItemID, ItemName, Unit, Status order by ItemName", {
+            replacements: { category_id: categoryID, financial_year: financialYear, user_id: userID }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data1) {
+            return data1;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+};
+
+exports.submitAreaProduction = function (arr, obj, callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const tableAreaProduction = new sql.Table();
+        tableAreaProduction.create = true;
+        tableAreaProduction.columns.add('ItemID', sql.Int, { nullable: false });
+        tableAreaProduction.columns.add('TotalArea', sql.Decimal(18, 2), { nullable: false });
+        tableAreaProduction.columns.add('FruitsBearingArea', sql.Decimal(18, 2), { nullable: true });
+        tableAreaProduction.columns.add('Production', sql.Decimal(18, 2), { nullable: false });
+        for (var i = 0; i < arr.length; i++) {
+            tableAreaProduction.rows.add(arr[i].ItemID, arr[i].TotalArea, arr[i].FruitsBearingArea, arr[i].Production);
+        }
+        const request = new sql.Request(con);
+        request.input('FinancialYear', obj.financialYear);
+        request.input('Estimate', obj.estimate);
+        request.input('AHOUserID', obj.UserID);
+        request.input('AHOIPAddress', obj.IPAddress);
+        request.input('Type', obj.type);
+        request.input('tableAreaProduction', tableAreaProduction);
+        request.execute('spSubmitAreaProduction', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.returnValue);
+            }
+            con.close();
+        });
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};

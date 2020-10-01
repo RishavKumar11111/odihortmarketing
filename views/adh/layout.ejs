@@ -203,6 +203,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="#!areaProduction" class="nav-link">
+                                <i class="nav-icon fas fa-edit"></i>
+                                <p>
+                                    Area & Production of Crops
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="#!changePassword" class="nav-link">
                                 <i class="nav-icon fas fa-key"></i>
                                 <p>
@@ -280,6 +288,9 @@
                 }).when("/stockInApproveReject", {
                     templateUrl: "adh/stockInApproveReject",
                     controller: 'myADHStockInApproveRejectCtrl'
+                }).when("/areaProduction", {
+                    templateUrl: "adh/areaProduction",
+                    controller: 'myADHAreaProductionCtrl'
                 }).when("/changePassword", {
                     templateUrl: "adh/changePassword",
                     controller: 'myADHChangePasswordCtrl'
@@ -436,6 +447,7 @@
     <script src="../../public/controllers/adh/myADHDashboardCtrl.js"></script>
     <script src="../../public/controllers/adh/myADHAHODetailsCtrl.js"></script>
     <script src="../../public/controllers/adh/myADHStockInApproveRejectCtrl.js"></script>
+    <script src="../../public/controllers/adh/myADHAreaProductionCtrl.js"></script>
     <script src="../../public/controllers/adh/myADHChangePasswordCtrl.js"></script>
     <!-- jQuery -->
     <script src="../../AdminLTE/plugins/jquery/jquery.min.js"></script>

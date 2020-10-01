@@ -211,6 +211,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="#!areaProduction" class="nav-link">
+                                <i class="nav-icon fas fa-edit"></i>
+                                <p>
+                                    Area & Production of Crops
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="#!changePassword" class="nav-link">
                                 <i class="nav-icon fas fa-key"></i>
                                 <p>
@@ -295,6 +303,9 @@
                 }).when("/stockOut", {
                     templateUrl: "aho/stockOut",
                     controller: 'myAHOStockOutCtrl'
+                }).when("/areaProduction", {
+                    templateUrl: "aho/areaProduction",
+                    controller: 'myAHOAreaProductionCtrl'
                 }).when("/changePassword", {
                     templateUrl: "aho/changePassword",
                     controller: 'myAHOChangePasswordCtrl'
@@ -452,6 +463,7 @@
     <script src="../../public/controllers/aho/myAHOStockInCtrl.js"></script>
     <script src="../../public/controllers/aho/myAHOStockInModifyCtrl.js"></script>
     <script src="../../public/controllers/aho/myAHOStockOutCtrl.js"></script>
+    <script src="../../public/controllers/aho/myAHOAreaProductionCtrl.js"></script>
     <script src="../../public/controllers/aho/myAHOChangePasswordCtrl.js"></script>
     <!-- jQuery -->
     <script src="../../AdminLTE/plugins/jquery/jquery.min.js"></script>

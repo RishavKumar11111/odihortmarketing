@@ -220,6 +220,12 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
+                                    <a href="#!areaProduction" class="nav-link">
+                                        <i class="nav-icon fas fa-edit"></i>
+                                        <p>Area & Production of Crops</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="#!availableItemsList" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Available Items List</p>
@@ -348,6 +354,9 @@
                 }).when("/tradersList", {
                     templateUrl: "ddh/tradersList",
                     controller: 'myDDHTradersListCtrl'
+                }).when("/areaProduction", {
+                    templateUrl: "ddh/areaProduction",
+                    controller: 'myDDHAreaProductionCtrl'
                 }).when("/changePassword", {
                     templateUrl: "ddh/changePassword",
                     controller: 'myDDHChangePasswordCtrl'
@@ -510,6 +519,7 @@
     <script src="../../public/controllers/ddh/myDDHStockInListCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHStockOutListCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHTradersListCtrl.js"></script>
+    <script src="../../public/controllers/ddh/myDDHAreaProductionCtrl.js"></script>
     <script src="../../public/controllers/ddh/myDDHChangePasswordCtrl.js"></script>
     <!-- jQuery -->
     <script src="../../AdminLTE/plugins/jquery/jquery.min.js"></script>

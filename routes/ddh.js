@@ -116,6 +116,11 @@ router.get('/dashboard', csrfProtection, permit.permission('DDH'), cache.overrid
 //   res.render('ddh/stockout', { title: 'Stock Out', csrfToken: req.csrfToken() });
 // });
 
+router.get('/areaProduction', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('ddh/areaProduction', { title: 'Area & Production of Crops', csrfToken: req.csrfToken() });
+});
+
 router.get('/availableItemsList', csrfProtection, permit.permission('DDH'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   res.render('ddh/availableitemslist', { title: 'Available Items List', csrfToken: req.csrfToken() });
@@ -524,6 +529,39 @@ router.post('/submitADHDetails', parseForm, csrfProtection, permit.permission('D
     }
   }, function error(response) {
     console.log(response.status);
+  });
+});
+
+router.get('/getCropDetails', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var categoryID = req.query.categoryID;
+  var estimate = req.query.estimate;
+  var financialYear = req.query.financialYear;
+  var blockCode = req.query.blockCode;
+  var districtCode = req.session.username.substr(4, 3);
+  balModule.getCropDetails(categoryID, estimate, financialYear, blockCode, districtCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getReport', permit.permission('DDH'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var categoryID = req.query.categoryID;
+  var estimate = req.query.estimate;
+  var financialYear = req.query.financialYear;
+  var blockCode = req.query.blockCode;
+  var districtCode = req.session.username.substr(4, 3);
+  var ItemID = req.query.itemID;
+  balModule.getReport(categoryID, estimate, financialYear, blockCode, districtCode, ItemID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
   });
 });
 

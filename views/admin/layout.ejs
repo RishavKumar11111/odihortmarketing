@@ -202,6 +202,18 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
+                                    <a href="#!areaProductionCW" class="nav-link">
+                                        <i class="nav-icon fas fa-edit"></i>
+                                        <p>Area & Production of Crops, Crop-wise</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#!areaProductionDW" class="nav-link">
+                                        <i class="nav-icon fas fa-edit"></i>
+                                        <p>Area & Production of Crops, District-wise</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="#!availableItemsList" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Available Items List</p>
@@ -343,6 +355,12 @@
                 }).when("/ddhDetails", {
                     templateUrl: "admin/ddhDetails",
                     controller: 'myAdminDDHDetailsCtrl'
+                }).when("/areaProductionCW", {
+                    templateUrl: "admin/areaProductionCW",
+                    controller: 'myAdminAreaProductionCWCtrl'
+                }).when("/areaProductionDW", {
+                    templateUrl: "admin/areaProductionDW",
+                    controller: 'myAdminAreaProductionDWCtrl'
                 }).when("/changePassword", {
                     templateUrl: "admin/changePassword",
                     controller: 'myAdminChangePasswordCtrl'
@@ -456,6 +474,8 @@
     <script src="../../public/controllers/admin/myAdminFarmersCountCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminUnavailableItemsListCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminDDHDetailsCtrl.js"></script>
+    <script src="../../public/controllers/admin/myAdminAreaProductionCWCtrl.js"></script>
+    <script src="../../public/controllers/admin/myAdminAreaProductionDWCtrl.js"></script>
     <script src="../../public/controllers/admin/myAdminChangePasswordCtrl.js"></script>
     <!-- jQuery -->
     <script src="../../AdminLTE/plugins/jquery/jquery.min.js"></script>

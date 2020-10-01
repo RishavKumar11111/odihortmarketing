@@ -1,0 +1,222 @@
+<div class="content-wrapper" ng-controller="myDDHAreaProductionCtrl" ng-init="getBlocks(); getCategories();">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h1><%= title %></h1>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active"><%= title %></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <form class="form-horizontal" role="form" name="apForm" autocomplete="off" novalidate>
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Area & Production of Crops</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                    class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5>Agriculture Year (July 1 2019 - June 30 2020) <small>(Select Block, Financial Year, Estimate
+                                and
+                                Category)</small></h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Blocks</label>
+                                    <select class="form-control select2" ng-model="ddlBlocks"
+                                        ng-change="getCropDetails()" name="block"
+                                        ng-options="i.BlockCode as i.BlockName for i in blocks">
+                                        <option value="" disabled>Select Blocks</option>
+                                    </select>
+                                    <div class="has-error" ng-show="apForm.$submitted || apForm.block.$touched"
+                                        style="color:red">
+                                        <span ng-show="apForm.block.$error.required">This is a required
+                                            field</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Financial Year</label>
+                                    <select class="form-control select2" name="financialYear"
+                                        ng-change="bindEstimate();" ng-model="ddlFinancialYear" required>
+                                        <option value="" disabled>Select Year</option>
+                                        <option value="2019-20">2019-20</option>
+                                        <option value="2020-21">2020-21</option>
+                                    </select>
+                                    <div class="has-error" ng-show="apForm.$submitted || apForm.financialYear.$touched"
+                                        style="color:red">
+                                        <span ng-show="apForm.financialYear.$error.required">This is a required
+                                            field</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Estimate</label>
+                                    <select class="form-control select2" name="estimate" ng-model="ddlEstimate"
+                                        ng-change="getCropDetails()"
+                                        ng-options="i.EstimateID as i.EstimateName for i in estimates" required>
+                                        <option value="" disabled>Select Estimate</option>
+                                    </select>
+                                    <div class="has-error" ng-show="apForm.$submitted || apForm.estimate.$touched"
+                                        style="color:red">
+                                        <span ng-show="apForm.estimate.$error.required">This is a required
+                                            field</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Category</label>
+                                    <select class="form-control select2" name="categories" ng-model="ddlCategories"
+                                        ng-options="i.CategoryID as i.CategoryName for i in categories"
+                                        ng-change="getItemsByCategory(ddlCategories); getCropDetails()" required>
+                                        <option value="" disabled>Select Category</option>
+                                    </select>
+                                    <div class="has-error" ng-show="apForm.$submitted || apForm.categories.$touched"
+                                        style="color:red">
+                                        <span ng-show="apForm.categories.$error.required">This is a required
+                                            field</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Items</label>
+                                    <select class="form-control select2" ng-model="ddlItems"
+                                        ng-options="i.ItemID as i.ItemName for i in items" ng-change="getReport()">
+                                        <option value="">Select Item</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div
+                            ng-show="cropDetails.length > 0 && ddlBlocks !== null && ddlBlocks !== undefined && ddlFinancialYear !== null && ddlFinancialYear !== undefined && ddlEstimate !== null && ddlEstimate !== undefined && ddlCategories !== null && ddlCategories !== undefined">
+                            <h5>Items Details</h5>
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover" style="text-align: center;">
+                                    <thead>
+                                        <tr>
+                                            <th>Crops</th>
+                                            <th>Total Area (in Ha.)</th>
+                                            <th ng-show="ddlCategories == 1 || ddlCategories == 4">
+                                                Fruits Bearing Area (in Ha.)</th>
+                                            <th>Production</th>
+                                            <th>Productivity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="i in cropDetails">
+                                            <td>{{i.ItemName}}</td>
+                                            <td>
+                                                <input type="text" class="form-control" placeholder="Enter Total Area"
+                                                    name="totalArea[{{$index}}]" ng-model="i.TotalArea" disabled
+                                                    valid-number-upto-two-decimal ng-change="calculateProductivity(i)"
+                                                    minlength="1" maxlength="10" required>
+                                                <span style="color:red"
+                                                    ng-show="apForm['totalArea[' + $index + ']'].$touched && apForm['totalArea[' + $index + ']'].$error.required">This
+                                                    is a
+                                                    required
+                                                    field</span>
+                                            </td>
+                                            <td ng-show="ddlCategories == 1 || ddlCategories == 4">
+                                                <input type="text" class="form-control"
+                                                    name="fruitsBearingArea[{{$index}}]"
+                                                    placeholder="Enter Fruits Bearing Area" disabled
+                                                    ng-model="i.FruitsBearingArea" valid-number-upto-two-decimal
+                                                    minlength="1" maxlength="10" required>
+                                                <span style="color:red"
+                                                    ng-show="apForm['fruitsBearingArea[' + $index + ']'].$touched && apForm['fruitsBearingArea[' + $index + ']'].$error.required">This
+                                                    is a
+                                                    required
+                                                    field</span>
+                                            </td>
+                                            <td style="text-align: left;">
+                                                <div style="display: flex; white-space: nowrap;">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Enter Production" ng-model="i.Production"
+                                                        disabled
+                                                        valid-number-upto-two-decimal name="production[{{$index}}]"
+                                                        ng-change="calculateProductivity(i)" minlength="1"
+                                                        maxlength="10" required>&nbsp;&nbsp;&nbsp;
+                                                    <label class="control-label">in ({{i.Unit}})</label>
+                                                </div>
+                                                <span style="color:red"
+                                                    ng-show="apForm['production[' + $index + ']'].$touched && apForm['production[' + $index + ']'].$error.required">This
+                                                    is a
+                                                    required
+                                                    field</span>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" disabled
+                                                    ng-model="i.productivity" placeholder="in ({{i.Unit}} / Ha.)"
+                                                    valid-number-upto-two-decimal minlength="1" maxlength="10">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div
+                            ng-show="report.length > 0 && ddlBlocks !== null && ddlBlocks !== undefined && ddlBlocks == 0 && ddlFinancialYear !== null && ddlFinancialYear !== undefined && ddlEstimate !== null && ddlEstimate !== undefined && ddlCategories !== null && ddlCategories !== undefined">
+                            <div style="display: flex; justify-content: space-evenly;">
+                                <p><b>Financial Year: {{ddlFinancialYear | capitalize}}</b></p>
+                                <p ng-show="ddlEstimate !== 'All'"><b>Estimate: {{ddlEstimate | capitalize}}</b></p>
+                                <p><b>Category: {{categoryName | capitalize}}</b></p>
+                                <p><b>Item: {{itemName | capitalize}}</b></p>
+                            </div>
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover" style="text-align: center;">
+                                    <thead>
+                                        <tr>
+                                            <th>Block</th>
+                                            <th>Total Area (in Ha.)</th>
+                                            <th ng-show="ddlCategories == 1 || ddlCategories == 4">
+                                                Fruits Bearing Area (in Ha.)</th>
+                                            <th>Production (in {{unitName}})</th>
+                                            <th>Productivity (in {{unitName}} / Ha.)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="i in report">
+                                            <td>{{i.BlockName}}</td>
+                                            <td>{{i.TotalArea}}</td>
+                                            <td ng-show="ddlCategories == 1 || ddlCategories == 4">
+                                                {{i.FruitsBearingArea}}</td>
+                                            <td>{{i.Production}}</td>
+                                            <td>{{i.productivity}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total</th>
+                                            <td>{{sumTotalArea}}</td>
+                                            <td ng-show="ddlCategories == 1 || ddlCategories == 4">
+                                                {{sumFruitsBearingArea}}</td>
+                                            <td>{{sumProduction}}</td>
+                                            <td>{{avgProductivity}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right"></div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>

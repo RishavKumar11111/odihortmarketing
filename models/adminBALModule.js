@@ -343,3 +343,45 @@ exports.submitDDHDetails = function (obj, callback) {
         console.log('An error occurred...', err);
     });
 };
+
+exports.getCropDetails = function (categoryID, estimate, financialYear, districtCode) {
+    if (estimate !== 'All') {
+        return sequelize.query("select a.ItemID, ItemName, sum(TotalArea) TotalArea, sum(isnull(FruitsBearingArea, 0)) FruitsBearingArea, sum(Production) Production, case when Unit = 'Q' then 'MT.' else 'Lakh Nos.' end Unit, Status from AreaProduction a inner join Items b on a.ItemID = b.ItemID inner join LGDBlock c on substring(a.AHOUserID, 5, 4) = c.BlockCode where CategoryID = :category_id and FinancialYear = :financial_year and Estimate = :estimate and DistrictCode = :district_code and Status = 1 group by a.ItemID, ItemName, Unit, Status order by ItemName", {
+            replacements: { category_id: categoryID, estimate: estimate, financial_year: financialYear, district_code: districtCode }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+    else {
+        return sequelize.query("select a.ItemID, ItemName, sum(TotalArea) TotalArea, sum(isnull(FruitsBearingArea, 0)) FruitsBearingArea, sum(Production) Production, case when Unit = 'Q' then 'MT.' else 'Lakh Nos.' end Unit, Status from AreaProduction a inner join Items b on a.ItemID = b.ItemID inner join LGDBlock c on substring(a.AHOUserID, 5, 4) = c.BlockCode where CategoryID = :category_id and FinancialYear = :financial_year and DistrictCode = :district_code and Status = 1 group by a.ItemID, ItemName, Unit, Status order by ItemName", {
+            replacements: { category_id: categoryID, financial_year: financialYear, district_code: districtCode }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data1) {
+            return data1;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+};
+
+exports.getReport = function (categoryID, estimate, financialYear, districtCode, itemID) {
+    if (districtCode == 0) {
+        return sequelize.query("select DistrictName, sum(isnull(TotalArea, 0)) TotalArea, sum(isnull(FruitsBearingArea, 0)) FruitsBearingArea, sum(isnull(Production, 0)) Production from LGDDistrict a inner join LGDBlock b on a.DistrictCode = b.DistrictCode left join (select TotalArea, FruitsBearingArea, Production, substring(AHOUserID, 5, 4) BlockCode from AreaProduction where ItemID = :item_id and FinancialYear = :financial_year and (:estimate = 'All' or Estimate = :estimate) and Status = 1) c on b.BlockCode = c.BlockCode group by DistrictName order by DistrictName", {
+            replacements: { category_id: categoryID, estimate: estimate, financial_year: financialYear, district_code: districtCode, item_id: itemID }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+    else {
+        return sequelize.query("select BlockName, sum(isnull(TotalArea, 0)) TotalArea, sum(isnull(FruitsBearingArea, 0)) FruitsBearingArea, sum(isnull(Production, 0)) Production from LGDBlock a left join (select TotalArea, FruitsBearingArea, Production, substring(AHOUserID, 5, 4) BlockCode from AreaProduction where ItemID = :item_id and FinancialYear = :financial_year and (:estimate = 'All' or Estimate = :estimate) and Status = 1) b on a.BlockCode = b.BlockCode where DistrictCode = :district_code group by BlockName order by BlockName", {
+            replacements: { category_id: categoryID, estimate: estimate, financial_year: financialYear, district_code: districtCode, item_id: itemID }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+};

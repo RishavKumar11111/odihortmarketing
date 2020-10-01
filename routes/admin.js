@@ -106,6 +106,16 @@ router.get('/dashboard', csrfProtection, permit.permission('ADMIN'), cache.overr
   res.render('admin/dashboard', { title: 'Dashboard', csrfToken: req.csrfToken() });
 });
 
+router.get('/areaProductionDW', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('admin/areaProductionDW', { title: 'Area & Production of Crops, District-wise', csrfToken: req.csrfToken() });
+});
+
+router.get('/areaProductionCW', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('admin/areaProductionCW', { title: 'Area & Production of Crops, Crop-wise', csrfToken: req.csrfToken() });
+});
+
 router.get('/availableItemsList', csrfProtection, permit.permission('ADMIN'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   res.get('X-Frame-Options');
   res.render('admin/availableitemslist', { title: 'Available Items List', csrfToken: req.csrfToken() });
@@ -484,6 +494,37 @@ router.post('/submitDDHDetails', parseForm, csrfProtection, permit.permission('A
     }
   }, function error(response) {
     console.log(response.status);
+  });
+});
+
+router.get('/getCropDetails', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var categoryID = req.query.categoryID;
+  var estimate = req.query.estimate;
+  var financialYear = req.query.financialYear;
+  var districtCode = req.query.districtCode;
+  balModule.getCropDetails(categoryID, estimate, financialYear, districtCode).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.get('/getReport', permit.permission('ADMIN'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var categoryID = req.query.categoryID;
+  var estimate = req.query.estimate;
+  var financialYear = req.query.financialYear;
+  var districtCode = req.query.districtCode;
+  var ItemID = req.query.itemID;
+  balModule.getReport(categoryID, estimate, financialYear, districtCode, ItemID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
   });
 });
 

@@ -121,6 +121,11 @@ router.get('/stockOut', csrfProtection, permit.permission('AHO'), cache.override
   res.render('aho/stockout', { title: 'Stock Out', csrfToken: req.csrfToken() });
 });
 
+router.get('/areaProduction', csrfProtection, permit.permission('AHO'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  res.render('aho/areaProduction', { title: 'Area & Production of Crops', csrfToken: req.csrfToken() });
+});
+
 router.get('/changePassword', csrfProtection, permit.permission('AHO'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
   req.session.RandomNo = randomNumber();
   res.get('X-Frame-Options');
@@ -410,6 +415,38 @@ router.post('/submitStockOut', parseForm, csrfProtection, permit.permission('AHO
   obj.Status = null;
   balModule.submitStockOut(stockArray, obj, function success(response1) {
     res.send((response1 == stockArray.length) ? true : false);
+  }, function error(response) {
+    console.log(response.status);
+  });
+});
+
+router.get('/getCropDetails', permit.permission('AHO'), function (req, res, next) {
+  res.get('X-Frame-Options');
+  var categoryID = req.query.categoryID;
+  var estimate = req.query.estimate;
+  var financialYear = req.query.financialYear;
+  var userID = req.session.username;
+  balModule.getCropDetails(categoryID, estimate, financialYear, userID).then(function success(response) {
+    res.send(response);
+  }, function error(response) {
+    console.log(response.status);
+  }).catch(function err(error) {
+    console.log('An error occurred...', error);
+  });
+});
+
+router.post('/submitAreaProduction', parseForm, csrfProtection, permit.permission('AHO'), cache.overrideCacheHeaders(overrideConfig), function (req, res, next) {
+  res.get('X-Frame-Options');
+  balModule.addActivityLog(req.connection.remoteAddress, req.session.username, getURL(req), req.device.type.toUpperCase(), os.platform(), req.headers['user-agent'], '/submitAreaProduction', 'INSERT', 'POST', function success(response) {
+  }, function error(response) {
+    console.log(response.status);
+  });
+  var arr = req.body.data.arr;
+  var obj = req.body.data.obj;
+  obj.UserID = req.session.username;
+  obj.IPAddress = req.connection.remoteAddress;
+  balModule.submitAreaProduction(arr, obj, function success(response1) {
+    res.send((response1 == arr.length) ? true : false);
   }, function error(response) {
     console.log(response.status);
   });

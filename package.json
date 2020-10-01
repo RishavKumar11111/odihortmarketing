@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js --ignore public/"
   },
   "dependencies": {
     "atob": "^2.1.2",

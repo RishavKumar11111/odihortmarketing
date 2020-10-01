@@ -273,3 +273,68 @@ exports.finalizeStockIn = function (array, obj, callback) {
         console.log('An error occurred...', err);
     });
 };
+
+exports.getCropDetails = function (categoryID, estimate, financialYear, blockCode, subDivisionCode) {
+    if (estimate !== 'All') {
+        return sequelize.query("select a.ItemID, ItemName, TotalArea, FruitsBearingArea, Production, case when Unit = 'Q' then 'MT.' else 'Lakh Nos.' end Unit, Status, 1 FS from AreaProduction a inner join Items b on a.ItemID = b.ItemID where CategoryID = :category_id and FinancialYear = :financial_year and Estimate = :estimate and AHOUserID = 'AHO_' + :block_code order by ItemName", {
+            replacements: { category_id: categoryID, estimate: estimate, financial_year: financialYear, block_code: blockCode, sub_division_code: subDivisionCode }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data) {
+            return data;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+    else {
+        return sequelize.query("select a.ItemID, ItemName, sum(TotalArea) TotalArea, sum(isnull(FruitsBearingArea, 0)) FruitsBearingArea, sum(Production) Production, case when Unit = 'Q' then 'MT.' else 'Lakh Nos.' end Unit, Status, 0 FS from AreaProduction a inner join Items b on a.ItemID = b.ItemID where CategoryID = :category_id and FinancialYear = :financial_year and AHOUserID = 'AHO_' + :block_code and Status = 1 group by a.ItemID, ItemName, Unit, Status order by ItemName", {
+            replacements: { category_id: categoryID, financial_year: financialYear, block_code: blockCode }, type: sequelize.QueryTypes.SELECT
+        }).then(function success(data1) {
+            return data1;
+        }).catch(function error(err) {
+            console.log('An error occurred...', err);
+        });
+    }
+};
+
+exports.approveAreaProduction = function (arr, obj, callback) {
+    var con = new sql.ConnectionPool(locConfig);
+    con.connect().then(function success() {
+        const tableAreaProduction = new sql.Table();
+        tableAreaProduction.create = true;
+        tableAreaProduction.columns.add('ItemID', sql.Int, { nullable: false });
+        tableAreaProduction.columns.add('TotalArea', sql.Decimal(18, 2), { nullable: false });
+        tableAreaProduction.columns.add('FruitsBearingArea', sql.Decimal(18, 2), { nullable: true });
+        tableAreaProduction.columns.add('Production', sql.Decimal(18, 2), { nullable: false });
+        for (var i = 0; i < arr.length; i++) {
+            tableAreaProduction.rows.add(arr[i].ItemID, arr[i].TotalArea, arr[i].FruitsBearingArea, arr[i].Production);
+        }
+        const request = new sql.Request(con);
+        request.input('FinancialYear', obj.financialYear);
+        request.input('Estimate', obj.estimate);
+        request.input('ADHUserID', obj.UserID);
+        request.input('ADHIPAddress', obj.IPAddress);
+        request.input('Type', obj.type);
+        request.input('AHOUserID', 'AHO_' + obj.blockCode);
+        request.input('tableAreaProduction', tableAreaProduction);
+        request.execute('spApproveAreaProduction', function (err, result) {
+            if (err) {
+                console.log('An error occurred...', err);
+            }
+            else {
+                callback(result.returnValue);
+            }
+            con.close();
+        });
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
+
+exports.getReport = function (categoryID, estimate, financialYear, blockCode, subDivisionCode, itemID) {
+    return sequelize.query("select BlockName, sum(isnull(TotalArea, 0)) TotalArea, sum(isnull(FruitsBearingArea, 0)) FruitsBearingArea, sum(isnull(Production, 0)) Production, Unit from LGDBlock a left join (select TotalArea, FruitsBearingArea, Production, case when Unit = 'Q' then 'MT.' else 'Lakh Nos.' end Unit, substring(AHOUserID, 5, 4) BlockCode from AreaProduction a inner join Items b on a.ItemID = b.ItemID where a.ItemID = :item_id and FinancialYear = :financial_year and (:estimate = 'All' or Estimate = :estimate)) b on a.BlockCode = b.BlockCode where SubDivisionCode = :sub_division_code group by BlockName, Unit order by BlockName", {
+        replacements: { category_id: categoryID, estimate: estimate, financial_year: financialYear, block_code: blockCode, sub_division_code: subDivisionCode, item_id: itemID }, type: sequelize.QueryTypes.SELECT
+    }).then(function success(data) {
+        return data;
+    }).catch(function error(err) {
+        console.log('An error occurred...', err);
+    });
+};
