@@ -98,7 +98,7 @@
                                 <div class="form-group">
                                     <label class="control-label">Items</label>
                                     <select class="form-control select2" ng-model="ddlItems"
-                                        ng-options="i.ItemID as i.ItemName for i in items" ng-change="filterDetails()">
+                                        ng-options="i.ItemID as i.ItemName for i in items" ng-change="getCropDetails()">
                                         <option value="">Select Item</option>
                                     </select>
                                 </div>

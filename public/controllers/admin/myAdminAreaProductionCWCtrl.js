@@ -44,15 +44,6 @@ app.controller('myAdminAreaProductionCWCtrl', function ($scope, $http, $filter) 
         }
     };
 
-    $scope.filterDetails = function () {
-        if ($scope.ddlItems !== null && $scope.ddlItems !== undefined) {
-            $scope.cropDetails = $filter('filter')($scope.cropDetails, { ItemID: $scope.ddlItems }, true);
-        }
-        else {
-            $scope.getCropDetails();
-        }
-    };
-
     $scope.getCropDetails = function () {
         if ($scope.ddlDistricts !== 0) {
             if ($scope.ddlDistricts !== null && $scope.ddlDistricts !== undefined && $scope.ddlFinancialYear !== null && $scope.ddlFinancialYear !== undefined && $scope.ddlEstimate !== null && $scope.ddlEstimate !== undefined && $scope.ddlCategories !== null && $scope.ddlCategories !== undefined) {
